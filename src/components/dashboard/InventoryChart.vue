@@ -1,11 +1,9 @@
 <template>
   <div id="chart">
     <apexchart
-      width="400px"
-      height="400px"
       type="donut"
-      :options="plotOptions"
-      :series="series"
+      :options="chartOptions"
+      :series="chartOptions.series"
     />
   </div>
 </template>
@@ -13,67 +11,65 @@
 <script>
 export default {
   name: "InventoryChart",
-  data() {
-    return {
-      series: [1200, 1400],
-      plotOptions: {
-        pie: {
-          startAngle: 0,
-          endAngle: 360,
-          expandOnClick: true,
-          offsetX: 0,
-          offsetY: 0,
-          customScale: 1,
-          dataLabels: {
-            offset: 0,
-            minAngleToShowLabel: 10,
+  computed: {
+    chartOptions: function() {
+      return {
+        colors: ["#5682FF", "#F27B61"],
+        legend: {
+          fontSize: "14px",
+          fontFamily: "Rubik, sans-serif",
+          fontWeight: 400,
+          itemMargin: {
+            vertical: 10,
           },
-          donut: {
-            size: "65%",
-            background: "transparent",
-            labels: {
-              show: true,
-              name: {
+          position: "bottom",
+        },
+        dataLabels: {
+          enabled: true,
+        },
+        labels: ["Export", "Import"],
+        plotOptions: {
+          pie: {
+            donut: {
+              size: "65%",
+              labels: {
                 show: true,
-                fontSize: "22px",
-                fontFamily: "Helvetica, Arial, sans-serif",
-                fontWeight: 600,
-                color: undefined,
-                offsetY: -10,
-                formatter: function(val) {
-                  return val;
+                name: {
+                  show: true,
+                  fontSize: "18px",
+                  fontFamily: "Rubik, sans-serif",
+                  color: "#5682FF",
+                  offsetY: -10,
                 },
-              },
-              value: {
-                show: true,
-                fontSize: "16px",
-                fontFamily: "Helvetica, Arial, sans-serif",
-                fontWeight: 400,
-                color: undefined,
-                offsetY: 16,
-                formatter: function(val) {
-                  return val;
+                value: {
+                  show: true,
+                  fontSize: "16px",
+                  fontFamily: "Rubik, sans-serif",
+                  color: undefined,
+                  offsetY: 2,
+                  formatter: function(val) {
+                    return val;
+                  },
                 },
-              },
-              total: {
-                show: true,
-                showAlways: true,
-                label: "Total",
-                fontSize: "22px",
-                fontFamily: "Helvetica, Arial, sans-serif",
-                fontWeight: 600,
-                color: "#373d3f",
-                formatter: function(w) {
-                  return w.globals.seriesTotals.reduce((a, b) => {
-                    return a + b;
-                  }, 0);
+                total: {
+                  show: true,
+                  label: "Total",
+                  color: "#5682FF",
+                  fontSize: "16px",
+                  formatter: function(w) {
+                    return w.globals.seriesTotals.reduce((a, b) => {
+                      return a + b;
+                    }, 0);
+                  },
                 },
               },
             },
           },
         },
-      },
-    };
+        responsive: [],
+        series: [1250, 4500],
+      };
+    },
   },
 };
 </script>
