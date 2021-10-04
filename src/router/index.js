@@ -4,6 +4,8 @@ import Dashboard from "@/views/Dashboard";
 import PLB from "@/views/PLB";
 import PPFTZ from "@/views/PPFTZ";
 import Setup from "@/views/Setup";
+import CreateDocument from "@/views/plb_ppftz/CreateDocument";
+import TableInventory from "@/views/plb_ppftz/TableInventory";
 
 Vue.use(VueRouter);
 
@@ -11,12 +13,24 @@ const routes = [
   {
     path: "/",
     name: "Dahsboard",
+    exact: true,
     component: Dashboard,
   },
   {
     path: "/plb",
-    name: "PLB",
     component: PLB,
+    children: [
+      {
+        path: "",
+        name: "PLB",
+        component: TableInventory,
+      },
+      {
+        path: "add",
+        name: "CreateDocument",
+        component: CreateDocument,
+      },
+    ],
   },
   {
     path: "/ppftz",

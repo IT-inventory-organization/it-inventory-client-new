@@ -83,7 +83,7 @@ export default {
     },
     handleSubmit() {
       this.$refs.form.validate();
-      console.log("test");
+      this.$router.push(`${this.$route.path}/add`);
     },
   },
 };
