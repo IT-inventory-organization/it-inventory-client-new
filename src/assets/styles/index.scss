@@ -55,4 +55,28 @@ body {
     font-size: 0.9rem !important;
   }
 }
+
+.table_menu_actions {
+  & .v-btn__content {
+    font-size: 0.8rem;
+    text-transform: capitalize;
+    font-weight: 400;
+  }
+  &:active {
+    background-color: none;
+  }
+}
 // End Table
+
+// Btn
+.it_inven_create_btn {
+  background-color: #312e68 !important;
+  border-radius: 10px !important;
+  width: max-content;
+  & .v-btn__content {
+    color: #ffffff;
+    font-weight: normal;
+    text-transform: capitalize;
+  }
+}
+// End Btn

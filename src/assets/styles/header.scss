@@ -44,41 +44,12 @@ $paddingHorizontal: 28px;
       width: max-content;
       text-decoration: none;
       color: #8d8ac7;
-      &_active {
-        color: white;
-        svg {
-          width: 32px;
-          height: 32px;
-          path,
-          circle,
-          rect {
-            stroke: white;
-          }
-        }
-        &::before {
-          position: absolute;
-          content: "";
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 5px;
-          background-color: white;
-          animation: menu_active 0.5s ease;
-        }
-      }
     }
   }
 }
 
 .router-link-exact-active {
   color: white;
-  svg {
-    path,
-    circle,
-    rect {
-      stroke: white;
-    }
-  }
   &::before {
     position: absolute;
     content: "";
