@@ -3,7 +3,9 @@
     <core-app-bar />
 
     <v-main>
-      <router-view />
+      <v-container class="it-inventory-container">
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -28,4 +30,5 @@ export default {
 </script>
 <style lang="scss">
 @import "./assets/styles/index.scss";
+@import "./assets/styles/card.scss";
 </style>

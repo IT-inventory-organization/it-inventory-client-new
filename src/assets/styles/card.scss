@@ -1,0 +1,11 @@
+// Card
+.it-inventory-card {
+  box-shadow: none !important;
+  border-radius: 20px !important;
+  padding: 40px 50px;
+  background-color: #ffffff;
+  &-title {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}

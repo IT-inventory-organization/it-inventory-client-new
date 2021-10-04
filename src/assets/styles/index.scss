@@ -33,3 +33,26 @@ body {
   -moz-osx-font-smoothing: grayscale;
   height: 200vh;
 }
+
+// container
+.it-inventory-container {
+  margin: 16px 0;
+}
+// End container
+
+// Box
+.it-inventory-box {
+  border-radius: 10px;
+  border: 1px solid #d8dcf2;
+  padding: 1.2rem;
+}
+// End Box
+
+// Table
+.it-inventory-simple-table {
+  & th,
+  & td {
+    font-size: 0.9rem !important;
+  }
+}
+// End Table

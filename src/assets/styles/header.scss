@@ -1,6 +1,6 @@
 $heightNavbar: 70px;
 $paddingVertical: 20px;
-$paddingHorizontal: 20px;
+$paddingHorizontal: 28px;
 
 .header_app {
   display: flex;
@@ -29,6 +29,7 @@ $paddingHorizontal: 20px;
   height: $heightNavbar;
   width: 100%;
   display: flex;
+  padding: 0 $paddingHorizontal;
   &_menu {
     &_wrapper {
       width: 200px;
@@ -103,11 +104,13 @@ $paddingHorizontal: 20px;
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 9999999;
+  margin-bottom: 120px;
 }
 
 .v-list-item {
   cursor: pointer;
-  min-height: px;
+  min-height: 40px;
   &:hover {
     background-color: rgba($color: #000000, $alpha: 0.1);
   }

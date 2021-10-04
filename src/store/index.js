@@ -1,39 +1,38 @@
-import axios from 'axios'
-import Vue from 'vue'
-import Vuex from 'vuex'
+import axios from "axios";
+import Vue from "vue";
+import Vuex from "vuex";
 
-const baseUrl = 'http://localhost:3000/'
+const baseUrl = "http://localhost:3000/";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    dataPengajua: {
-      name
-    }
+    dataPengajuan: {
+      name: "",
+    },
   },
   mutations: {
     SET_NAME(state, value) {
-      state.dataPengajua.name = value
+      state.dataPengajuan.name = value;
     },
     SET_DATA(state, value) {
-      state.dataPengajua = value
-    }
+      state.dataPengajuan = value;
+    },
   },
   actions: {
     async fetchData(context) {
-      let result = await axios.get(baseUrl)
+      let result = await axios.get(baseUrl);
       result = {
         success: true,
         message: "",
         data: {
           name: "ayam",
-          tanggal: Date.now()
-        }
-      }
-      context.commit("SET_DATA", result.data)
-    }
+          tanggal: Date.now(),
+        },
+      };
+      context.commit("SET_DATA", result.data);
+    },
   },
-  modules: {
-  }
-})
+  modules: {},
+});
