@@ -101,7 +101,20 @@ export default {
   },
   methods: {
     handleSubmit() {
-      this.$emit("handleSubmitStepper");
+      this.$swal({
+        title: "Apakah data anda sudah benar?",
+        type: "warning",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#5682ff",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Tidak",
+      }).then((result) => {
+        if (result.value) {
+          this.$emit("handleSubmitStepper");
+        }
+      });
     },
   },
 };
