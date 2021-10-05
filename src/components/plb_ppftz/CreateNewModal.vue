@@ -1,0 +1,117 @@
+<template>
+  <v-card>
+    <v-card-title>
+      <v-row no-gutters align-content="center" justify="space-between">
+        <span class="text-h6">Created New</span>
+        <span style="cursor: pointer" @click.prevent="handleDialog"
+          ><v-icon>mdi-close</v-icon></span
+        >
+      </v-row>
+    </v-card-title>
+    <v-card-text>
+      <v-form ref="initialReport" @submit.prevent="handleSubmit">
+        <v-container>
+          <v-select
+            dense
+            clearable
+            v-model="pengajuanSebagai"
+            label="Pengajuan Sebagai"
+            :items="['Test 1', 'Test 2']"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Pengajauan Sebagai');
+              },
+            ]"
+            outlined
+          ></v-select>
+          <v-select
+            dense
+            clearable
+            label="Diajukan Dikantor"
+            :items="['Test 1', 'Test 2']"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Diajukan Dikantor');
+              },
+            ]"
+            outlined
+          ></v-select>
+          <v-select
+            dense
+            clearable
+            label="Jenis Pemberitahuan"
+            :items="['Test 1', 'Test 2']"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Jenis Pemberitahuan');
+              },
+            ]"
+            outlined
+          ></v-select>
+          <v-select
+            dense
+            clearable
+            label="Jenis Dokumen BC"
+            :items="['Test 1', 'Test 2']"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Jenis Dokumen BC');
+              },
+            ]"
+            outlined
+          ></v-select>
+        </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <button type="submit" class="btn_save">
+            <span>Next</span> <img src="../../assets/icons/ic_bulletnext.svg" />
+          </button>
+        </v-card-actions>
+      </v-form>
+    </v-card-text>
+  </v-card>
+</template>
+
+<script>
+import { FieldRequired } from "@/mixins/ValidationRules";
+export default {
+  name: "CreateNewModal",
+  mixins: [FieldRequired],
+  data() {
+    return {
+      pengajuanSebagai: "",
+      diajukanDikantor: "",
+      jenisPemberitahuan: "",
+      jenisDokumenBC: "",
+      page: "",
+    };
+  },
+  watch: {
+    pengajuanSebagai(val) {
+      console.log(val);
+    },
+  },
+  methods: {
+    handleDialog() {
+      this.$emit("handleModal");
+    },
+    handleSubmit() {
+      if (this.$refs.initialReport.validate()) {
+        this.$router.push(`${this.$route.path}/add`);
+      }
+      console.log("sadasd");
+    },
+  },
+  created() {
+    const getPath = this.$route.path;
+
+    if (getPath.includes("plb")) {
+      this.page = "PLB";
+    } else if (getPath.includes("ppftz")) {
+      this.page = "PPFTZ";
+    }
+  },
+};
+</script>
+
+<style lang="scss" scoped></style>

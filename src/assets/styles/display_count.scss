@@ -1,0 +1,26 @@
+.it-inventory-count-export,
+.it-inventory-count-import {
+  text-align: center;
+}
+
+.it-inventory-count-export {
+  border-right: 1px solid #d8dcf2;
+  .it-inventory-count-title {
+    color: #5682ff;
+  }
+}
+
+.it-inventory-count-import {
+  .it-inventory-count-title {
+    color: #f27b61;
+  }
+}
+
+.it-inventory-count-title {
+  font-size: 1.2rem;
+}
+
+.it-inventory-count-number {
+  font-size: 3rem;
+  font-weight: 500;
+}
