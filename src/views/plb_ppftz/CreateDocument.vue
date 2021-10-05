@@ -41,7 +41,7 @@
       <!-- Data Lanjutan -->
       <v-stepper-items>
         <v-stepper-content step="2">
-          lanjutan
+          <form-data-lanjutan @handleSubmitStepper="handleSubmitStepper" />
         </v-stepper-content>
       </v-stepper-items>
       <!-- End Data Lanjutan -->
@@ -70,6 +70,8 @@ export default {
   name: "CreateDocument",
   components: {
     FormDataHeader: () => import("@/views/plb_ppftz/DataHeader/FormDataHeader"),
+    FormDataLanjutan: () =>
+      import("@/views/plb_ppftz/DataLanjutan/FormDataLanjutan"),
   },
   data() {
     return {
