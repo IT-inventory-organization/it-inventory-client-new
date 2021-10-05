@@ -23,6 +23,7 @@
           </v-col>
           <v-col lg="2">
             <v-select
+              clearable
               class="filter_lists_merah"
               value="Import"
               outlined

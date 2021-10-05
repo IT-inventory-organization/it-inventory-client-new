@@ -3,7 +3,7 @@
     <core-app-bar />
 
     <v-main>
-      <v-container class="it-inventory-container">
+      <v-container fluid class="it-inventory-container">
         <router-view />
       </v-container>
     </v-main>

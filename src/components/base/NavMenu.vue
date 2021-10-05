@@ -26,7 +26,7 @@ export default {
     menus: [
       {
         name: "Dashboard",
-        path: "/",
+        path: "/dashboard",
         icon: "bx:bxs-dashboard",
       },
       {

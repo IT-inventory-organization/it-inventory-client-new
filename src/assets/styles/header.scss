@@ -1,11 +1,11 @@
 $heightNavbar: 70px;
 $paddingVertical: 20px;
-$paddingHorizontal: 28px;
+$paddingHorizontal: 30px;
 
 .header_app {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding: $paddingVertical $paddingHorizontal;
   align-items: center;
   background-color: #fff;
   height: $heightNavbar;

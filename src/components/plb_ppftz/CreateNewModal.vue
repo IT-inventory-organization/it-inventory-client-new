@@ -9,48 +9,61 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <v-form
-        ref="form"
-        @submit.prevent="handleSubmit"
-        v-model="formValid"
-        lazy-validation
-      >
+      <v-form ref="initialReport" @submit.prevent="handleSubmit">
         <v-container>
           <v-select
             dense
+            clearable
             v-model="pengajuanSebagai"
             label="Pengajuan Sebagai"
             :items="['Test 1', 'Test 2']"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Pengajauan Sebagai');
+              },
+            ]"
             outlined
-            :rules="requiredRules"
           ></v-select>
           <v-select
             dense
+            clearable
             label="Diajukan Dikantor"
             :items="['Test 1', 'Test 2']"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Diajukan Dikantor');
+              },
+            ]"
             outlined
           ></v-select>
           <v-select
             dense
+            clearable
             label="Jenis Pemberitahuan"
             :items="['Test 1', 'Test 2']"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Jenis Pemberitahuan');
+              },
+            ]"
             outlined
           ></v-select>
           <v-select
             dense
+            clearable
             label="Jenis Dokumen BC"
             :items="['Test 1', 'Test 2']"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Jenis Dokumen BC');
+              },
+            ]"
             outlined
           ></v-select>
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <button
-            type="submit"
-            class="btn_save"
-            id="submit-form"
-            :disabled="!formValid"
-          >
+          <button type="submit" class="btn_save">
             <span>Next</span> <img src="../../assets/icons/ic_bulletnext.svg" />
           </button>
         </v-card-actions>
@@ -60,16 +73,17 @@
 </template>
 
 <script>
+import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "CreateNewModal",
+  mixins: [FieldRequired],
   data() {
     return {
-      formValid: false,
       pengajuanSebagai: "",
       diajukanDikantor: "",
       jenisPemberitahuan: "",
       jenisDokumenBC: "",
-      requiredRules: [(v) => !!v || `Pengajuan sebagai harus diisi`],
+      page: "",
     };
   },
   watch: {
@@ -82,27 +96,22 @@ export default {
       this.$emit("handleModal");
     },
     handleSubmit() {
-      this.$refs.form.validate();
-      this.$router.push(`${this.$route.path}/add`);
+      if (this.$refs.initialReport.validate()) {
+        this.$router.push(`${this.$route.path}/add`);
+      }
+      console.log("sadasd");
     },
+  },
+  created() {
+    const getPath = this.$route.path;
+
+    if (getPath.includes("plb")) {
+      this.page = "PLB";
+    } else if (getPath.includes("ppftz")) {
+      this.page = "PPFTZ";
+    }
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.btn_save {
-  background-color: transparent;
-  width: max-content;
-  outline: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  cursor: pointer;
-  user-select: none;
-  span {
-    font-size: 1rem;
-    color: #9ba1bc;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

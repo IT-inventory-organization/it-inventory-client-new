@@ -31,12 +31,12 @@ body {
   background-color: #f7f8fd;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 200vh;
 }
 
 // container
 .it-inventory-container {
   margin: 16px 0;
+  padding: 12px 30px !important;
 }
 // End container
 
@@ -79,4 +79,94 @@ body {
     text-transform: capitalize;
   }
 }
+
+.btn_save {
+  background-color: transparent;
+  width: max-content;
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  user-select: none;
+  span {
+    font-size: 1rem;
+    color: #9ba1bc;
+  }
+}
 // End Btn
+
+// Accordion
+
+.it-accordion-panel {
+  background-color: #f7f8fd !important;
+  margin-bottom: 15px;
+  border-radius: 10px !important;
+  &::before {
+    box-shadow: none !important;
+    border: 1px solid #d8dcf2 !important;
+    border-radius: inherit;
+  }
+  .v-expansion-panel-header {
+    font-size: 1rem;
+  }
+  .v-expansion-panel-content {
+    background-color: #ffffff;
+  }
+  .v-expansion-panel-content__wrap {
+    font-size: 1rem;
+    padding: 24px 16px !important;
+  }
+}
+// End Accordion
+
+// Stepper
+.it-inven-stepper {
+  & .v-stepper__header {
+    margin-bottom: 48px;
+    & .v-stepper__step {
+      flex-direction: column !important;
+      gap: 10px;
+      & .v-stepper__step__step {
+        border: 4px solid #d8dcf2 !important;
+        background-color: #ffffff !important;
+        color: #d8dcf2 !important;
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+    }
+
+    & .v-stepper__step--complete {
+      & .v-stepper__step__step {
+        border-color: #5682ff !important;
+        color: #5682ff !important;
+        i {
+          color: #5682ff !important;
+        }
+      }
+      & .v-stepper__label {
+        color: #5682ff !important;
+      }
+    }
+
+    & .v-stepper__step--active {
+      & .v-stepper__step__step {
+        border-color: #5682ff !important;
+        color: #5682ff !important;
+      }
+      & .v-stepper__label {
+        color: #5682ff !important;
+      }
+    }
+
+    & .v-divider {
+      border-width: 2px;
+      position: relative;
+    }
+  }
+}
+// End Stepper

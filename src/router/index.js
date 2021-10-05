@@ -12,8 +12,11 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Dahsboard",
-    exact: true,
+    redirect: { name: "Dashboard" },
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
     component: Dashboard,
   },
   {
@@ -27,15 +30,26 @@ const routes = [
       },
       {
         path: "add",
-        name: "CreateDocument",
+        name: "PLBCreateDocument",
         component: CreateDocument,
       },
     ],
   },
   {
     path: "/ppftz",
-    name: "PPFTZ",
     component: PPFTZ,
+    children: [
+      {
+        path: "",
+        name: "PPFTZ",
+        component: TableInventory,
+      },
+      {
+        path: "add",
+        name: "PPFTZCreateDocument",
+        component: CreateDocument,
+      },
+    ],
   },
   {
     path: "/setup",
