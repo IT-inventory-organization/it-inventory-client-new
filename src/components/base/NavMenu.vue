@@ -47,7 +47,7 @@ export default {
     ],
   }),
   mounted() {
-    this.stickyNav();
+    // this.stickyNav();
   },
   methods: {
     stickyNav() {
