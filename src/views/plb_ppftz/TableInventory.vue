@@ -1,5 +1,8 @@
 <template>
   <div class="it-inventory-card">
+    <v-card-title class="it-inventory-card-title" style="margin-bottom: 25px">
+      {{ page }}
+    </v-card-title>
     <v-row no-gutters>
       <v-col lg="10">
         <v-text-field
@@ -90,6 +93,7 @@ export default {
   },
   data() {
     return {
+      page: "",
       dialog: false,
       headers: [
         {
@@ -119,6 +123,15 @@ export default {
     handleModal() {
       this.dialog = !this.dialog;
     },
+  },
+  created() {
+    const getPath = this.$route.path;
+
+    if (getPath.includes("plb")) {
+      this.page = "PLB";
+    } else if (getPath.includes("ppftz")) {
+      this.page = "PPFTZ";
+    }
   },
 };
 </script>
