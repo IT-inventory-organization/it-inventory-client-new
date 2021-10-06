@@ -12,10 +12,9 @@
       <v-form ref="initialReport" @submit.prevent="handleSubmit">
         <v-container>
           <v-select
-            dense
             clearable
-            v-model="pengajuanSebagai"
             label="Pengajuan Sebagai"
+            v-model="pengajuanSebagai"
             :items="['Test 1', 'Test 2']"
             :rules="[
               (value) => {
@@ -25,10 +24,10 @@
             outlined
           ></v-select>
           <v-select
-            dense
             clearable
             label="Diajukan Dikantor"
             :items="['Test 1', 'Test 2']"
+            v-model="diajukanDikantor"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Diajukan Dikantor');
@@ -37,10 +36,10 @@
             outlined
           ></v-select>
           <v-select
-            dense
             clearable
             label="Jenis Pemberitahuan"
             :items="['Test 1', 'Test 2']"
+            v-model="jenisPemberitahuan"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Jenis Pemberitahuan');
@@ -49,9 +48,9 @@
             outlined
           ></v-select>
           <v-select
-            dense
             clearable
             label="Jenis Dokumen BC"
+            v-model="BCDocumentType"
             :items="['Test 1', 'Test 2']"
             :rules="[
               (value) => {
@@ -74,32 +73,71 @@
 
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
+
 export default {
   name: "CreateNewModal",
   mixins: [FieldRequired],
   data() {
     return {
-      pengajuanSebagai: "",
-      diajukanDikantor: "",
-      jenisPemberitahuan: "",
-      jenisDokumenBC: "",
       page: "",
     };
   },
-  watch: {
-    pengajuanSebagai(val) {
-      console.log(val);
+  computed: {
+    pengajuanSebagai: {
+      get() {
+        return this.$store.state.report.report.pengajuanSebagai;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_REPORT", {
+          key: "pengajuanSebagai",
+          value,
+        });
+      },
+    },
+    diajukanDikantor: {
+      get() {
+        return this.$store.state.report.report.diajukanDikantor;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_REPORT", {
+          key: "diajukanDikantor",
+          value,
+        });
+      },
+    },
+    jenisPemberitahuan: {
+      get() {
+        return this.$store.state.report.report.jenisPemberitahuan;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_REPORT", {
+          key: "jenisPemberitahuan",
+          value,
+        });
+      },
+    },
+    BCDocumentType: {
+      get() {
+        return this.$store.state.report.report.BCDocumentType;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_REPORT", {
+          key: "BCDocumentType",
+          value,
+        });
+      },
     },
   },
   methods: {
     handleDialog() {
       this.$emit("handleModal");
+      this.$refs.initialReport.resetValidation();
     },
     handleSubmit() {
       if (this.$refs.initialReport.validate()) {
+        // this.$store.dispatch("createReport")
         this.$router.push(`${this.$route.path}/add`);
       }
-      console.log("sadasd");
     },
   },
   created() {

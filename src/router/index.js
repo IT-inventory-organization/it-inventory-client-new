@@ -3,9 +3,10 @@ import VueRouter from "vue-router";
 import Dashboard from "@/views/Dashboard";
 import PLB from "@/views/PLB";
 import PPFTZ from "@/views/PPFTZ";
-import Setup from "@/views/Setup";
+// import Setup from "@/views/Setup";
 import CreateDocument from "@/views/plb_ppftz/CreateDocument";
 import TableInventory from "@/views/plb_ppftz/TableInventory";
+import Login from "@/views/Login";
 
 Vue.use(VueRouter);
 
@@ -51,18 +52,15 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/setup",
-    name: "Setup",
-    component: Setup,
-  },
+  // {
+  //   path: "/setup",
+  //   name: "Setup",
+  //   component: Setup,
+  // },
   {
     path: "/login",
     name: "login",
-  },
-  {
-    path: "/register",
-    name: "register",
+    component: Login,
   },
 ];
 

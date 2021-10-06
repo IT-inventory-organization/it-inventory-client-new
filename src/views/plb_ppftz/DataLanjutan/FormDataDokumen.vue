@@ -9,7 +9,7 @@
       </v-row>
     </v-card-title>
     <v-card-text class="py-4">
-      <v-form ref="initialReport" @submit.prevent="handleSubmit">
+      <v-form ref="formDataDokumen" @submit.prevent="handleSubmit">
         <v-row>
           <v-col lg="6" md="6" sm="12">
             <v-text-field
@@ -48,17 +48,6 @@
               ]"
             >
             </v-text-field>
-            <v-text-field
-              label="HS Code"
-              outlined
-              v-model="hsCode"
-              :rules="[
-                (value) => {
-                  return genericRequiredRule(value, 'Hs Code');
-                },
-              ]"
-            >
-            </v-text-field>
           </v-col>
         </v-row>
         <v-row no-gutters style="justify-content: flex-end ">
@@ -87,17 +76,17 @@ export default {
       kodeDokumen: "",
       nomorDokumen: "",
       tanggalDokumen: "",
-      hsCode: "",
     };
   },
   methods: {
     handleSubmit() {
-      if (this.$refs.initialReport.validate()) {
+      if (this.$refs.formDataDokumen.validate()) {
         this.$emit("handleModal");
       }
     },
     handleDialog() {
       this.$emit("handleModal");
+      this.$refs.formDataDokumen.resetValidation();
     },
   },
 };

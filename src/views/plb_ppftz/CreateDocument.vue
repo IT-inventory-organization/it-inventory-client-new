@@ -1,8 +1,21 @@
 <template>
   <div class="it-inventory-card">
-    <v-card-title class="it-inventory-card-title">
-      Create New {{ page }}
-    </v-card-title>
+    <v-row align="center">
+      <v-col lg="10" md="10" sm="12">
+        <v-card-title class="it-inventory-card-title">
+          Create New {{ page }}
+        </v-card-title>
+      </v-col>
+      <v-col lg="2" md="2" sm="12">
+        <v-btn
+          v-if="step === 4"
+          fill
+          class="it_inven_create_btn"
+          style="width: 100%"
+          >Submit</v-btn
+        >
+      </v-col>
+    </v-row>
 
     <v-stepper class="it-inven-stepper" v-model="step" elevation="0">
       <v-stepper-header>
@@ -49,7 +62,7 @@
       <!-- Data Barang -->
       <v-stepper-items>
         <v-stepper-content step="3">
-          barang
+          <form-data-barang @handleSubmitStepper="handleSubmitStepper" />
         </v-stepper-content>
       </v-stepper-items>
       <!-- End Data Barang -->
@@ -57,7 +70,7 @@
       <!-- Preview -->
       <v-stepper-items>
         <v-stepper-content step="4">
-          Preview
+          <data-preview />
         </v-stepper-content>
       </v-stepper-items>
       <!-- End Preview -->
@@ -72,6 +85,8 @@ export default {
     FormDataHeader: () => import("@/views/plb_ppftz/DataHeader/FormDataHeader"),
     FormDataLanjutan: () =>
       import("@/views/plb_ppftz/DataLanjutan/FormDataLanjutan"),
+    FormDataBarang: () => import("@/views/plb_ppftz/DataBarang/TableBarang"),
+    DataPreview: () => import("@/views/plb_ppftz/DataPreview/DataPreview"),
   },
   data() {
     return {

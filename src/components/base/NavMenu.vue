@@ -39,11 +39,11 @@ export default {
         path: "/ppftz",
         icon: "akar-icons:file",
       },
-      {
-        name: "Setup",
-        path: "/setup",
-        icon: "raphael:smallgear",
-      },
+      // {
+      //   name: "Setup",
+      //   path: "/setup",
+      //   icon: "raphael:smallgear",
+      // },
     ],
   }),
   mounted() {

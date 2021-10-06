@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <core-app-bar />
+    <core-app-bar></core-app-bar>
 
     <v-main>
       <v-container fluid class="it-inventory-container">
@@ -21,11 +21,7 @@ export default {
     return {};
   },
   methods: {},
-  created() {
-    if (localStorage.getItem("token")) {
-      this.$router.push("/login");
-    }
-  },
+  created() {},
 };
 </script>
 <style lang="scss">

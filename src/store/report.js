@@ -1,11 +1,18 @@
 import axios from "axios";
-import { AESDecrypt } from "../helper/Encryption";
+import { AESDecrypt, AESEncrypt } from "../helper/Encryption";
 
 const baseUrl = process.env.BASE_URL;
 
 const report = {
   state: {
     reportId: "",
+    report: {
+      pengajuanSebagai: "Test 1",
+      diajukanDikantor: "Test 2",
+      jenisPemberitahuan: "Test 1",
+      BCDocumentType: "Test 2",
+    },
+    reports: [],
     dataPengajuan: {
       kantorPabeanAsal: "",
       kategoryPemberitahuan: "",
@@ -20,15 +27,15 @@ const report = {
       namaPengirim: "",
       alamatPengirim: "",
       nomorIjinBpkPengirim: "",
-      tanggalIjinbpkPengirim:"",
-      reportId: ""
+      tanggalIjinbpkPengirim: "",
+      reportId: "",
     },
     identitasPenerima: {
       jenisIdentitasPenerima: "",
       nomorIdentitasPenerima: "",
       namaPenerima: "",
       alamatPenerima: "",
-      reportId: ""
+      reportId: "",
     },
     transaksiPerdagangan: {
       transaksi: "",
@@ -38,20 +45,20 @@ const report = {
       cif: "",
       voluntaryDeclaration: "",
       freight: "",
-      reportId: ""
+      reportId: "",
     },
     dataPengangkutan: {
       caraAngkut: "",
       namaPengangkut: "",
       bendera: "",
       nomorVoyFlightPol: "",
-      reportId:"",
+      reportId: "",
     },
     dataPelabuhanMuatBongkar: {
       pelabuhanMuat: "",
       pelabuhanTujuan: "",
       pelabuhanTransit: "",
-      reportId: ""
+      reportId: "",
     },
     dataBeratDanVolume: {
       beratBersih: "",
@@ -71,10 +78,19 @@ const report = {
     },
     dataPerkiraanTanggalPengeluaran: {
       perkiraanTanggalPengeluaran: "",
-      reportId: ""
-    }
+      reportId: "",
+    },
   },
   mutations: {
+    SET_DATA_REPORT(state, payload) {
+      state.report[payload.key] = payload.value;
+    },
+    SET_REPORT(state, payload) {
+      state.report = payload;
+    },
+    SET_REPORTS(state, payload) {
+      state.reports = payload;
+    },
     SET_DATA_PENGAJUAN(state, payload) {
       state.dataPengajuan[payload.key] = payload.value;
     },
@@ -107,30 +123,43 @@ const report = {
     },
   },
   actions: {
+    async createReport(context) {
+      let result = await axios({
+        url: baseUrl + "/report",
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: AESEncrypt(context.state.report),
+      });
+      if (result.success) {
+        context.commit("SET_REPORT", AESDecrypt(result.data));
+      }
+    },
     async fetchData(context) {
-      let result = await axios.get({
+      let result = await axios({
         url: baseUrl + "/report",
         method: "GET",
         headers: {
-          authorization: "Bearer " + localStorage.getItem("token_it_inventory")
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
         },
       });
-      if(result.success) {
-        context.commit("SET_DATA", AESDecrypt(result.data));
+      if (result.success) {
+        context.commit("SET_REPORTS", AESDecrypt(result.data));
       }
     },
     async getOneReport(context, payload) {
-      let result = await axios.get({
+      let result = await axios({
         url: baseUrl + "/report/oneReport/" + payload.id,
         method: "GET",
         headers: {
-          authorization: "Bearer " + localStorage.getItem("token_it_inventory")
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
         },
       });
-      if(result.success) {
-        context.commit("SET_DATA", AESDecrypt(result.data));
+      if (result.success) {
+        context.commit("SET_REPORT", AESDecrypt(result.data));
       }
-    }
+    },
   },
 };
 

@@ -35,7 +35,7 @@
         <v-text-field
           label="Pelabuhan Transit"
           outlined
-          v-model="pelabuhanTujuan"
+          v-model="pelabuhanTransit"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Pelabuhan Tujuan');

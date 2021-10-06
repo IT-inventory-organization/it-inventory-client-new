@@ -10,7 +10,7 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <div class="header_app_menu_user" v-bind="attrs" v-on="on">
-            <v-avatar color="#312E68" size="50  ">
+            <v-avatar color="#312E68" size="50">
               <v-icon dark>
                 mdi-account-circle-outline
               </v-icon>
