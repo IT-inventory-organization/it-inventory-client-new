@@ -5,7 +5,7 @@
       >Data Transaksi Perdagangan</v-card-title
     >
     <v-row>
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <v-select
           clearable
           :items="['4 - Transaksi']"
@@ -54,7 +54,7 @@
         </v-text-field>
       </v-col>
 
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <v-text-field
           label="Transaksi Lainnya"
           outlined
@@ -69,7 +69,7 @@
         <v-text-field
           label="NDPBM Kurs"
           outlined
-          v-model="ndpbmKurs"
+          v-model="kursNDPBM"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'NDPBM Kurs');
@@ -109,7 +109,7 @@
       >Data Pengangkutan</v-card-title
     >
     <v-row>
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <v-select
           clearable
           :items="['1 - Laut']"
@@ -135,7 +135,7 @@
           ]"
         ></v-select>
       </v-col>
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <v-text-field
           label="Nama Pengangkut"
           outlined
@@ -150,7 +150,7 @@
         <v-text-field
           label="Nomor Voly Flight Pol"
           outlined
-          v-model="nomorVolyFlightPol"
+          v-model="nomorVoyFlightPol"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Nomor Voly Flight Pol');
@@ -170,23 +170,147 @@ export default {
   name: "DataPemasukanPengeluaranSatu",
   mixins: [FieldRequired],
   data() {
-    return {
-      // Data Transaksi Perdagangan
-      transaksi: "",
-      valuta: "",
-      cif: "",
-      freight: "",
-      transaksiLainnya: "-",
-      ndpbmKurs: "",
-      voluntaryDeclaration: "",
-      hargaPenyerahan: "",
+    return {};
+  },
+  computed: {
+    // Data Transaksi Perdagangan
+    transaksi: {
+      get() {
+        return this.$store.state.report.transaksiPerdagangan.transaksi;
+      },
+      set(value) {
+        this.$store.commit("SET_TRANSAKSI_PERDAGANGAN", {
+          key: "transaksi",
+          value,
+        });
+      },
+    },
+    transaksiLainnya: {
+      get() {
+        return this.$store.state.report.transaksiPerdagangan.transaksiLainnya;
+      },
+      set(value) {
+        this.$store.commit("SET_TRANSAKSI_PERDAGANGAN", {
+          key: "transaksiLainnya",
+          value,
+        });
+      },
+    },
+    valuta: {
+      get() {
+        return this.$store.state.report.transaksiPerdagangan.valuta;
+      },
+      set(value) {
+        this.$store.commit("SET_TRANSAKSI_PERDAGANGAN", {
+          key: "valuta",
+          value,
+        });
+      },
+    },
+    kursNDPBM: {
+      get() {
+        return this.$store.state.report.transaksiPerdagangan.kursNDPBM;
+      },
+      set(value) {
+        this.$store.commit("SET_TRANSAKSI_PERDAGANGAN", {
+          key: "kursNDPBM",
+          value,
+        });
+      },
+    },
+    cif: {
+      get() {
+        return this.$store.state.report.transaksiPerdagangan.cif;
+      },
+      set(value) {
+        this.$store.commit("SET_TRANSAKSI_PERDAGANGAN", {
+          key: "cif",
+          value,
+        });
+      },
+    },
+    voluntaryDeclaration: {
+      get() {
+        return this.$store.state.report.transaksiPerdagangan
+          .voluntaryDeclaration;
+      },
+      set(value) {
+        this.$store.commit("SET_TRANSAKSI_PERDAGANGAN", {
+          key: "voluntaryDeclaration",
+          value,
+        });
+      },
+    },
+    freight: {
+      get() {
+        return this.$store.state.report.transaksiPerdagangan.freight;
+      },
+      set(value) {
+        this.$store.commit("SET_TRANSAKSI_PERDAGANGAN", {
+          key: "freight",
+          value,
+        });
+      },
+    },
+    hargaPenyerahan: {
+      get() {
+        return this.$store.state.report.transaksiPerdagangan.hargaPenyerahan;
+      },
+      set(value) {
+        this.$store.commit("SET_TRANSAKSI_PERDAGANGAN", {
+          key: "hargaPenyerahan",
+          value,
+        });
+      },
+    },
+    // End Data Pengangkutan
 
-      // Data Pengangkutan
-      caraAngkut: "",
-      bendera: "",
-      namaPengangkut: "",
-      nomorVolyFlightPol: "",
-    };
+    // Data Pengangkutan
+    caraAngkut: {
+      get() {
+        return this.$store.state.report.dataPengangkutan.caraAngkut;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PENGANGKUTAN", {
+          key: "caraAngkut",
+          value,
+        });
+      },
+    },
+    namaPengangkut: {
+      get() {
+        return this.$store.state.report.dataPengangkutan.namaPengangkut;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PENGANGKUTAN", {
+          key: "namaPengangkut",
+          value,
+        });
+      },
+    },
+    bendera: {
+      get() {
+        return this.$store.state.report.dataPengangkutan.bendera;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PENGANGKUTAN", {
+          key: "bendera",
+          value,
+        });
+      },
+    },
+    nomorVoyFlightPol: {
+      get() {
+        return this.$store.state.report.dataPengangkutan.nomorVoyFlightPol;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PENGANGKUTAN", {
+          key: "nomorVoyFlightPol",
+          value,
+        });
+      },
+    },
+    // End Data Pengangkut
   },
 };
 </script>

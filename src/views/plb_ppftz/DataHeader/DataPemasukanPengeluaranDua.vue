@@ -1,14 +1,14 @@
 <template>
   <v-expansion-panel-content>
     <v-row>
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <!-- Data Pelabuhan Muat Bongkar -->
         <v-card-title
           class="it-inventory-card-title it-inventory-card-title__sub"
           >Data Pelabuhan Muat Bongkar</v-card-title
         >
 
-        <v-autocomplete
+        <v-combobox
           :items="[`Test1`, `Test2`]"
           outlined
           label="Pelabuhan Muat"
@@ -19,7 +19,7 @@
               return genericRequiredRule(value, 'Pelabuhan Muat');
             },
           ]"
-        ></v-autocomplete>
+        ></v-combobox>
 
         <v-text-field
           label="Pelabuhan Tujuan"
@@ -117,7 +117,7 @@
         <!-- End Data Perkiraan Tanggal -->
       </v-col>
 
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <!-- Data Berat dan Volume -->
         <v-card-title
           class="it-inventory-card-title it-inventory-card-title__sub"
@@ -126,7 +126,7 @@
         <v-text-field
           label="Berat Bersih Total (KGM)"
           outlined
-          v-model="beratBersihTotal"
+          v-model="beratBersih"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Berat Bersih Total (KGM)');
@@ -137,7 +137,7 @@
         <v-text-field
           label="Berat Kotor Total (KGM)"
           outlined
-          v-model="beratKotorTotal"
+          v-model="beratKotor"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Berat Kotor Total (KGM)');
@@ -163,7 +163,7 @@
           class="it-inventory-card-title it-inventory-card-title__sub"
           >Data Tempat Penimbunan</v-card-title
         >
-        <v-autocomplete
+        <v-combobox
           :items="[`Test1`, `Test2`]"
           outlined
           clearable
@@ -174,7 +174,7 @@
               return genericRequiredRule(value, 'Tempat Penimbunan');
             },
           ]"
-        ></v-autocomplete>
+        ></v-combobox>
         <!-- End Data Tempat Penimbunan -->
 
         <!-- Data Tempat Penimbunan -->
@@ -182,7 +182,7 @@
           class="it-inventory-card-title it-inventory-card-title__sub"
           >Data Tempat Penimbunan</v-card-title
         >
-        <v-autocomplete
+        <v-combobox
           :items="[`Test1`, `Test2`]"
           outlined
           label="Data Lartas Barang"
@@ -193,7 +193,7 @@
               return genericRequiredRule(value, 'Data Lartas Barang');
             },
           ]"
-        ></v-autocomplete>
+        ></v-combobox>
         <!-- End Data Tempat Penimbunan -->
       </v-col>
     </v-row>
@@ -206,29 +206,158 @@ export default {
   name: "DataPemasukanPengeluaranDua",
   mixins: [FieldRequired],
   data() {
-    return {
-      // Data Pelabuhan Muat Bongkar
-      pelabuhanMuat: "",
-      pelabuhanTujuan: "",
-      pelabuhanTransit: "",
+    return {};
+  },
+  computed: {
+    // Data Pelabuhan Muat Bongkat
+    pelabuhanMuat: {
+      get() {
+        return this.$store.state.report.dataPelabuhanMuatBongkar.pelabuhanMuat;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PELABUHAN_MUAT_BONGKAR", {
+          key: "pelabuhanMuat",
+          value,
+        });
+      },
+    },
+    pelabuhanTujuan: {
+      get() {
+        return this.$store.state.report.dataPelabuhanMuatBongkar
+          .pelabuhanTujuan;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PELABUHAN_MUAT_BONGKAR", {
+          key: "pelabuhanTujuan",
+          value,
+        });
+      },
+    },
+    pelabuhanTransit: {
+      get() {
+        return this.$store.state.report.dataPelabuhanMuatBongkar
+          .pelabuhanTransit;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PELABUHAN_MUAT_BONGKAR", {
+          key: "pelabuhanTransit",
+          value,
+        });
+      },
+    },
 
-      // Data Peti Kemas dan Pengemas
-      jumlahJenisKemasan: "",
-      jumlahPetiKemas: "",
-      jumlahJenisBarang: "",
+    // Data Berat Dan Volume
+    beratBersih: {
+      get() {
+        return this.$store.state.report.dataBeratDanVolume.beratBersih;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_BERAT_DAN_VOLUME", {
+          key: "beratBersih",
+          value,
+        });
+      },
+    },
+    beratKotor: {
+      get() {
+        return this.$store.state.report.dataBeratDanVolume.beratKotor;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_BERAT_DAN_VOLUME", {
+          key: "beratKotor",
+          value,
+        });
+      },
+    },
+    volume: {
+      get() {
+        return this.$store.state.report.dataBeratDanVolume.volume;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_BERAT_DAN_VOLUME", {
+          key: "volume",
+          value,
+        });
+      },
+    },
 
-      // Data Perkiraan Tanggal
-      perkiraanTanggalPengeluaran: "",
+    // Data Peti Kemas dan Pengemas
+    jumlahJenisKemasan: {
+      get() {
+        return this.$store.state.report.dataPetiKemasDanPengemas
+          .jumlahJenisKemasan;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PETI_KEMAS_DAN_PENGEMAS", {
+          key: "jumlahJenisKemasan",
+          value,
+        });
+      },
+    },
+    jumlahPetiKemas: {
+      get() {
+        return this.$store.state.report.dataPetiKemasDanPengemas
+          .jumlahPetiKemas;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PETI_KEMAS_DAN_PENGEMAS", {
+          key: "jumlahPetiKemas",
+          value,
+        });
+      },
+    },
+    jumlahJenisBarang: {
+      get() {
+        return this.$store.state.report.dataPetiKemasDanPengemas
+          .jumlahJenisBarang;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PETI_KEMAS_DAN_PENGEMAS", {
+          key: "jumlahJenisBarang",
+          value,
+        });
+      },
+    },
 
-      // Data Berat dan Volume
-      beratBersihTotal: "",
-      beratKotorTotal: "",
-      volume: "",
+    // Data Tempat Penimbunan
+    tempatPenimbunan: {
+      get() {
+        return this.$store.state.report.dataTempatPenimbunan.tempatPenimbunan;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_TEMPAT_PENIMBUNAN", {
+          key: "tempatPenimbunan",
+          value,
+        });
+      },
+    },
 
-      // Data Tempat Penimbunan
-      tempatPenimbunan: "",
-      dataLartasBarang: "",
-    };
+    // Data Perkiraan Tanggal Pengeluaran
+    perkiraanTanggalPengeluaran: {
+      get() {
+        return this.$store.state.report.dataPerkiraanTanggalPengeluaran
+          .perkiraanTanggalPengeluaran;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PERKIRAAN_TANGGAL_PENGELUARAN", {
+          key: "perkiraanTanggalPengeluaran",
+          value,
+        });
+      },
+    },
+
+    // Data Lartas
+    dataLartasBarang: {
+      get() {
+        return this.$store.state.report.dataLartas.dataLartasBarang;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_LARTAS", {
+          key: "dataLartasBarang",
+          value,
+        });
+      },
+    },
   },
 };
 </script>

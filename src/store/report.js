@@ -1,22 +1,24 @@
 import axios from "axios";
 import { AESDecrypt, AESEncrypt } from "../helper/Encryption";
-
+// import router from "../router/";
 const baseUrl = process.env.BASE_URL;
 
 const report = {
   state: {
     reportId: "",
+    reportIsSuccess: false,
     report: {
-      pengajuanSebagai: "Test 1",
-      diajukanDikantor: "Test 2",
-      jenisPemberitahuan: "Test 1",
-      BCDocumentType: "Test 2",
+      pengajuanSebagai: "",
+      diajukanDikantor: "",
+      jenisPemberitahuan: "",
+      BCDocumentType: "",
     },
     reports: [],
     dataPengajuan: {
       kantorPabeanAsal: "",
       kategoryPemberitahuan: "",
       kategoryPengeluaran: "",
+      tujuanPengeluaran: "",
       asalBarang: "",
       caraPembayaran: "",
       reportId: "",
@@ -27,7 +29,7 @@ const report = {
       namaPengirim: "",
       alamatPengirim: "",
       nomorIjinBpkPengirim: "",
-      tanggalIjinbpkPengirim: "",
+      tanggalIjinBpkPengirim: "",
       reportId: "",
     },
     identitasPenerima: {
@@ -40,11 +42,12 @@ const report = {
     transaksiPerdagangan: {
       transaksi: "",
       transaksiLainnya: "",
-      valute: "",
+      valuta: "",
       kursNDPBM: "",
       cif: "",
       voluntaryDeclaration: "",
       freight: "",
+      hargaPenyerahan: "",
       reportId: "",
     },
     dataPengangkutan: {
@@ -80,6 +83,10 @@ const report = {
       perkiraanTanggalPengeluaran: "",
       reportId: "",
     },
+    dataLartas: {
+      dataLartasBarang: "",
+      reportId: "",
+    },
   },
   mutations: {
     SET_DATA_REPORT(state, payload) {
@@ -98,28 +105,31 @@ const report = {
       state.identitasPengirim[payload.key] = payload.value;
     },
     SET_IDENTITAS_PENERIMA(state, payload) {
-      state.identitasPengirim[payload.key] = payload.value;
+      state.identitasPenerima[payload.key] = payload.value;
     },
     SET_TRANSAKSI_PERDAGANGAN(state, payload) {
-      state.identitasPengirim[payload.key] = payload.value;
+      state.transaksiPerdagangan[payload.key] = payload.value;
     },
     SET_DATA_PENGANGKUTAN(state, payload) {
-      state.identitasPengirim[payload.key] = payload.value;
+      state.dataPengangkutan[payload.key] = payload.value;
     },
     SET_DATA_PELABUHAN_MUAT_BONGKAR(state, payload) {
-      state.identitasPengirim[payload.key] = payload.value;
+      state.dataPelabuhanMuatBongkar[payload.key] = payload.value;
     },
     SET_DATA_BERAT_DAN_VOLUME(state, payload) {
-      state.identitasPengirim[payload.key] = payload.value;
+      state.dataBeratDanVolume[payload.key] = payload.value;
     },
     SET_DATA_PETI_KEMAS_DAN_PENGEMAS(state, payload) {
-      state.identitasPengirim[payload.key] = payload.value;
+      state.dataPetiKemasDanPengemas[payload.key] = payload.value;
     },
     SET_DATA_TEMPAT_PENIMBUNAN(state, payload) {
-      state.identitasPengirim[payload.key] = payload.value;
+      state.dataTempatPenimbunan[payload.key] = payload.value;
     },
     SET_DATA_PERKIRAAN_TANGGAL_PENGELUARAN(state, payload) {
-      state.identitasPengirim[payload.key] = payload.value;
+      state.dataPerkiraanTanggalPengeluaran[payload.key] = payload.value;
+    },
+    SET_DATA_LARTAS(state, payload) {
+      state.dataLartas[payload.key] = payload.value;
     },
   },
   actions: {

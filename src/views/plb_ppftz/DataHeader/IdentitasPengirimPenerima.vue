@@ -5,7 +5,7 @@
       >Pengirim</v-card-title
     >
     <v-row>
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <v-select
           clearable
           :items="['5 - NPWP - 15 Digits']"
@@ -42,7 +42,7 @@
         </v-text-field>
       </v-col>
 
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <v-text-field
           label="Nomor Identitas Pengirim"
           outlined
@@ -86,16 +86,16 @@
       >Penerima</v-card-title
     >
     <v-row>
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <v-select
           clearable
           :items="['5 - NPWP - 15 Digits']"
-          label="Jenis Identitas Pengirim"
+          label="Jenis Identitas Penerima"
           outlined
-          v-model="jenisIdentitasPengirim"
+          v-model="jenisIdentitasPenerima"
           :rules="[
             (value) => {
-              return genericRequiredRule(value, 'Jenis Identitas Pengirim');
+              return genericRequiredRule(value, 'Jenis Identitas Penerima');
             },
           ]"
         ></v-select>
@@ -112,7 +112,7 @@
         </v-text-field>
       </v-col>
 
-      <v-col lg="6" sm="12">
+      <v-col lg="6" md="6" sm="12">
         <v-text-field
           label="Nomor Identitas Penerima"
           outlined
@@ -147,20 +147,138 @@ export default {
   name: "IdentitasPengirimPenerima",
   mixins: [FieldRequired],
   data() {
-    return {
-      // Penerima
-      jenisIdentitasPengirim: "",
-      namaPengirim: "",
-      nomorIjinBpkPengirim: "",
-      nomorIdentitasPengirim: "",
-      alamatPengirim: "",
-      tanggalIjinBpkPengirim: "",
-      // Pengirim
-      jenisIdentitasPenerima: "",
-      namaPenerima: "",
-      nomorIdentitasPenerima: "",
-      alamatPenerima: "",
-    };
+    return {};
+  },
+  computed: {
+    // Pengirim
+    identitasPengirim: {
+      get() {
+        return this.$store.state.report.identitasPengirim.identitasPengirim;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENGIRIM", {
+          key: "identitasPengirim",
+          value,
+        });
+      },
+    },
+    jenisIdentitasPengirim: {
+      get() {
+        return this.$store.state.report.identitasPengirim
+          .jenisIdentitasPengirim;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENGIRIM", {
+          key: "jenisIdentitasPengirim",
+          value,
+        });
+      },
+    },
+    nomorIdentitasPengirim: {
+      get() {
+        return this.$store.state.report.identitasPengirim
+          .nomorIdentitasPengirim;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENGIRIM", {
+          key: "nomorIdentitasPengirim",
+          value,
+        });
+      },
+    },
+    namaPengirim: {
+      get() {
+        return this.$store.state.report.identitasPengirim.namaPengirim;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENGIRIM", {
+          key: "namaPengirim",
+          value,
+        });
+      },
+    },
+    alamatPengirim: {
+      get() {
+        return this.$store.state.report.identitasPengirim.alamatPengirim;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENGIRIM", {
+          key: "alamatPengirim",
+          value,
+        });
+      },
+    },
+    nomorIjinBpkPengirim: {
+      get() {
+        return this.$store.state.report.identitasPengirim.nomorIjinBpkPengirim;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENGIRIM", {
+          key: "nomorIjinBpkPengirim",
+          value,
+        });
+      },
+    },
+    tanggalIjinBpkPengirim: {
+      get() {
+        return this.$store.state.report.identitasPengirim
+          .tanggalIjinBpkPengirim;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENGIRIM", {
+          key: "tanggalIjinBpkPengirim",
+          value,
+        });
+      },
+    },
+
+    // Penerima
+    jenisIdentitasPenerima: {
+      get() {
+        return this.$store.state.report.identitasPenerima
+          .jenisIdentitasPenerima;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENERIMA", {
+          key: "jenisIdentitasPenerima",
+          value,
+        });
+      },
+    },
+    nomorIdentitasPenerima: {
+      get() {
+        return this.$store.state.report.identitasPenerima
+          .nomorIdentitasPenerima;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENERIMA", {
+          key: "nomorIdentitasPenerima",
+          value,
+        });
+      },
+    },
+    namaPenerima: {
+      get() {
+        return this.$store.state.report.identitasPenerima.namaPenerima;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENERIMA", {
+          key: "namaPenerima",
+          value,
+        });
+      },
+    },
+    alamatPenerima: {
+      get() {
+        return this.$store.state.report.identitasPenerima.alamatPenerima;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PENERIMA", {
+          key: "alamatPenerima",
+          value,
+        });
+      },
+    },
   },
 };
 </script>
