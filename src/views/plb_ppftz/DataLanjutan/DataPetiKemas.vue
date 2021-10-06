@@ -24,7 +24,7 @@
           v-model="volumeKontainer"
           :rules="[
             (value) => {
-              return genericRequiredRule(value, 'Hs Code');
+              return genericRequiredRule(value, 'Volume Kontainer');
             },
           ]"
         >

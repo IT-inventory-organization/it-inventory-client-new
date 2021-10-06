@@ -106,13 +106,13 @@ export default {
         {
           id: 12212,
           kodeDokumen: "331122122323",
-          namaDokumen: "Dokumen-332210012",
+          nomorDokumen: "Dokumen-332210012",
           tanggalDokumen: "20-09-2021",
         },
         {
           id: 12213,
           kodeDokumen: "1232332323",
-          namaDokumen: "Dokumen-22333",
+          nomorDokumen: "Dokumen-22333",
           tanggalDokumen: "21-09-2021",
         },
       ],

@@ -54,7 +54,7 @@ export default {
   methods: {
     handleSubmit() {
       this.$swal({
-        title: "Apakah data anda sudah benar?",
+        title: "Apakah data anda sudah benar ?",
         type: "warning",
         icon: "question",
         showCancelButton: true,
