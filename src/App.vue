@@ -36,7 +36,8 @@ export default {
   created() {
     const token = localStorage.getItem("token_it_inventory");
     if (!token) {
-      this.$router.push("/login");
+      // eslint-disable-next-line no-unused-vars
+      this.$router.push("/login").catch((err) => {});
     }
 
     if (token) {

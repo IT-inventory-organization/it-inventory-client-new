@@ -100,6 +100,7 @@ const report = {
       ]
     */
     dataDokumen: [],
+    index: null,
   },
   mutations: {
     // Data Header
@@ -149,6 +150,24 @@ const report = {
     // Data Lanjutan
     SET_DATA_DOKUMEN(state, payload) {
       state.dataDokumen = [...state.dataDokumen, payload];
+    },
+    UPDATE_DATA_DOKUMENT(state, payload, index) {
+      state.dataDokumen[index] = payload;
+    },
+
+    DELETE_DATA_DOKUMEN(state, payload) {
+      if (state.dataDokumen.length < 2) {
+        state.dataDokumen = [];
+      } else {
+        // const index = state.dataDokumen.indexOf(payload);
+        // if (index !== -1)
+        state.dataDokumen = state.dataDokumen.filter((value) => {
+          return value.kodeDokumen !== payload.kodeDokumen;
+        });
+      }
+    },
+    SET_INDEX(state, index) {
+      state.index = index;
     },
   },
   actions: {

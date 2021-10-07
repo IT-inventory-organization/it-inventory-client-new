@@ -128,18 +128,21 @@
 </template>
 
 <script>
-import DataPengajuan from "@/views/plb_ppftz/DataHeader/DataPengajuan";
-import IdentitasPengirimPenerima from "@/views/plb_ppftz/DataHeader/IdentitasPengirimPenerima";
-import DataPemasukanPengeluaranSatu from "@/views/plb_ppftz/DataHeader/DataPemasukanPengeluaranSatu";
-import DataPemasukanPengeluaranDua from "@/views/plb_ppftz/DataHeader/DataPemasukanPengeluaranDua";
+// import DataPengajuan from "@/views/plb_ppftz/DataHeader/DataPengajuan";
+// import IdentitasPengirimPenerima from "@/views/plb_ppftz/DataHeader/IdentitasPengirimPenerima";
+// import DataPemasukanPengeluaranSatu from "@/views/plb_ppftz/DataHeader/DataPemasukanPengeluaranSatu";
+// import DataPemasukanPengeluaranDua from "@/views/plb_ppftz/DataHeader/DataPemasukanPengeluaranDua";
 
 export default {
   name: "FormDataHeader",
   components: {
-    DataPengajuan,
-    IdentitasPengirimPenerima,
-    DataPemasukanPengeluaranSatu,
-    DataPemasukanPengeluaranDua,
+    DataPengajuan: () => import("@/views/plb_ppftz/DataHeader/DataPengajuan"),
+    IdentitasPengirimPenerima: () =>
+      import("@/views/plb_ppftz/DataHeader/IdentitasPengirimPenerima"),
+    DataPemasukanPengeluaranSatu: () =>
+      import("@/views/plb_ppftz/DataHeader/DataPemasukanPengeluaranSatu"),
+    DataPemasukanPengeluaranDua: () =>
+      import("@/views/plb_ppftz/DataHeader/DataPemasukanPengeluaranDua"),
   },
   props: ["step", "handleSubmitStepper"],
   data() {
@@ -167,11 +170,16 @@ export default {
       return false;
     },
     handleValidate(key) {
-      if (this.$refs[key].handleValidate()) {
-        this[key] = true;
-      } else {
-        this[key] = false;
-      }
+      // const getKey = Object.keys(this.$refs[key].$refs);
+      try {
+        const getRef = this.$refs[key].handleValidate();
+        if (getRef) {
+          this[key] = true;
+        } else {
+          this[key] = false;
+        }
+        // eslint-disable-next-line no-empty
+      } catch (error) {}
     },
 
     handleSubmit() {
@@ -185,12 +193,13 @@ export default {
         confirmButtonText: "Ya",
         cancelButtonText: "Tidak",
       }).then((result) => {
+        // this.$emit("handleSubmitStepper");
         if (result.value) {
-          if (this.validateStepper()) {
-            this.$emit("handleSubmitStepper");
-          } else {
-            this.$swal("Data Belum Lengkap", "", "error");
-          }
+          // if (this.validateStepper()) {
+          this.$emit("handleSubmitStepper");
+          // } else {
+          // this.$swal("Data Belum Lengkap", "", "error");
+          // }
         }
       });
       if (this.$refs["dataPemasukanPengeluaranDua"].handleValidate()) {

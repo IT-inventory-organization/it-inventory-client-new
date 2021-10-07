@@ -91,7 +91,8 @@ export default {
   },
   created() {
     if (localStorage.getItem("token_it_inventory")) {
-      this.$router.push("/dashboard");
+      // eslint-disable-next-line no-unused-vars
+      this.$router.push("/dashboard").catch((err) => {});
     }
   },
 };

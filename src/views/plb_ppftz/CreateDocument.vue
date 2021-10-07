@@ -93,7 +93,7 @@ export default {
     return {
       page: "",
       currentLocation: "",
-      step: 1,
+      step: 2,
     };
   },
   created() {

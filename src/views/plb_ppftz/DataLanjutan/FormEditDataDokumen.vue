@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
-        <span class="text-h6">Add New List</span>
+        <span class="text-h6">Edit Dokumen</span>
         <span style="cursor: pointer" @click.prevent="handleDialog"
           ><v-icon>mdi-close</v-icon></span
         >
@@ -56,7 +56,7 @@
             fill
             class="it_inven_create_btn"
             style="width: 200px"
-            >Save</v-btn
+            >Update</v-btn
           >
         </v-row>
       </v-form>
@@ -67,7 +67,7 @@
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
-  name: "FormDataDokumen",
+  name: "FormEditDataDokumen",
   mixins: [FieldRequired],
   props: [],
   data() {
@@ -77,27 +77,44 @@ export default {
       nomorDokumen: "",
     };
   },
+  computed: {
+    index: {
+      get() {
+        return this.$store.state.report.index;
+      },
+    },
+    item: {
+      get() {
+        return this.$store.state.report.dataDokumen[this.index];
+      },
+    },
+  },
+  mounted() {
+    if (this.item) {
+      this.kodeDokumen = this.item.kodeDokumen;
+      this.tanggalDokumen = this.item.tanggalDokumen;
+      this.nomorDokumen = this.item.nomorDokumen;
+    }
+  },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       const [y, m, d] = this.tanggalDokumen.split("-");
+
       const payload = {
         kodeDokumen: this.kodeDokumen,
         tanggalDokumen: `${d}-${m}-${y}`,
         nomorDokumen: this.nomorDokumen,
       };
+      console.log(payload);
 
       if (this.$refs.formDataDokumen.validate()) {
-        this.$store.commit("SET_DATA_DOKUMEN", payload);
-        this.$emit("handleModal");
-
-        // Reset State
-        this.kodeDokumen = "";
-        this.tanggalDokumen = "";
-        this.nomorDokumen = "";
+        await this.$store.commit("UPDATE_DATA_DOKUMENT", payload, this.index);
+        this.handleDialog();
       }
     },
     handleDialog() {
-      this.$emit("handleModal");
+      this.$emit("handleEdit");
+
       this.$refs.formDataDokumen.resetValidation();
     },
   },
