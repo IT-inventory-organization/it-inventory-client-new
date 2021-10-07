@@ -154,7 +154,6 @@ const report = {
       const temp = [...state.dataDokumen]
       state.dataDokumen = []
       state.dataDokumen = temp.map((ele, ind) => {
-        console.log(ind, payload.index)
         if(ind === payload.index) {
           ele = Object.assign({}, payload.payload)
         }
