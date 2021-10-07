@@ -3,9 +3,10 @@
     <v-row no-gutters>
       <v-col lg="9" md="9"><div class="text-h6">List Dokumen</div></v-col>
       <v-col lg="3" md="3" style="display:flex; justify-content: flex-end">
-        <button class="btn mr-6">
+        <button class="btn mr-6" @click.prevent="handleImport">
           <v-icon left>mdi-tray-arrow-down</v-icon> Import CSV
         </button>
+        <input type="file" id="fileInput" accept=".csv" hidden />
         <button @click.prevent="handleModal" class="btn">
           <v-icon left>mdi-plus-box-outline</v-icon> Add
         </button>
@@ -16,7 +17,7 @@
         <div class="it-inventory-box">
           <v-data-table
             :headers="headers"
-            :items="data"
+            :items="dataDokumen"
             :items-per-page="5"
             class="it-inventory-simple-table"
           >
@@ -80,13 +81,20 @@ export default {
     FormDataDokumen: () =>
       import("@/views/plb_ppftz/DataLanjutan/FormDataDokumen"),
   },
+  computed: {
+    dataDokumen: {
+      get() {
+        return this.$store.state.report.dataDokumen;
+      },
+    },
+  },
   data() {
     return {
       dialog: false,
       headers: [
         {
           text: "No",
-          value: "id",
+          value: "no",
           sortable: false,
         },
         {
@@ -102,25 +110,20 @@ export default {
         { text: "Tanggal Dokumen", value: "tanggalDokumen" },
         { text: "Action", value: "action", sortable: false },
       ],
-      data: [
-        {
-          id: 12212,
-          kodeDokumen: "331122122323",
-          nomorDokumen: "Dokumen-332210012",
-          tanggalDokumen: "20-09-2021",
-        },
-        {
-          id: 12213,
-          kodeDokumen: "1232332323",
-          nomorDokumen: "Dokumen-22333",
-          tanggalDokumen: "21-09-2021",
-        },
-      ],
     };
   },
   methods: {
     handleModal() {
       this.dialog = !this.dialog;
+    },
+    handleImport() {
+      const fileInput = document.getElementById("fileInput");
+      fileInput.click();
+      fileInput.onchange = (e) => {
+        const file = e.target.files;
+        console.log(file);
+      };
+      // fileReader.click;
     },
   },
 };

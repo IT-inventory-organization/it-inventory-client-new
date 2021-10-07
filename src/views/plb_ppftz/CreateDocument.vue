@@ -6,12 +6,13 @@
           Create New {{ page }}
         </v-card-title>
       </v-col>
-      <v-col lg="2" md="2" sm="12">
+      <v-col lg="2" md="2" sm="12" style="text-align: right">
         <v-btn
           v-if="step === 4"
           fill
           class="it_inven_create_btn"
-          style="width: 100%"
+          style="width: 60%"
+          @click="handleSubmitAll"
           >Submit</v-btn
         >
       </v-col>
@@ -91,21 +92,29 @@ export default {
   data() {
     return {
       page: "",
+      currentLocation: "",
       step: 1,
     };
   },
   created() {
-    const getPath = this.$route.path;
+    this.currentLocation = this.$route.path;
 
-    if (getPath.includes("plb")) {
+    if (this.currentLocation.includes("plb")) {
       this.page = "PLB";
-    } else if (getPath.includes("ppftz")) {
+    } else if (this.currentLocation.includes("ppftz")) {
       this.page = "PPFTZ";
     }
   },
   methods: {
     handleSubmitStepper() {
       this.step += 1;
+    },
+    handleSubmitAll() {
+      if (this.page === "PLB") {
+        this.$router.push("/plb");
+      } else if (this.page === "PPFTZ") {
+        this.$router.push("/ppftz");
+      }
     },
   },
 };

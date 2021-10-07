@@ -72,16 +72,27 @@ export default {
   props: ["handleModal"],
   data() {
     return {
-      pageActions: "",
       kodeDokumen: "",
-      nomorDokumen: "",
       tanggalDokumen: "",
+      nomorDokumen: "",
     };
   },
   methods: {
     handleSubmit() {
+      const payload = {
+        kodeDokumen: this.kodeDokumen,
+        tanggalDokumen: this.tanggalDokumen,
+        nomorDokumen: this.nomorDokumen,
+      };
+
       if (this.$refs.formDataDokumen.validate()) {
+        this.$store.commit("SET_DATA_DOKUMEN", payload);
         this.$emit("handleModal");
+
+        // Reset State
+        this.kodeDokumen = "";
+        this.tanggalDokumen = "";
+        this.nomorDokumen = "";
       }
     },
     handleDialog() {

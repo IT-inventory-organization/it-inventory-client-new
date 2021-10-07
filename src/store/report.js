@@ -6,7 +6,6 @@ const baseUrl = process.env.BASE_URL;
 const report = {
   state: {
     reportId: "",
-    reportIsSuccess: false,
     report: {
       pengajuanSebagai: "",
       diajukanDikantor: "",
@@ -14,6 +13,7 @@ const report = {
       BCDocumentType: "",
     },
     reports: [],
+    // Data Header
     dataPengajuan: {
       kantorPabeanAsal: "",
       kategoryPemberitahuan: "",
@@ -87,8 +87,22 @@ const report = {
       dataLartasBarang: "",
       reportId: "",
     },
+    // End Data Header
+
+    // Data Lanjutan
+    /*
+      dataDokumen:[
+        {
+          kodeDokumen: "55154-2415",
+          nomorDokumen: "08-239-6154",
+          tanggalDokumen: "10-04-2016"
+        }
+      ]
+    */
+    dataDokumen: [],
   },
   mutations: {
+    // Data Header
     SET_DATA_REPORT(state, payload) {
       state.report[payload.key] = payload.value;
     },
@@ -130,6 +144,11 @@ const report = {
     },
     SET_DATA_LARTAS(state, payload) {
       state.dataLartas[payload.key] = payload.value;
+    },
+
+    // Data Lanjutan
+    SET_DATA_DOKUMEN(state, payload) {
+      state.dataDokumen = [...state.dataDokumen, payload];
     },
   },
   actions: {

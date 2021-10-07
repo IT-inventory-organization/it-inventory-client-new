@@ -108,6 +108,9 @@ body {
     border: 1px solid #d8dcf2 !important;
     border-radius: inherit;
   }
+  &::after {
+    border-top: none !important;
+  }
   .v-expansion-panel-header {
     font-size: 1rem;
   }
@@ -119,6 +122,20 @@ body {
     padding: 24px 16px !important;
   }
 }
+
+.it-accordion-panel.it-accordion-panel__error {
+  background-color: rgba(242, 124, 97, 0.2) !important;
+  &::before {
+    border: 1px solid #f27b61 !important;
+  }
+}
+
+// .it-accordion-panel.it-accordion-panel__success {
+//   background-color: rgb(12, 102, 207, 0.2) !important;
+//   &::before {
+//     border: 1px solid #0c66cf !important;
+//   }
+// }
 // End Accordion
 
 // Stepper

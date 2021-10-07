@@ -1,33 +1,55 @@
 import axios from "axios";
+import Swal from "sweetalert2";
+import router from "@/router/";
 
-const baseUrl = "http://localhost:3000/";
+const baseUrl = "http://192.168.100.32:3000/";
 
 const user = {
   state: {
-    dataPengajuan: {
-      name: "",
+    user: {
+      email: "",
+      password: "",
     },
+    token: "",
+    isLoading: false,
   },
   mutations: {
-    SET_NAME(state, value) {
-      state.dataPengajuan.name = value;
+    SET_USER(state, payload) {
+      state.user[payload.key] = payload.value;
     },
-    SET_DATA(state, value) {
-      state.dataPengajuan = value;
+    RESET_USER(state) {
+      state.user = { email: "", password: "" };
+    },
+    SET_TOKEN(state, payload) {
+      state.token = payload;
+    },
+    SET_ISLOADING(state, payload) {
+      state.isLoading = payload;
     },
   },
   actions: {
-    async fetchData(context) {
-      let result = await axios.get(baseUrl);
-      result = {
-        success: true,
-        message: "",
-        data: {
-          name: "ayam",
-          tanggal: Date.now(),
-        },
-      };
-      context.commit("SET_DATA", result.data);
+    async loginActionUser(context) {
+      try {
+        context.commit("SET_ISLOADING", true);
+        const result = await axios({
+          url: `${baseUrl}login`,
+          method: "POST",
+          data: context.state.user,
+        });
+        context.commit("SET_ISLOADING", false);
+        context.commit("SET_TOKEN", result.data.data);
+        localStorage.setItem("token_it_inventory", result.data.data);
+        router.push("/dashboard");
+      } catch (error) {
+        if (error.message === "Network Error") {
+          Swal.fire("Tidak ada jaringan!", "", "error");
+        }
+
+        const response = error.response.data;
+        if (!response.success) {
+          Swal.fire("Gagal!", response.message, "error");
+        }
+      }
     },
   },
 };

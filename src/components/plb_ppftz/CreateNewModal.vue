@@ -137,6 +137,8 @@ export default {
       if (this.$refs.initialReport.validate()) {
         // this.$store.dispatch("createReport")
         this.$router.push(`${this.$route.path}/add`);
+      } else {
+        this.$swal("Data Belum Lengkap", "", "error");
       }
     },
   },

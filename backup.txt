@@ -1,1 +1,41 @@
 <v-btn fill class="it_inven_create_btn">Create New</v-btn>
+
+
+
+{
+    "reportId": "1",
+    "dataDokumen": {
+        "tableDokumen": [
+            {
+                "kodeDokumen": "55154-2415",
+                "nomorDokumen": "08-239-6154",
+                "tanggalDokumen": "10-04-2016"
+            }, {
+                "kodeDokumen": "0573-2883",
+                "nomorDokumen": "94-838-5275",
+                "tanggalDokumen": "19-03-2021"
+            }, {
+                "kodeDokumen": "42254-164",
+                "nomorDokumen": "03-753-9138",
+                "tanggalDokumen": "07-05-2017"
+            }, {
+                "kodeDokumen": "41268-461",
+                "nomorDokumen": "00-020-6425",
+                "tanggalDokumen": "15-10-2012"
+            }, {
+                "kodeDokumen": "55111-661",
+                "nomorDokumen": "79-060-0347",
+                "tanggalDokumen": "10-08-2019"
+            }, {
+                "kodeDokumen": "11822-0067",
+                "nomorDokumen": "65-508-0719",
+                "tanggalDokumen": "06-04-2020"
+            }
+        ]
+    },
+    "dataPetiKemas": {
+        "dataKontainer": "Kontainer FGH",
+        "volumeKontainer": 9999.99
+    }
+    
+}
