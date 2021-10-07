@@ -15,7 +15,8 @@
             <v-text-field
               label="Kode Dokumen"
               outlined
-              v-model="kodeDokumen"
+              v-model="item.kodeDokumen"
+              @change="handleChange('kodeDokumen', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Kode Dokumen');
@@ -26,7 +27,8 @@
             <v-text-field
               label="Tanggal Dokumen"
               outlined
-              v-model="tanggalDokumen"
+              v-model="item.tanggalDokumen"
+              @change="handleChange('tanggalDokumen', $event)"
               type="date"
               :rules="[
                 (value) => {
@@ -40,7 +42,8 @@
             <v-text-field
               label="Nomor Dokumen"
               outlined
-              v-model="nomorDokumen"
+              v-model="item.nomorDokumen"
+              @change="handleChange('nomorDokumen', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Nomor Dokumen');
@@ -69,53 +72,31 @@ import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "FormEditDataDokumen",
   mixins: [FieldRequired],
-  props: [],
-  data() {
-    return {
-      kodeDokumen: "",
-      tanggalDokumen: "",
-      nomorDokumen: "",
-    };
-  },
-  computed: {
-    index: {
-      get() {
-        return this.$store.state.report.index;
-      },
-    },
-    item: {
-      get() {
-        return this.$store.state.report.dataDokumen[this.index];
-      },
-    },
-  },
-  mounted() {
-    if (this.item) {
-      this.kodeDokumen = this.item.kodeDokumen;
-      this.tanggalDokumen = this.item.tanggalDokumen;
-      this.nomorDokumen = this.item.nomorDokumen;
-    }
-  },
+  props: ["item", "index"],
   methods: {
+    handleChange (key, value) {
+      this.$emit("handleChangeEdit", key, value)
+    },
     async handleSubmit() {
-      const [y, m, d] = this.tanggalDokumen.split("-");
+      const [y, m, d] = this.item.tanggalDokumen.split("-");
 
       const payload = {
-        kodeDokumen: this.kodeDokumen,
+        kodeDokumen: this.item.kodeDokumen,
         tanggalDokumen: `${d}-${m}-${y}`,
-        nomorDokumen: this.nomorDokumen,
+        nomorDokumen: this.item.nomorDokumen,
       };
-      console.log(payload);
-
+      const data = {
+        payload, index: this.index
+      }
       if (this.$refs.formDataDokumen.validate()) {
-        await this.$store.commit("UPDATE_DATA_DOKUMENT", payload, this.index);
+        // this.$emit("handleEdit", payload, this.index)
+        this.$store.commit("UPDATE_DATA_DOKUMENT", data)
         this.handleDialog();
       }
     },
     handleDialog() {
-      this.$emit("handleEdit");
-
       this.$refs.formDataDokumen.resetValidation();
+      this.$emit("handleEdit");
     },
   },
 };

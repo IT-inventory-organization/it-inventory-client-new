@@ -3,12 +3,16 @@ const configSecurity = {
   mode: CryptoJS.mode.ECB,
   padding: CryptoJS.pad.Pkcs7
 };
-const keyPromise = process.env.KEY_CRYPTO;
+const keyPromise = CryptoJS.enc.Utf8.parse("@syreiasdp");
 
 module.exports = {
   AESDecrypt: (data) => {
+    data = CryptoJS.enc.Base64.parse(data);
     const decrypt = CryptoJS.AES.decrypt(
-      data,
+      {
+        ciphertext: data,
+        salt: ''
+      },
       keyPromise,
       configSecurity
     );

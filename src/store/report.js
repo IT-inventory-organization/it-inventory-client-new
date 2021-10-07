@@ -100,7 +100,6 @@ const report = {
       ]
     */
     dataDokumen: [],
-    index: null,
   },
   mutations: {
     // Data Header
@@ -151,8 +150,16 @@ const report = {
     SET_DATA_DOKUMEN(state, payload) {
       state.dataDokumen = [...state.dataDokumen, payload];
     },
-    UPDATE_DATA_DOKUMENT(state, payload, index) {
-      state.dataDokumen[index] = payload;
+    UPDATE_DATA_DOKUMENT(state, payload) {
+      const temp = [...state.dataDokumen]
+      state.dataDokumen = []
+      state.dataDokumen = temp.map((ele, ind) => {
+        console.log(ind, payload.index)
+        if(ind === payload.index) {
+          ele = Object.assign({}, payload.payload)
+        }
+        return ele
+      })
     },
 
     DELETE_DATA_DOKUMEN(state, payload) {
@@ -165,9 +172,6 @@ const report = {
           return value.kodeDokumen !== payload.kodeDokumen;
         });
       }
-    },
-    SET_INDEX(state, index) {
-      state.index = index;
     },
   },
   actions: {

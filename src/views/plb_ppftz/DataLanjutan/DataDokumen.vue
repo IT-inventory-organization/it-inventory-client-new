@@ -54,9 +54,8 @@
                 </template>
 
                 <v-list>
-                  <v-list-item>
+                  <v-list-item @click="handleEditDialog(props.item, props.index)">
                     <v-list-item-title
-                      @click="handleEdit(props.item, props.index)"
                     >
                       <v-icon left>mdi-pencil-outline </v-icon>
                       Edit
@@ -92,7 +91,8 @@
         ref="editDataDokumen"
         :item="editedItem"
         :index="editedIndex"
-        @handleEdit="handleEdit"
+        @handleEdit="handleEditDialog"
+        @handleChangeEdit="handleChangeEdit"
       />
     </v-dialog>
   </div>
@@ -111,11 +111,6 @@ export default {
     dataDokumen: {
       get() {
         return this.$store.state.report.dataDokumen;
-      },
-    },
-    index: {
-      set(value) {
-        return this.$store.commit("SET_INDEX", value);
       },
     },
   },
@@ -154,12 +149,13 @@ export default {
     return {
       dialog: false,
       editDialog: false,
-      editedItem: null,
+      editedItem: {
+        kodeDokumen: "",
+        tanggalDokumen: "",
+        nomorDokumen: "",
+      },
       editedIndex: null,
       csvData: [],
-      kodeDokumen: "",
-      tanggalDokumen: "",
-      nomorDokumen: "",
       headers: [
         {
           text: "No",
@@ -199,7 +195,7 @@ export default {
         this.kodeDokumen = "";
         this.tanggalDokumen = "";
         this.nomorDokumen = "";
-        e.target.files = [];
+        this.csvData = []
       };
       reader.readAsText(file);
     },
@@ -212,18 +208,25 @@ export default {
     handleDelete(item) {
       this.$store.commit("DELETE_DATA_DOKUMEN", item);
     },
-    handleEdit(item, index) {
+    handleEditDialog(item, index) {
       this.editDialog = !this.editDialog;
       if (this.editDialog) {
-        this.editedItem = { ...item };
-        this.index = index;
+        this.editedItem = Object.assign({}, item);
+        this.editedIndex = index;
         const [d, m, y] = this.editedItem.tanggalDokumen.split("-");
         this.editedItem.tanggalDokumen = `${y}-${m}-${d}`;
       } else {
-        this.editedItem = null;
+        this.editedItem = {
+          kodeDokumen: "",
+          tanggalDokumen: "",
+          nomorDokumen: "",
+        };
         this.editedIndex = null;
       }
     },
+    handleChangeEdit(key, value) {
+      this.editedItem[key] = value
+    }
   },
 };
 </script>
