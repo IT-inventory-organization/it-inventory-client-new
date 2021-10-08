@@ -1,12 +1,20 @@
 <template>
   <div>
     <v-row no-gutters>
-      <v-col lg="9" md="9"><div class="text-h6">List Dokumen</div></v-col>
+      <v-col lg="9" md="9"><div class="text-h6">List Data Barang</div></v-col>
       <v-col lg="3" md="3" style="display:flex; justify-content: flex-end">
-        <button class="btn mr-6">
+        <button class="btn mr-6" @click.prevent="handleImport">
           <v-icon left>mdi-tray-arrow-down</v-icon> Import CSV
         </button>
-
+        <input
+          type="file"
+          @change="handleCSV"
+          ref="fileInput"
+          accept=".csv"
+          multiple="false"
+          hidden
+          @click="$refs.fileInput.value = ''"
+        />
         <button @click.prevent="handleModal" class="btn">
           <v-icon left>mdi-plus-box-outline</v-icon> Add
         </button>
@@ -22,12 +30,12 @@
             class="it-inventory-simple-table"
           >
             <template v-slot:[`item.no`]="props">
-              {{ props.index + 1 }}
+              {{ (props.index += 1) }}
             </template>
             <template v-slot:[`item.status`]="{ item }">
               <approval-badge :status="item.status"></approval-badge>
             </template>
-            <template v-slot:[`item.action`]>
+            <template v-slot:[`item.action`]="props">
               <v-menu offset-y>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -45,19 +53,21 @@
                 </template>
 
                 <v-list>
-                  <v-list-item>
+                  <v-list-item
+                    @click="handleEditDialog(props.item, props.index)"
+                  >
                     <v-list-item-title>
                       <v-icon left>mdi-pencil-outline </v-icon>
                       Edit
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item>
+                  <v-list-item @click="handleCopy(props.item)">
                     <v-list-item-title>
                       <v-icon left>mdi-content-copy </v-icon>
                       Copy
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item>
+                  <v-list-item @click.prevent="handleDelete(props.item)">
                     <v-list-item-title>
                       <v-icon left>mdi-trash-can-outline</v-icon>
                       Delete
@@ -83,7 +93,13 @@
     </v-dialog>
 
     <v-dialog v-model="editDialog" persistent max-width="800px">
-      <form-edit-data-barang @handleModal="handleModal" />
+      <form-edit-data-barang
+        ref="editListDataBarang"
+        :item="editedItem"
+        :index="editedIndex"
+        @handleEdit="handleEditDialog"
+        @handleChangeEdit="handleChangeEdit"
+      />
     </v-dialog>
   </div>
 </template>
@@ -93,11 +109,23 @@ export default {
   name: "TableBarang",
   components: {
     FormDataBarang: () => import("@/views/plb_ppftz/DataBarang/FormDataBarang"),
+    FormEditDataBarang: () =>
+      import("@/views/plb_ppftz/DataBarang/FormEditDataBarang"),
   },
   data() {
     return {
       dialog: false,
+      tableListBarangValidate: false,
       editDialog: false,
+      editedItem: {
+        posTarif: "",
+        uraian: "",
+        nettoBrutoVolume: "",
+        satuanKemasan: "",
+        nilaiPabeanHargaPenyerahan: "",
+        hsCode: "",
+      },
+      editedIndex: null,
       headers: [
         {
           text: "No",
@@ -137,9 +165,60 @@ export default {
       },
     },
   },
+  watch: {
+    listDataBarang(val) {
+      if (val.length > 0) {
+        this.tableListBarangValidate = true;
+      } else {
+        this.tableListBarangValidate = false;
+      }
+    },
+    csvData(val) {
+      // Belum bisa
+      if (val.length && val.length > 0) {
+        let temp = [...val];
+        temp[0] = temp[0].split(",");
+        temp.pop();
+        for (let i = 1; i < temp.length; i++) {
+          temp[i] = temp[i].split(",");
+          for (let j = 0; j < temp[i].length; j++) {
+            const tempKeyArr = temp[0][j].split(" ").map((ele) => ele);
+            const key =
+              tempKeyArr[0][0].toLowerCase() +
+              tempKeyArr[0].substr(1) +
+              tempKeyArr[1][0].toUpperCase() +
+              tempKeyArr[1].substr(1);
+            const value = temp[i][j];
+            this[key] = value;
+          }
+
+          const payload = {
+            posTarif: this.posTarif,
+            uraian: this.uraian,
+            netoBrutoVolume: this.netoBrutoVolume,
+            satuanKemasan: this.satuanKemasan,
+            nilaiPabeanHargaPenyerahan: this.nilaiPabeanHargaPenyerahan,
+            hsCode: this.hsCode,
+          };
+          this.$store.commit("SET_LIST_DATA_BARANG", payload);
+        }
+        this.posTarif = "";
+        this.uraian = "";
+        this.netoBrutoVolume = "";
+        this.satuanKemasan = "";
+        this.nilaiPabeanHargaPenyerahan = "";
+        this.hsCode = "";
+      }
+    },
+  },
   methods: {
     handleModal() {
       this.dialog = !this.dialog;
+    },
+    handleImport() {
+      this.$refs.fileInput.click();
+
+      // fileReader.click;
     },
     handleCSV(e) {
       const file = e.target.files[0];
@@ -147,29 +226,65 @@ export default {
       reader.onload = async (e) => {
         this.csvData = await e.target.result.split(/\r\n|\r|\n/);
 
-        this.kodeDokumen = "";
-        this.tanggalDokumen = "";
-        this.nomorDokumen = "";
+        this.posTarif = "";
+        this.uraian = "";
+        this.netoBrutoVolume = "";
+        this.satuanKemasan = "";
+        this.nilaiPabeanHargaPenyerahan = "";
+        this.hsCode = "";
         // Mematikan resetCSV
         // this.csvData = [];
       };
       reader.readAsText(file);
     },
+    handleImportCSV(key, value) {
+      this[key] = value;
+    },
     handleSubmit() {
-      this.$swal({
-        title: "Apakah data anda sudah benar ?",
-        type: "warning",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#5682ff",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Ya",
-        cancelButtonText: "Tidak",
-      }).then((result) => {
-        if (result.value) {
-          this.$emit("handleSubmitStepper");
-        }
-      });
+      if (this.tableListBarangValidate) {
+        this.$swal({
+          title: "Apakah data anda sudah benar ?",
+          type: "warning",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#5682ff",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya",
+          cancelButtonText: "Tidak",
+        }).then((result) => {
+          if (result.value) {
+            this.$emit("handleSubmitStepper");
+          }
+        });
+      } else {
+        this.$swal("Data Belum Lengkap", "", "error");
+      }
+    },
+    handleCopy(item) {
+      this.$store.commit("SET_LIST_DATA_BARANG", item);
+    },
+    handleDelete(item) {
+      this.$store.commit("DELETE_DATA_BARANG", item);
+    },
+    handleEditDialog(item, index) {
+      this.editDialog = !this.editDialog;
+      if (this.editDialog) {
+        this.editedItem = Object.assign({}, item);
+        this.editedIndex = index;
+      } else {
+        this.editedItem = {
+          posTarif: "",
+          uraian: "",
+          nettoBrutoVolume: "",
+          satuanKemasan: "",
+          nilaiPabeanHargaPenyerahan: "",
+          hsCode: "",
+        };
+        this.editedIndex = null;
+      }
+    },
+    handleChangeEdit(key, value) {
+      this.editedItem[key] = value;
     },
   },
 };

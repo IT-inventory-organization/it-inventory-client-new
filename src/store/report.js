@@ -187,14 +187,9 @@ const report = {
       });
     },
     DELETE_DATA_DOKUMEN(state, payload) {
-      if (state.dataDokumen.length < 2) {
-        state.dataDokumen = [];
-      } else {
-        // const index = state.dataDokumen.indexOf(payload);
-        // if (index !== -1)
-        state.dataDokumen = state.dataDokumen.filter((value) => {
-          return value.kodeDokumen !== payload.kodeDokumen;
-        });
+      const index = state.dataDokumen.indexOf(payload);
+      if (index != -1) {
+        state.dataDokumen.splice(index, 1);
       }
     },
     SET_DATA_PETI_KEMAS(state, payload) {
@@ -208,19 +203,43 @@ const report = {
     SET_DATA_BARANG(state, payload) {
       state.dataBarang[payload.key] = payload.value;
     },
+    DELETE_DATA_BARANG(state, payload) {
+      const index = state.listDataBarang.indexOf(payload);
+      if (index != -1) {
+        state.listDataBarang.splice(index, 1);
+      }
+    },
+    UPDATE_DATA_LIST_BARANG(state, payload) {
+      const temp = [...state.listDataBarang];
+      state.listDataBarang = [];
+      state.listDataBarang = temp.map((ele, ind) => {
+        if (ind === payload.index) {
+          ele = Object.assign({}, payload.payload);
+        }
+        return ele;
+      });
+    },
   },
   actions: {
     async createReport(context) {
-      let result = await axios({
-        url: baseUrl + "/report",
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
-        },
-        data: AESEncrypt(context.state.report),
-      });
-      if (result.success) {
-        context.commit("SET_REPORT", AESDecrypt(result.data));
+      context.commit("SET_LOADING_CREATE", true);
+      try {
+        let result = await axios({
+          url: baseUrl + "/report",
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+          data: AESEncrypt(context.state.report),
+        });
+        if (result.success) {
+          context.commit("SET_REPORT", AESDecrypt(result.data));
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        context.commit("SET_LOADING_CREATE", false);
       }
     },
     async fetchData(context) {

@@ -127,24 +127,24 @@ export default {
         this.dataDokumenForm = false;
       }
       this.handleValidate("dataPetiKemasForm");
-      this.$swal({
-        title: "Apakah data anda sudah benar ?",
-        type: "warning",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#5682ff",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Ya",
-        cancelButtonText: "Tidak",
-      }).then((result) => {
-        if (result.value) {
-          if (this.validateStepper()) {
+      if (this.dataDokumenForm && this.dataPetiKemasForm) {
+        this.$swal({
+          title: "Apakah data anda sudah benar ?",
+          type: "warning",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#5682ff",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya",
+          cancelButtonText: "Tidak",
+        }).then((result) => {
+          if (result.value) {
             this.$emit("handleSubmitStepper");
-          } else {
-            this.$swal("Data Belum Lengkap", "", "error");
           }
-        }
-      });
+        });
+      } else {
+        this.$swal("Data Belum Lengkap", "", "error");
+      }
     },
   },
 };

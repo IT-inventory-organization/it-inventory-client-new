@@ -39,10 +39,6 @@ const user = {
             dataLogin: Encryption.AESEncrypt(context.state.user),
           },
         });
-        // const result = await axios.post(
-        //   `${baseUrl}login`,
-        //   Encryption.AESEncrypt()
-        // );
         context.commit("SET_ISLOADING", false);
         context.commit("SET_TOKEN", result.data.data);
         localStorage.setItem("token_it_inventory", result.data.data);
