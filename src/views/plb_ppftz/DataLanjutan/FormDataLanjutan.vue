@@ -3,9 +3,24 @@
     <v-card class="mb-12" elevation="0">
       <!-- Data Dokumen -->
       <v-expansion-panels>
-        <v-expansion-panel class="it-accordion-panel">
+        <v-expansion-panel
+          v-model="show"
+          :class="
+            `${
+              dataDokumenForm === 'a' || dataDokumenForm
+                ? 'it-accordion-panel'
+                : 'it-accordion-panel it-accordion-panel__error'
+            }`
+          "
+        >
           <v-expansion-panel-header>
             <span>Data Dokumen</span>
+            <template
+              v-if="dataDokumenForm && dataDokumenForm !== 'a'"
+              v-slot:actions
+            >
+              <img src="@/assets/icons/ic_circle_checklist.svg" />
+            </template>
           </v-expansion-panel-header>
           <!-- Form -->
           <v-expansion-panel-content>
@@ -13,23 +28,36 @@
           </v-expansion-panel-content>
           <!-- End Form -->
         </v-expansion-panel>
-      </v-expansion-panels>
-      <!-- End Data Dokumen -->
 
-      <!-- Data Dokumen -->
-      <v-expansion-panels>
-        <v-expansion-panel class="it-accordion-panel">
+        <!-- Data Peti Kemas -->
+        <v-expansion-panel
+          v-model="show"
+          :class="
+            `${
+              dataPetiKemasForm === 'a' || dataPetiKemasForm
+                ? 'it-accordion-panel'
+                : 'it-accordion-panel it-accordion-panel__error'
+            }`
+          "
+        >
           <v-expansion-panel-header>
             <span>Data Peti Kemas</span>
+
+            <template
+              v-if="dataPetiKemasForm && dataPetiKemasForm !== 'a'"
+              v-slot:actions
+            >
+              <img src="@/assets/icons/ic_circle_checklist.svg" />
+            </template>
           </v-expansion-panel-header>
           <!-- Form -->
-          <v-expansion-panel-content>
-            <data-peti-kemas></data-peti-kemas>
+          <v-expansion-panel-content eager>
+            <data-peti-kemas ref="dataPetiKemasForm"></data-peti-kemas>
           </v-expansion-panel-content>
           <!-- End Form -->
         </v-expansion-panel>
+        <!-- End Data Peti Kemas -->
       </v-expansion-panels>
-      <!-- End Data Peti Kemas -->
     </v-card>
 
     <v-row no-gutters style="justify-content: flex-end">
@@ -49,12 +77,58 @@ export default {
     DataPetiKemas: () => import("@/views/plb_ppftz/DataLanjutan/DataPetiKemas"),
   },
   data() {
-    return {};
+    return {
+      dataDokumenForm: "a",
+      dataPetiKemasForm: "a",
+      show: false,
+    };
+  },
+  computed: {
+    dataDokumen: {
+      get() {
+        return this.$store.state.report.dataDokumen;
+      },
+    },
+    dataPetiKemas: {
+      get() {
+        return this.$store.state.report.dataPetiKemas;
+      },
+    },
+  },
+  watch: {
+    dataDokumen(val) {
+      if (val.length > 0) {
+        this.dataDokumenForm = true;
+      } else {
+        this.dataDokumenForm = false;
+      }
+    },
   },
   methods: {
+    validateStepper() {
+      if (!this.dataDokumenForm || !this.dataPetiKemasForm) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    handleValidate(key) {
+      const getRef = this.$refs[key].handleValidate();
+      if (getRef) {
+        this[key] = true;
+      } else {
+        this[key] = false;
+      }
+    },
     handleSubmit() {
+      if (this.$store.state.report.dataDokumen.length > 0) {
+        this.dataDokumenForm = true;
+      } else {
+        this.dataDokumenForm = false;
+      }
+      this.handleValidate("dataPetiKemasForm");
       this.$swal({
-        title: "Apakah data anda sudah benar?",
+        title: "Apakah data anda sudah benar ?",
         type: "warning",
         icon: "question",
         showCancelButton: true,
@@ -64,7 +138,11 @@ export default {
         cancelButtonText: "Tidak",
       }).then((result) => {
         if (result.value) {
-          this.$emit("handleSubmitStepper");
+          if (this.validateStepper()) {
+            this.$emit("handleSubmitStepper");
+          } else {
+            this.$swal("Data Belum Lengkap", "", "error");
+          }
         }
       });
     },

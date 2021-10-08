@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="initialReport" @submit.prevent="handleSubmit">
+  <v-form ref="formDataPetiKemas" lazy-validation>
     <v-row>
       <v-col lg="6" md="6" sm="12">
         <v-select
@@ -18,13 +18,11 @@
       <v-col lg="6" md="6" sm="12">
         <v-text-field
           label="Volume Kontainer"
-          type="number"
-          min="0"
           outlined
           v-model="volumeKontainer"
           :rules="[
             (value) => {
-              return genericRequiredRule(value, 'Hs Code');
+              return genericRequiredRule(value, 'Volume Kontainer');
             },
           ]"
         >
@@ -40,16 +38,35 @@ export default {
   name: "DataPetiKemas",
   mixins: [FieldRequired],
   data() {
-    return {
-      dataKontainer: "",
-      volumeKontainer: "",
-    };
+    return {};
+  },
+  computed: {
+    dataKontainer: {
+      get() {
+        return this.$store.state.report.dataPetiKemas.dataKontainer;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PETI_KEMAS", {
+          key: "dataKontainer",
+          value,
+        });
+      },
+    },
+    volumeKontainer: {
+      get() {
+        return this.$store.state.report.dataPetiKemas.volumeKontainer;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PETI_KEMAS", {
+          key: "volumeKontainer",
+          value,
+        });
+      },
+    },
   },
   methods: {
-    handleSubmit() {
-      if (this.$refs.initialReport.validate()) {
-        this.$emit("handleModal");
-      }
+    handleValidate() {
+      return this.$refs.formDataPetiKemas.validate();
     },
   },
 };

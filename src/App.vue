@@ -1,13 +1,21 @@
 <template>
-  <v-app>
-    <core-app-bar />
+  <div>
+    <v-app v-if="token">
+      <core-app-bar></core-app-bar>
 
-    <v-main>
-      <v-container fluid class="it-inventory-container">
+      <v-main>
+        <v-container fluid class="it-inventory-container">
+          <router-view />
+        </v-container>
+      </v-main>
+    </v-app>
+
+    <v-app v-if="!token">
+      <v-main>
         <router-view />
-      </v-container>
-    </v-main>
-  </v-app>
+      </v-main>
+    </v-app>
+  </div>
 </template>
 
 <script>
@@ -16,14 +24,24 @@ export default {
   components: {
     CoreAppBar: () => import("@/components/base/AppBar"),
   },
-  computed: {},
+  computed: {
+    token() {
+      return this.$store.state.user.token;
+    },
+  },
   data() {
     return {};
   },
   methods: {},
   created() {
-    if (localStorage.getItem("token")) {
-      this.$router.push("/login");
+    const token = localStorage.getItem("token_it_inventory");
+    if (!token) {
+      // eslint-disable-next-line no-unused-vars
+      this.$router.push("/login")
+    }
+
+    if (token) {
+      this.$store.commit("SET_TOKEN", token);
     }
   },
 };

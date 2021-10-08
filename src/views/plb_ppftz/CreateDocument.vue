@@ -1,8 +1,22 @@
 <template>
   <div class="it-inventory-card">
-    <v-card-title class="it-inventory-card-title">
-      Create New {{ page }}
-    </v-card-title>
+    <v-row align="center">
+      <v-col lg="10" md="10" sm="12">
+        <v-card-title class="it-inventory-card-title">
+          Create New {{ page }}
+        </v-card-title>
+      </v-col>
+      <v-col lg="2" md="2" sm="12" style="text-align: right">
+        <v-btn
+          v-if="step === 4"
+          fill
+          class="it_inven_create_btn"
+          style="width: 60%"
+          @click="handleSubmitAll"
+          >Submit</v-btn
+        >
+      </v-col>
+    </v-row>
 
     <v-stepper class="it-inven-stepper" v-model="step" elevation="0">
       <v-stepper-header>
@@ -49,7 +63,7 @@
       <!-- Data Barang -->
       <v-stepper-items>
         <v-stepper-content step="3">
-          barang
+          <form-data-barang @handleSubmitStepper="handleSubmitStepper" />
         </v-stepper-content>
       </v-stepper-items>
       <!-- End Data Barang -->
@@ -57,7 +71,7 @@
       <!-- Preview -->
       <v-stepper-items>
         <v-stepper-content step="4">
-          Preview
+          <data-preview />
         </v-stepper-content>
       </v-stepper-items>
       <!-- End Preview -->
@@ -72,25 +86,35 @@ export default {
     FormDataHeader: () => import("@/views/plb_ppftz/DataHeader/FormDataHeader"),
     FormDataLanjutan: () =>
       import("@/views/plb_ppftz/DataLanjutan/FormDataLanjutan"),
+    FormDataBarang: () => import("@/views/plb_ppftz/DataBarang/TableBarang"),
+    DataPreview: () => import("@/views/plb_ppftz/DataPreview/DataPreview"),
   },
   data() {
     return {
       page: "",
-      step: 1,
+      currentLocation: "",
+      step: 3,
     };
   },
   created() {
-    const getPath = this.$route.path;
+    this.currentLocation = this.$route.path;
 
-    if (getPath.includes("plb")) {
+    if (this.currentLocation.includes("plb")) {
       this.page = "PLB";
-    } else if (getPath.includes("ppftz")) {
+    } else if (this.currentLocation.includes("ppftz")) {
       this.page = "PPFTZ";
     }
   },
   methods: {
     handleSubmitStepper() {
       this.step += 1;
+    },
+    handleSubmitAll() {
+      if (this.page === "PLB") {
+        this.$router.push("/plb");
+      } else if (this.page === "PPFTZ") {
+        this.$router.push("/ppftz");
+      }
     },
   },
 };

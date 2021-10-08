@@ -1,73 +1,119 @@
 <template>
   <div>
     <v-card class="mb-12" elevation="0">
-      <!-- Data Pengajuan -->
-      <v-expansion-panels>
-        <v-expansion-panel class="it-accordion-panel">
-          <v-expansion-panel-header>
-            <span>Data Pengajuan</span>
+      <v-form ref="form" lazy-validation>
+        <!-- Data Pengajuan -->
+        <v-expansion-panels>
+          <v-expansion-panel
+            :class="
+              `${
+                dataPengajuanForm === 'a' || dataPengajuanForm
+                  ? 'it-accordion-panel'
+                  : 'it-accordion-panel it-accordion-panel__error'
+              }`
+            "
+          >
+            <v-expansion-panel-header>
+              <span>Data Pengajuan</span>
 
-            <template v-if="dataPengajuanForm" v-slot:actions>
-              <img src="@/assets/icons/ic_circle_checklist.svg" />
-            </template>
-          </v-expansion-panel-header>
-          <!-- Form -->
-          <data-pengajuan />
-          <!-- End Form -->
-        </v-expansion-panel>
-      </v-expansion-panels>
-      <!-- End Data Pengajuan -->
+              <template
+                v-if="dataPengajuanForm && dataPengajuanForm !== 'a'"
+                v-slot:actions
+              >
+                <img src="@/assets/icons/ic_circle_checklist.svg" />
+              </template>
+            </v-expansion-panel-header>
+            <!-- Form -->
+            <data-pengajuan ref="dataPengajuanForm" />
+            <!-- End Form -->
+          </v-expansion-panel>
 
-      <!-- Identitas Pengirim/Penerima -->
-      <v-expansion-panels>
-        <v-expansion-panel class="it-accordion-panel">
-          <v-expansion-panel-header>
-            <span>Identitas Pengirim/Penerima</span>
+          <v-expansion-panel
+            :class="
+              `${
+                identitasPengirimPenerima === 'a' || identitasPengirimPenerima
+                  ? 'it-accordion-panel'
+                  : 'it-accordion-panel it-accordion-panel__error'
+              }`
+            "
+          >
+            <v-expansion-panel-header>
+              <span>Identitas Pengirim/Penerima</span>
 
-            <template v-if="dataPengajuanForm" v-slot:actions>
-              <img src="@/assets/icons/ic_circle_checklist.svg" />
-            </template>
-          </v-expansion-panel-header>
-          <!-- Form -->
-          <identitas-pengirim-penerima />
-          <!-- End Form -->
-        </v-expansion-panel>
-      </v-expansion-panels>
-      <!-- End Identitas Pengirim/Penerima -->
+              <template
+                v-if="
+                  identitasPengirimPenerima && identitasPengirimPenerima !== 'a'
+                "
+                v-slot:actions
+              >
+                <img src="@/assets/icons/ic_circle_checklist.svg" />
+              </template>
+            </v-expansion-panel-header>
+            <!-- Form -->
+            <identitas-pengirim-penerima ref="identitasPengirimPenerima" />
+            <!-- End Form -->
+          </v-expansion-panel>
 
-      <!-- Data Pemasukan Pengeluaran I -->
-      <v-expansion-panels>
-        <v-expansion-panel class="it-accordion-panel">
-          <v-expansion-panel-header>
-            <span>Data Pemasukan Pengeluaran I</span>
+          <v-expansion-panel
+            :class="
+              `${
+                dataPemasukanPengeluaranSatu === 'a' ||
+                dataPemasukanPengeluaranSatu
+                  ? 'it-accordion-panel'
+                  : 'it-accordion-panel it-accordion-panel__error'
+              }`
+            "
+          >
+            <v-expansion-panel-header>
+              <span>Data Pemasukan Pengeluaran I</span>
 
-            <template v-if="dataPemasukanPengeluaranSatu" v-slot:actions>
-              <img src="@/assets/icons/ic_circle_checklist.svg" />
-            </template>
-          </v-expansion-panel-header>
-          <!-- Form -->
-          <data-pemasukan-pengeluaran-satu />
-          <!-- End Form -->
-        </v-expansion-panel>
-      </v-expansion-panels>
-      <!-- End Data Pemasukan Pengeluaran I -->
+              <template
+                v-if="
+                  dataPemasukanPengeluaranSatu &&
+                    dataPemasukanPengeluaranSatu !== 'a'
+                "
+                v-slot:actions
+              >
+                <img src="@/assets/icons/ic_circle_checklist.svg" />
+              </template>
+            </v-expansion-panel-header>
+            <!-- Form -->
+            <data-pemasukan-pengeluaran-satu
+              ref="dataPemasukanPengeluaranSatu"
+            />
+            <!-- End Form -->
+          </v-expansion-panel>
 
-      <!-- Data Pemasukan Pengeluaran II -->
-      <v-expansion-panels>
-        <v-expansion-panel class="it-accordion-panel">
-          <v-expansion-panel-header>
-            <span>Data Pemasukan Pengeluaran II</span>
+          <v-expansion-panel
+            :class="
+              `${
+                dataPemasukanPengeluaranDua === 'a' ||
+                dataPemasukanPengeluaranDua
+                  ? 'it-accordion-panel'
+                  : 'it-accordion-panel it-accordion-panel__error'
+              }`
+            "
+          >
+            <v-expansion-panel-header>
+              <span>Data Pemasukan Pengeluaran II</span>
 
-            <template v-if="dataPemasukanPengeluaranDua" v-slot:actions>
-              <img src="@/assets/icons/ic_circle_checklist.svg" />
-            </template>
-          </v-expansion-panel-header>
-          <!-- Form -->
-          <data-pemasukan-pengeluaran-dua />
-          <!-- End Form -->
-        </v-expansion-panel>
-      </v-expansion-panels>
-      <!-- Data Pemasukan Pengeluaran II -->
+              <template
+                v-if="
+                  dataPemasukanPengeluaranDua &&
+                    dataPemasukanPengeluaranDua !== 'a'
+                "
+                v-slot:actions
+              >
+                <img src="@/assets/icons/ic_circle_checklist.svg" />
+              </template>
+            </v-expansion-panel-header>
+            <!-- Form -->
+            <data-pemasukan-pengeluaran-dua ref="dataPemasukanPengeluaranDua" />
+            <!-- End Form -->
+          </v-expansion-panel>
+        </v-expansion-panels>
+        <!-- End Data Pengajuan -->
+      </v-form>
     </v-card>
 
     <v-row no-gutters style="justify-content: flex-end">
@@ -79,6 +125,11 @@
 </template>
 
 <script>
+// import DataPengajuan from "@/views/plb_ppftz/DataHeader/DataPengajuan";
+// import IdentitasPengirimPenerima from "@/views/plb_ppftz/DataHeader/IdentitasPengirimPenerima";
+// import DataPemasukanPengeluaranSatu from "@/views/plb_ppftz/DataHeader/DataPemasukanPengeluaranSatu";
+// import DataPemasukanPengeluaranDua from "@/views/plb_ppftz/DataHeader/DataPemasukanPengeluaranDua";
+
 export default {
   name: "FormDataHeader",
   components: {
@@ -93,14 +144,42 @@ export default {
   props: ["step", "handleSubmitStepper"],
   data() {
     return {
-      dataPengajuanForm: false,
-      identitasPengirimPenerima: false,
-      dataPemasukanPengeluaranSatu: false,
-      dataPemasukanPengeluaranDua: false,
+      dataPengajuanForm: "a",
+      identitasPengirimPenerima: "a",
+      dataPemasukanPengeluaranSatu: "a",
+      dataPemasukanPengeluaranDua: "a",
     };
   },
   methods: {
+    validateStepper() {
+      if (
+        this.dataPengajuanForm &&
+        this.dataPengajuanForm !== "a" &&
+        this.identitasPengirimPenerima &&
+        this.identitasPengirimPenerima !== "a" &&
+        this.dataPemasukanPengeluaranSatu &&
+        this.dataPemasukanPengeluaranSatu !== "a" &&
+        this.dataPemasukanPengeluaranDua &&
+        this.dataPemasukanPengeluaranDua !== "a"
+      ) {
+        return true;
+      }
+      return false;
+    },
+    handleValidate(key) {
+      const getRef = this.$refs[key].handleValidate();
+      if (getRef) {
+        this[key] = true;
+      } else {
+        this[key] = false;
+      }
+    },
+
     handleSubmit() {
+      this.handleValidate("dataPengajuanForm");
+      this.handleValidate("identitasPengirimPenerima");
+      this.handleValidate("dataPemasukanPengeluaranSatu");
+      this.handleValidate("dataPemasukanPengeluaranDua");
       this.$swal({
         title: "Apakah data anda sudah benar?",
         type: "warning",
@@ -112,7 +191,11 @@ export default {
         cancelButtonText: "Tidak",
       }).then((result) => {
         if (result.value) {
-          this.$emit("handleSubmitStepper");
+          if (this.validateStepper()) {
+            this.$emit("handleSubmitStepper");
+          } else {
+            this.$swal("Data Belum Lengkap", "", "error");
+          }
         }
       });
     },

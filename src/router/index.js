@@ -3,9 +3,9 @@ import VueRouter from "vue-router";
 import Dashboard from "@/views/Dashboard";
 import PLB from "@/views/PLB";
 import PPFTZ from "@/views/PPFTZ";
-import Setup from "@/views/Setup";
 import CreateDocument from "@/views/plb_ppftz/CreateDocument";
 import TableInventory from "@/views/plb_ppftz/TableInventory";
+import Login from "@/views/Login";
 
 Vue.use(VueRouter);
 
@@ -18,10 +18,16 @@ const routes = [
     path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/plb",
     component: PLB,
+    meta: {
+      requiresAuth: true,
+    },
     children: [
       {
         path: "",
@@ -52,17 +58,9 @@ const routes = [
     ],
   },
   {
-    path: "/setup",
-    name: "Setup",
-    component: Setup,
-  },
-  {
     path: "/login",
     name: "login",
-  },
-  {
-    path: "/register",
-    name: "register",
+    component: Login,
   },
 ];
 
@@ -70,7 +68,6 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-  // linkExactActiveClass: "navbar_menu_item_active",
 });
 
 export default router;

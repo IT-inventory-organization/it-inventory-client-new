@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
-        <span class="text-h6">Add New List</span>
+        <span class="text-h6">Edit Dokumen</span>
         <span style="cursor: pointer" @click.prevent="handleDialog"
           ><v-icon>mdi-close</v-icon></span
         >
@@ -15,7 +15,8 @@
             <v-text-field
               label="Kode Dokumen"
               outlined
-              v-model="kodeDokumen"
+              v-model="item.kodeDokumen"
+              @change="handleChange('kodeDokumen', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Kode Dokumen');
@@ -26,7 +27,8 @@
             <v-text-field
               label="Tanggal Dokumen"
               outlined
-              v-model="tanggalDokumen"
+              v-model="item.tanggalDokumen"
+              @change="handleChange('tanggalDokumen', $event)"
               type="date"
               :rules="[
                 (value) => {
@@ -40,7 +42,8 @@
             <v-text-field
               label="Nomor Dokumen"
               outlined
-              v-model="nomorDokumen"
+              v-model="item.nomorDokumen"
+              @change="handleChange('nomorDokumen', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Nomor Dokumen');
@@ -56,7 +59,7 @@
             fill
             class="it_inven_create_btn"
             style="width: 200px"
-            >Save</v-btn
+            >Update</v-btn
           >
         </v-row>
       </v-form>
@@ -67,38 +70,33 @@
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
-  name: "FormDataDokumen",
+  name: "FormEditDataDokumen",
   mixins: [FieldRequired],
-  props: [],
-  data() {
-    return {
-      kodeDokumen: "",
-      tanggalDokumen: "",
-      nomorDokumen: "",
-    };
-  },
+  props: ["item", "index"],
   methods: {
-    handleSubmit() {
-      const [y, m, d] = this.tanggalDokumen.split("-");
+    handleChange (key, value) {
+      this.$emit("handleChangeEdit", key, value)
+    },
+    async handleSubmit() {
+      const [y, m, d] = this.item.tanggalDokumen.split("-");
+
       const payload = {
-        kodeDokumen: this.kodeDokumen,
+        kodeDokumen: this.item.kodeDokumen,
         tanggalDokumen: `${d}-${m}-${y}`,
-        nomorDokumen: this.nomorDokumen,
+        nomorDokumen: this.item.nomorDokumen,
       };
-
+      const data = {
+        payload, index: this.index
+      }
       if (this.$refs.formDataDokumen.validate()) {
-        this.$store.commit("SET_DATA_DOKUMEN", payload);
-        this.$emit("handleModal");
-
-        // Reset State
-        this.kodeDokumen = "";
-        this.tanggalDokumen = "";
-        this.nomorDokumen = "";
+        // this.$emit("handleEdit", payload, this.index)
+        this.$store.commit("UPDATE_DATA_DOKUMENT", data)
+        this.handleDialog();
       }
     },
     handleDialog() {
-      this.$emit("handleModal");
       this.$refs.formDataDokumen.resetValidation();
+      this.$emit("handleEdit");
     },
   },
 };
