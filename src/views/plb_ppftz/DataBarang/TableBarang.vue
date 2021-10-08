@@ -6,6 +6,7 @@
         <button class="btn mr-6">
           <v-icon left>mdi-tray-arrow-down</v-icon> Import CSV
         </button>
+
         <button @click.prevent="handleModal" class="btn">
           <v-icon left>mdi-plus-box-outline</v-icon> Add
         </button>
@@ -16,10 +17,13 @@
         <div class="it-inventory-box">
           <v-data-table
             :headers="headers"
-            :items="data"
+            :items="listDataBarang"
             :items-per-page="5"
             class="it-inventory-simple-table"
           >
+            <template v-slot:[`item.no`]="props">
+              {{ props.index + 1 }}
+            </template>
             <template v-slot:[`item.status`]="{ item }">
               <approval-badge :status="item.status"></approval-badge>
             </template>
@@ -77,6 +81,10 @@
     <v-dialog v-model="dialog" persistent max-width="800px">
       <form-data-barang @handleModal="handleModal" />
     </v-dialog>
+
+    <v-dialog v-model="editDialog" persistent max-width="800px">
+      <form-edit-data-barang @handleModal="handleModal" />
+    </v-dialog>
   </div>
 </template>
 
@@ -89,10 +97,11 @@ export default {
   data() {
     return {
       dialog: false,
+      editDialog: false,
       headers: [
         {
           text: "No",
-          value: "id",
+          value: "no",
           sortable: false,
         },
         {
@@ -119,31 +128,32 @@ export default {
         { text: "Hs Code", value: "hsCode", sortable: false },
         { text: "Action", value: "action", sortable: false },
       ],
-      data: [
-        {
-          id: 12212,
-          posTarif: "331122122323",
-          uraian: "Dignissimos libero vitae repellendus sed consequatur enim.",
-          nettoBrutoVolume: "123321.67",
-          satuanKemasan: 12345,
-          nilaiPabeanHargaPenyerahan: 100923,
-          hsCode: 45123,
-        },
-        {
-          id: 12112,
-          posTarif: "331122222323",
-          uraian: "Dignissimos libero vitae repellendus sed consequatur enim.",
-          nettoBrutoVolume: "123321.67",
-          satuanKemasan: 12335,
-          nilaiPabeanHargaPenyerahan: 1120923,
-          hsCode: 45223,
-        },
-      ],
     };
+  },
+  computed: {
+    listDataBarang: {
+      get() {
+        return this.$store.state.report.listDataBarang;
+      },
+    },
   },
   methods: {
     handleModal() {
       this.dialog = !this.dialog;
+    },
+    handleCSV(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        this.csvData = await e.target.result.split(/\r\n|\r|\n/);
+
+        this.kodeDokumen = "";
+        this.tanggalDokumen = "";
+        this.nomorDokumen = "";
+        // Mematikan resetCSV
+        // this.csvData = [];
+      };
+      reader.readAsText(file);
     },
     handleSubmit() {
       this.$swal({

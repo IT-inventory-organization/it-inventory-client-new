@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panel-content>
+  <v-expansion-panel-content eager>
     <v-form ref="formDataPengajuan" lazy-validation>
       <v-row>
         <v-col lg="6" md="6" sm="12">

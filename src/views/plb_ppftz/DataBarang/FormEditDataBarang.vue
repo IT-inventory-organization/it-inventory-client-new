@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
-        <span class="text-h6">Add New List</span>
+        <span class="text-h6">Edit List</span>
         <span style="cursor: pointer" @click.prevent="handleDialog"
           ><v-icon>mdi-close</v-icon></span
         >
@@ -103,7 +103,7 @@
             fill
             class="it_inven_create_btn"
             style="width: 200px"
-            >Save</v-btn
+            >Update</v-btn
           >
         </v-row>
       </v-form>
@@ -118,92 +118,19 @@ export default {
   mixins: [FieldRequired],
   props: ["handleModal"],
   data() {
-    return {};
-  },
-  computed: {
-    posTarif: {
-      get() {
-        return this.$store.state.report.dataBarang.posTarif;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "posTarif",
-          value,
-        });
-      },
-    },
-    uraian: {
-      get() {
-        return this.$store.state.report.dataBarang.uraian;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "uraian",
-          value,
-        });
-      },
-    },
-    nettoBrutoVolume: {
-      get() {
-        return this.$store.state.report.dataBarang.nettoBrutoVolume;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "nettoBrutoVolume",
-          value,
-        });
-      },
-    },
-    satuanKemasan: {
-      get() {
-        return this.$store.state.report.dataBarang.satuanKemasan;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "satuanKemasan",
-          value,
-        });
-      },
-    },
-    nilaiPabeanHargaPenyerahan: {
-      get() {
-        return this.$store.state.report.dataBarang.nilaiPabeanHargaPenyerahan;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "nilaiPabeanHargaPenyerahan",
-          value,
-        });
-      },
-    },
-    hsCode: {
-      get() {
-        return this.$store.state.report.dataBarang.hsCode;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "hsCode",
-          value,
-        });
-      },
-    },
+    return {
+      posTarif: 0,
+      uraian: "",
+      nettoBrutoVolume: 0,
+      satuanKemasan: 0,
+      nilaiPabeanHargaPenyerahan: 0,
+      hsCode: "",
+    };
   },
   methods: {
     handleSubmit() {
       if (this.$refs.formDataBarang.validate()) {
-        this.$store.commit(
-          "SET_LIST_DATA_BARANG",
-          this.$store.state.report.dataBarang
-        );
-        this.posTarif = "";
-        this.uraian = "";
-        this.nettoBrutoVolume = "";
-        this.satuanKemasan = "";
-        this.nilaiPabeanHargaPenyerahan = "";
-        this.hsCode = "";
         this.$emit("handleModal");
-      } else {
-        this.$swal("Data Belum Lengkap", "", "error");
       }
     },
     handleDialog() {

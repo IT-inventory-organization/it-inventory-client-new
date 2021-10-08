@@ -29,7 +29,6 @@
           </v-expansion-panel>
 
           <v-expansion-panel
-            @click.prevent="handleValidate('dataPengajuanForm')"
             :class="
               `${
                 identitasPengirimPenerima === 'a' || identitasPengirimPenerima
@@ -56,7 +55,6 @@
           </v-expansion-panel>
 
           <v-expansion-panel
-            @click.prevent="handleValidate('identitasPengirimPenerima')"
             :class="
               `${
                 dataPemasukanPengeluaranSatu === 'a' ||
@@ -87,7 +85,6 @@
           </v-expansion-panel>
 
           <v-expansion-panel
-            @click.prevent="handleValidate('dataPemasukanPengeluaranSatu')"
             :class="
               `${
                 dataPemasukanPengeluaranDua === 'a' ||
@@ -170,19 +167,19 @@ export default {
       return false;
     },
     handleValidate(key) {
-      // const getKey = Object.keys(this.$refs[key].$refs);
-      try {
-        const getRef = this.$refs[key].handleValidate();
-        if (getRef) {
-          this[key] = true;
-        } else {
-          this[key] = false;
-        }
-        // eslint-disable-next-line no-empty
-      } catch (error) {}
+      const getRef = this.$refs[key].handleValidate();
+      if (getRef) {
+        this[key] = true;
+      } else {
+        this[key] = false;
+      }
     },
 
     handleSubmit() {
+      this.handleValidate("dataPengajuanForm");
+      this.handleValidate("identitasPengirimPenerima");
+      this.handleValidate("dataPemasukanPengeluaranSatu");
+      this.handleValidate("dataPemasukanPengeluaranDua");
       this.$swal({
         title: "Apakah data anda sudah benar?",
         type: "warning",
@@ -193,20 +190,14 @@ export default {
         confirmButtonText: "Ya",
         cancelButtonText: "Tidak",
       }).then((result) => {
-        // this.$emit("handleSubmitStepper");
         if (result.value) {
-          // if (this.validateStepper()) {
-          this.$emit("handleSubmitStepper");
-          // } else {
-          // this.$swal("Data Belum Lengkap", "", "error");
-          // }
+          if (this.validateStepper()) {
+            this.$emit("handleSubmitStepper");
+          } else {
+            this.$swal("Data Belum Lengkap", "", "error");
+          }
         }
       });
-      if (this.$refs["dataPemasukanPengeluaranDua"].handleValidate()) {
-        this.dataPemasukanPengeluaranDua = true;
-      } else {
-        this.dataPemasukanPengeluaranDua = false;
-      }
     },
   },
 };

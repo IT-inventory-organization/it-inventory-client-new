@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panel-content>
+  <v-expansion-panel-content eager>
     <v-form ref="formDataPemasukanSatu" lazy-validation>
       <!-- Data Transaksi Perdagangan -->
       <v-card-title class="it-inventory-card-title it-inventory-card-title__sub"

@@ -100,6 +100,32 @@ const report = {
       ]
     */
     dataDokumen: [],
+
+    dataPetiKemas: {
+      dataKontainer: "",
+      volumeKontainer: "",
+    },
+
+    // Data Barang
+    // listDataBarang: [
+    //   {
+    //     posTarif: "",
+    //     uraian:"",
+    //     nettoBrutoVolume: "",
+    //     satuanKemasan: "",
+    //     nilaiPabeanHargaPenyerahan: "",
+    //     hsCode: "",
+    //   },
+    // ],
+    listDataBarang: [],
+    dataBarang: {
+      posTarif: "",
+      uraian: "",
+      nettoBrutoVolume: "",
+      satuanKemasan: "",
+      nilaiPabeanHargaPenyerahan: "",
+      hsCode: "",
+    },
   },
   mutations: {
     // Data Header
@@ -151,16 +177,15 @@ const report = {
       state.dataDokumen = [...state.dataDokumen, payload];
     },
     UPDATE_DATA_DOKUMENT(state, payload) {
-      const temp = [...state.dataDokumen]
-      state.dataDokumen = []
+      const temp = [...state.dataDokumen];
+      state.dataDokumen = [];
       state.dataDokumen = temp.map((ele, ind) => {
-        if(ind === payload.index) {
-          ele = Object.assign({}, payload.payload)
+        if (ind === payload.index) {
+          ele = Object.assign({}, payload.payload);
         }
-        return ele
-      })
+        return ele;
+      });
     },
-
     DELETE_DATA_DOKUMEN(state, payload) {
       if (state.dataDokumen.length < 2) {
         state.dataDokumen = [];
@@ -171,6 +196,17 @@ const report = {
           return value.kodeDokumen !== payload.kodeDokumen;
         });
       }
+    },
+    SET_DATA_PETI_KEMAS(state, payload) {
+      state.dataPetiKemas[payload.key] = payload.value;
+    },
+
+    // Data Barang
+    SET_LIST_DATA_BARANG(state, payload) {
+      state.listDataBarang = [...state.listDataBarang, payload];
+    },
+    SET_DATA_BARANG(state, payload) {
+      state.dataBarang[payload.key] = payload.value;
     },
   },
   actions: {

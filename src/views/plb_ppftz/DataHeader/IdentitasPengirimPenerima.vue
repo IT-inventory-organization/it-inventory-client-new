@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panel-content>
+  <v-expansion-panel-content eager>
     <v-form ref="formIdentitas" lazy-validation>
       <!-- Pengirim -->
       <v-card-title class="it-inventory-card-title it-inventory-card-title__sub"

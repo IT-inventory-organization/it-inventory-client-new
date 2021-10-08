@@ -54,9 +54,10 @@
                 </template>
 
                 <v-list>
-                  <v-list-item @click="handleEditDialog(props.item, props.index)">
-                    <v-list-item-title
-                    >
+                  <v-list-item
+                    @click="handleEditDialog(props.item, props.index)"
+                  >
+                    <v-list-item-title>
                       <v-icon left>mdi-pencil-outline </v-icon>
                       Edit
                     </v-list-item-title>
@@ -132,9 +133,15 @@ export default {
             const value = temp[i][j];
             this[key] = value;
           }
+          const newDate = new Date(this.tanggalDokumen);
+          const getDate = newDate.getDate();
+          const getMonth = newDate.getMonth();
+          const getYear = newDate.getFullYear();
+          const resultNewDate = `${getDate}-${getMonth + 1}-${getYear}`;
+
           const payload = {
             kodeDokumen: this.kodeDokumen,
-            tanggalDokumen: this.tanggalDokumen,
+            tanggalDokumen: resultNewDate,
             nomorDokumen: this.nomorDokumen,
           };
           this.$store.commit("SET_DATA_DOKUMEN", payload);
@@ -172,7 +179,7 @@ export default {
           value: "nomorDokumen",
           sortable: false,
         },
-        { text: "Tanggal Dokumen", value: "tanggalDokumen" },
+        { text: "Tanggal Dokumen", value: "tanggalDokumen", sortable: false },
         { text: "Action", value: "action", sortable: false },
       ],
     };
@@ -195,7 +202,8 @@ export default {
         this.kodeDokumen = "";
         this.tanggalDokumen = "";
         this.nomorDokumen = "";
-        this.csvData = []
+        // Mematikan resetCSV
+        // this.csvData = [];
       };
       reader.readAsText(file);
     },
@@ -213,8 +221,16 @@ export default {
       if (this.editDialog) {
         this.editedItem = Object.assign({}, item);
         this.editedIndex = index;
-        const [d, m, y] = this.editedItem.tanggalDokumen.split("-");
-        this.editedItem.tanggalDokumen = `${y}-${m}-${d}`;
+
+        // Convert tanggal(dd-mm-yyyy) to (yyyy-mm-dd)
+        const newDate = new Date(this.editedItem.tanggalDokumen);
+        const getDate = newDate.getDate();
+        const getMonth = newDate.getMonth();
+        const getYear = newDate.getFullYear();
+        const resultNewDate = `${getYear}-${getMonth + 1}-${getDate}`;
+        // const [d, m, y] = this.editedItem.tanggalDokumen.split("-");
+        // this.editedItem.tanggalDokumen = `${y}-${m}-${d}`;
+        this.editedItem.tanggalDokumen = resultNewDate;
       } else {
         this.editedItem = {
           kodeDokumen: "",
@@ -225,8 +241,8 @@ export default {
       }
     },
     handleChangeEdit(key, value) {
-      this.editedItem[key] = value
-    }
+      this.editedItem[key] = value;
+    },
   },
 };
 </script>
