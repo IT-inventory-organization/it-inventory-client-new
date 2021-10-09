@@ -24,6 +24,12 @@
             (value) => {
               return genericRequiredRule(value, 'Volume Kontainer');
             },
+            (value) => {
+              return genericNumberRule(value, 'Volume Kontainer');
+            },
+            (value) => {
+              return genericMinRule(value, 'Volume Kontainer');
+            },
           ]"
         >
         </v-text-field>

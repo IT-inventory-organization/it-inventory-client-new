@@ -125,6 +125,10 @@ export default {
         nilaiPabeanHargaPenyerahan: "",
         hsCode: "",
       },
+      csvData: [],
+      Bruto: null,
+      Netto: null,
+      Volume: null,
       editedIndex: null,
       headers: [
         {
@@ -173,38 +177,41 @@ export default {
         this.tableListBarangValidate = false;
       }
     },
+    Bruto(val) {
+      if (val && val != "-") {
+        this.nettoBrutoVolume;
+      }
+    },
+    Netto(val) {
+      if (val && val != "-") {
+        this.nettoBrutoVolume;
+      }
+    },
+    Volume(val) {
+      if (val && val != "-") {
+        this.nettoBrutoVolume;
+      }
+    },
     csvData(val) {
       // Belum bisa
       if (val.length && val.length > 0) {
         let temp = [...val];
-        temp[0] = temp[0].split(",");
         temp.pop();
         for (let i = 1; i < temp.length; i++) {
           temp[i] = temp[i].split(",");
-          for (let j = 0; j < temp[i].length; j++) {
-            const tempKeyArr = temp[0][j].split(" ").map((ele) => ele);
-            const key =
-              tempKeyArr[0][0].toLowerCase() +
-              tempKeyArr[0].substr(1) +
-              tempKeyArr[1][0].toUpperCase() +
-              tempKeyArr[1].substr(1);
-            const value = temp[i][j];
-            this[key] = value;
-          }
-
           const payload = {
-            posTarif: this.posTarif,
-            uraian: this.uraian,
-            netoBrutoVolume: this.netoBrutoVolume,
-            satuanKemasan: this.satuanKemasan,
-            nilaiPabeanHargaPenyerahan: this.nilaiPabeanHargaPenyerahan,
-            hsCode: this.hsCode,
+            posTarif: temp[i][0],
+            uraian: temp[i][1],
+            nettoBrutoVolume: temp[i][2],
+            satuanKemasan: temp[i][3],
+            nilaiPabeanHargaPenyerahan: temp[i][4],
+            hsCode: temp[i][5],
           };
           this.$store.commit("SET_LIST_DATA_BARANG", payload);
         }
         this.posTarif = "";
         this.uraian = "";
-        this.netoBrutoVolume = "";
+        this.nettoBrutoVolume = "";
         this.satuanKemasan = "";
         this.nilaiPabeanHargaPenyerahan = "";
         this.hsCode = "";
@@ -228,7 +235,7 @@ export default {
 
         this.posTarif = "";
         this.uraian = "";
-        this.netoBrutoVolume = "";
+        this.nettoBrutoVolume = "";
         this.satuanKemasan = "";
         this.nilaiPabeanHargaPenyerahan = "";
         this.hsCode = "";
@@ -253,7 +260,25 @@ export default {
           cancelButtonText: "Tidak",
         }).then((result) => {
           if (result.value) {
-            this.$emit("handleSubmitStepper");
+            this.$store
+              .dispatch("createDataBarang")
+              .then((result) => {
+                if (result.data.success) {
+                  this.$swal.fire(
+                    "Berhasil create data barang!",
+                    "",
+                    "success"
+                  );
+                  this.$emit("handleSubmitStepper");
+                }
+              })
+              .catch((error) => {
+                this.$swal.fire(
+                  "Gagal membuat data barang!",
+                  error.response.data.message,
+                  "error"
+                );
+              });
           }
         });
       } else {

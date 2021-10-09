@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import DetectReportType from "@/helper/DetectReportType";
 export default {
   name: "CreateDocument",
   components: {
@@ -93,21 +94,28 @@ export default {
     return {
       page: "",
       currentLocation: "",
-      step: 3,
+      step: 1,
     };
   },
   created() {
     this.currentLocation = this.$route.path;
-
-    if (this.currentLocation.includes("plb")) {
-      this.page = "PLB";
-    } else if (this.currentLocation.includes("ppftz")) {
-      this.page = "PPFTZ";
+    this.page = DetectReportType(this.currentLocation);
+    if (!localStorage.getItem("current_report_id")) {
+      this.$router.push(`/${this.page.toLowerCase()}`);
+    } else {
+      this.$store.commit(
+        "SET_REPORT_ID",
+        +localStorage.getItem("current_report_id")
+      );
+    }
+    if (localStorage.getItem("stepper")) {
+      this.step = +localStorage.getItem("stepper");
     }
   },
   methods: {
     handleSubmitStepper() {
       this.step += 1;
+      localStorage.setItem("stepper", +this.step);
     },
     handleSubmitAll() {
       if (this.page === "PLB") {

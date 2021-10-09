@@ -139,7 +139,25 @@ export default {
           cancelButtonText: "Tidak",
         }).then((result) => {
           if (result.value) {
-            this.$emit("handleSubmitStepper");
+            this.$store
+              .dispatch("createDataLanjutan")
+              .then((result) => {
+                if (result.data.success) {
+                  this.$swal.fire(
+                    "Berhasil create data lanjutan!",
+                    "",
+                    "success"
+                  );
+                  this.$emit("handleSubmitStepper");
+                }
+              })
+              .catch((error) => {
+                this.$swal.fire(
+                  "Gagal membuat data lanjutan!",
+                  error.response.data.message,
+                  "error"
+                );
+              });
           }
         });
       } else {

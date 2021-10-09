@@ -1,18 +1,37 @@
 import axios from "axios";
 import { AESDecrypt, AESEncrypt } from "../helper/Encryption";
-// import router from "../router/";
-const baseUrl = process.env.BASE_URL;
+import router from "@/router/";
+import Swal from "sweetalert2";
+import user from "@/store/user";
+const baseUrl = "http://192.168.100.32:3000";
 
 const report = {
   state: {
     reportId: "",
+    optionsTableMerah: {
+      page: 1,
+      itemsPerPage: 5,
+      type: "",
+    },
     report: {
       pengajuanSebagai: "",
-      diajukanDikantor: "",
+      kantorPengajuan: "",
       jenisPemberitahuan: "",
       BCDocumentType: "",
     },
     reports: [],
+    optionsTableReports: {
+      page: 1,
+      itemsPerPage: 5,
+      type: "",
+      search: "",
+    },
+    totalReport: [],
+    totalReportAll: {
+      Import: 0,
+      Export: 0,
+    },
+    reportInventoryMerah: [],
     // Data Header
     dataPengajuan: {
       kantorPabeanAsal: "",
@@ -21,23 +40,20 @@ const report = {
       tujuanPengeluaran: "",
       asalBarang: "",
       caraPembayaran: "",
-      reportId: "",
     },
     identitasPengirim: {
-      jenisIdentitasPengirim: "",
+      jenisIdentitasPengirim: "5 - NPWP - 15 Digits",
       nomorIdentitasPengirim: "",
       namaPengirim: "",
       alamatPengirim: "",
       nomorIjinBpkPengirim: "",
       tanggalIjinBpkPengirim: "",
-      reportId: "",
     },
     identitasPenerima: {
-      jenisIdentitasPenerima: "",
+      jenisIdentitasPenerima: "5 - NPWP - 15 Digits",
       nomorIdentitasPenerima: "",
       namaPenerima: "",
       alamatPenerima: "",
-      reportId: "",
     },
     transaksiPerdagangan: {
       transaksi: "",
@@ -48,44 +64,36 @@ const report = {
       voluntaryDeclaration: "",
       freight: "",
       hargaPenyerahan: "",
-      reportId: "",
     },
     dataPengangkutan: {
       caraAngkut: "",
       namaPengangkut: "",
       bendera: "",
       nomorVoyFlightPol: "",
-      reportId: "",
     },
     dataPelabuhanMuatBongkar: {
       pelabuhanMuat: "",
       pelabuhanTujuan: "",
       pelabuhanTransit: "",
-      reportId: "",
     },
     dataBeratDanVolume: {
       beratBersih: "",
       beratKotor: "",
       volume: "",
-      reportId: "",
     },
     dataPetiKemasDanPengemas: {
       jumlahJenisKemasan: "",
       jumlahPetiKemas: "",
       jumlahJenisBarang: "",
-      reportId: "",
     },
     dataTempatPenimbunan: {
       tempatPenimbunan: "",
-      reportId: "",
     },
     dataPerkiraanTanggalPengeluaran: {
       perkiraanTanggalPengeluaran: "",
-      reportId: "",
     },
     dataLartas: {
-      dataLartasBarang: "",
-      reportId: "",
+      name: "",
     },
     // End Data Header
 
@@ -128,12 +136,33 @@ const report = {
     },
   },
   mutations: {
+    SET_REPORT_ID(state, payload) {
+      state.reportId = payload;
+    },
     // Data Header
     SET_DATA_REPORT(state, payload) {
       state.report[payload.key] = payload.value;
     },
+    SET_OPTIONS_TABLE_MERAH(state, payload) {
+      state.optionsTableMerah = Object.assign({}, payload);
+    },
     SET_REPORT(state, payload) {
       state.report = payload;
+    },
+    SET_TOTAL_REPORT_BY_STATUS(state, payload) {
+      state.totalReport = [...state.totalReport, payload.value];
+    },
+    SET_TOTAL_REPORT_ALL(state, payload) {
+      state.totalReportAll = payload;
+    },
+    RESET_TOTAL_REPORT_BY_STATUS(state) {
+      state.totalReport = [];
+    },
+    SET_REPORT_INVENTORY_MERAH(state, payload) {
+      state.reportInventoryMerah = payload;
+    },
+    SET_OPTIONS_TABLE_REPORTS(state, payload) {
+      state.optionsTableReports = Object.assign({}, payload);
     },
     SET_REPORTS(state, payload) {
       state.reports = payload;
@@ -142,7 +171,12 @@ const report = {
       state.dataPengajuan[payload.key] = payload.value;
     },
     SET_IDENTITAS_PENGIRIM(state, payload) {
-      state.identitasPengirim[payload.key] = payload.value;
+      if (payload.key === "tanggalIjinBpkPengirim") {
+        const [y, m, d] = payload.value.split("-");
+        state.identitasPengirim[payload.key] = `${d}-${m}-${y}`;
+      } else {
+        state.identitasPengirim[payload.key] = payload.value;
+      }
     },
     SET_IDENTITAS_PENERIMA(state, payload) {
       state.identitasPenerima[payload.key] = payload.value;
@@ -166,7 +200,8 @@ const report = {
       state.dataTempatPenimbunan[payload.key] = payload.value;
     },
     SET_DATA_PERKIRAAN_TANGGAL_PENGELUARAN(state, payload) {
-      state.dataPerkiraanTanggalPengeluaran[payload.key] = payload.value;
+      const [y, m, d] = payload.value.split("-");
+      state.dataPerkiraanTanggalPengeluaran[payload.key] = `${d}-${m}-${y}`;
     },
     SET_DATA_LARTAS(state, payload) {
       state.dataLartas[payload.key] = payload.value;
@@ -219,52 +254,302 @@ const report = {
         return ele;
       });
     },
+    SET_STATE_GLOBAL(state, payload) {
+      state[payload.key] = payload.value;
+    },
   },
   actions: {
-    async createReport(context) {
-      context.commit("SET_LOADING_CREATE", true);
+    async createReport(context, payload) {
+      // context.commit("SET_LOADING_CREATE", true);
       try {
         let result = await axios({
-          url: baseUrl + "/report",
+          url: baseUrl + "/report/?type=" + payload,
           method: "POST",
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
           },
-          data: AESEncrypt(context.state.report),
+          data: {
+            dataReport: AESEncrypt(context.state.report),
+          },
         });
-        if (result.success) {
-          context.commit("SET_REPORT", AESDecrypt(result.data));
+        if (result.data.success) {
+          const report = AESDecrypt(result.data.data);
+          context.commit("SET_REPORT", report);
+          context.commit("SET_REPORT_ID", report.id);
+          localStorage.setItem("current_report_id", report.id);
+          router.push(`/${payload.toLowerCase()}/add`);
         }
       } catch (error) {
-        console.log(error);
+        const response = error.response.data;
+        Swal.fire("Gagal!", response.message, "error");
       } finally {
-        context.commit("SET_LOADING_CREATE", false);
+        // context.commit("SET_LOADING_CREATE", false);
       }
     },
-    async fetchData(context) {
+    async fetchAllReport(context) {
+      const size =
+        context.state.optionsTableReports.itemsPerPage === -1
+          ? 100
+          : context.state.optionsTableReports.itemsPerPage;
       let result = await axios({
-        url: baseUrl + "/report",
+        url:
+          baseUrl +
+          `/report/get?pageSize=${size}&pageNo=${context.state.optionsTableReports.page}&sortBy=newest&search=${context.state.optionsTableReports.search}&type=${context.state.optionsTableReports.type}`,
         method: "GET",
         headers: {
           authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
         },
       });
-      if (result.success) {
-        context.commit("SET_REPORTS", AESDecrypt(result.data));
+      if (result.data.success) {
+        context.commit("SET_REPORTS", AESDecrypt(result.data.data));
       }
     },
-    async getOneReport(context, payload) {
+    async getOneReport(context) {
       let result = await axios({
-        url: baseUrl + "/report/oneReport/" + payload.id,
+        url: baseUrl + "/report/get/OneReport/" + context.state.reportId,
         method: "GET",
         headers: {
           authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
         },
       });
-      if (result.success) {
-        context.commit("SET_REPORT", AESDecrypt(result.data));
+      console.log(result);
+      if (result.data.success) {
+        const decrypt = AESDecrypt(result.data.data);
+        context.commit("SET_REPORT_ID", decrypt.id);
+        const tempReport = {
+          pengajuanSebagai: decrypt.pengajuanSebagai,
+          kantorPengajuan: decrypt.kantorPengajuan,
+          jenisPemberitahuan: decrypt.jenisPemberitahuan,
+          BCDocumentType: decrypt.BCDocumentType,
+        };
+        context.commit("SET_REPORT", tempReport);
+        const {
+          DataPengajuan,
+          reportIdentitasPenerima,
+          IdentitasPengirim,
+          TransaksiPerdagangan,
+          DataPengangkutan,
+          DataPelabuhanMuatBongkar,
+          DataBeratDanVolume,
+          DataPetiKemasDanPengema,
+          DataPerkiraanTanggalPengeluaran,
+          DataTempatPenimbunan,
+          DataLarta,
+          ListDokumens,
+          DataPetiKema,
+          listBarangs,
+        } = decrypt;
+
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataPengajuan",
+          value: DataPengajuan,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "identitasPenerima",
+          value: reportIdentitasPenerima,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "identitasPengirim",
+          value: IdentitasPengirim,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "transaksiPerdagangan",
+          value: TransaksiPerdagangan,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataPengangkutan",
+          value: DataPengangkutan,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataPelabuhanMuatBongkar",
+          value: DataPelabuhanMuatBongkar,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataBeratDanVolume",
+          value: DataBeratDanVolume,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataPetiKemasDanPengemas",
+          value: DataPetiKemasDanPengema,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataPerkiraanTanggalPengeluaran",
+          value: DataPerkiraanTanggalPengeluaran,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataTempatPenimbunan",
+          value: DataTempatPenimbunan,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataLartas",
+          value: DataLarta,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataDokumen",
+          value: ListDokumens,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "dataPetiKemas",
+          value: DataPetiKema,
+        });
+        context.commit("SET_STATE_GLOBAL", {
+          key: "listDataBarang",
+          value: listBarangs,
+        });
       }
+    },
+    async fetchAllTotalReport(context) {
+      // /report/get/getTotalReport
+      let result = await axios({
+        url: `${baseUrl + "/report/get/getTotalReport"}`,
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+      });
+      if (result.data.success) {
+        context.commit("SET_TOTAL_REPORT_ALL", AESDecrypt(result.data.data));
+      }
+    },
+    async fetchReportByStatus(context, payload) {
+      const extendedUrl = payload ? "?status=" + payload : "";
+      let result = await axios({
+        url: `${baseUrl + "/report/get/total" + extendedUrl}`,
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+      });
+      if (result.data.success && result.data.data !== null) {
+        const payloadMutation = {
+          key: payload,
+          value: AESDecrypt(result.data.data),
+        };
+        context.commit("SET_TOTAL_REPORT_BY_STATUS", payloadMutation);
+      }
+      if (result.data.success && result.data.data == null) {
+        const payloadMutation = {
+          key: payload,
+          value: {
+            Import: 0,
+            Export: 0,
+            status: payload,
+          },
+        };
+        context.commit("SET_TOTAL_REPORT_BY_STATUS", payloadMutation);
+      }
+    },
+    async fetchReportInventoryMerah(context, payload) {
+      const size = payload.itemsPerPage === -1 ? 100 : payload.itemsPerPage;
+      const result = await axios({
+        url:
+          baseUrl +
+          `/report/get/dataJalurMerah?pageSize=${size}&pageNo=${payload.page}${
+            payload.type ? "&type=" + payload.type : ""
+          }`,
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+      });
+      if (result.data.success) {
+        context.commit(
+          "SET_REPORT_INVENTORY_MERAH",
+          AESDecrypt(result.data.data)
+        );
+      }
+    },
+
+    // Data Header
+    createDataHeader(context) {
+      context.commit("SET_IDENTITAS_PENGIRIM", {
+        key: "namaPengirim",
+        value: user.state.dataUser.name,
+      });
+      context.commit("SET_IDENTITAS_PENGIRIM", {
+        key: "nomorIdentitasPengirim",
+        value: user.state.dataUser.npwp,
+      });
+      context.commit("SET_IDENTITAS_PENGIRIM", {
+        key: "alamatPengirim",
+        value: user.state.dataUser.address,
+      });
+      const {
+        reportId,
+        dataPengajuan,
+        identitasPenerima,
+        identitasPengirim,
+        transaksiPerdagangan,
+        dataPengangkutan,
+        dataPelabuhanMuatBongkar,
+        dataBeratDanVolume,
+        dataPetiKemasDanPengemas,
+        dataPerkiraanTanggalPengeluaran,
+        dataTempatPenimbunan,
+        dataLartas,
+      } = context.state;
+
+      return axios({
+        url: baseUrl + "/report/data-header",
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          dataHeader: AESEncrypt({
+            reportId,
+            dataPengajuan,
+            identitasPenerima,
+            identitasPengirim,
+            transaksiPerdagangan,
+            dataPengangkutan,
+            dataPelabuhanMuatBongkar,
+            dataBeratDanVolume,
+            dataPetiKemasDanPengemas,
+            dataPerkiraanTanggalPengeluaran,
+            dataTempatPenimbunan,
+            dataLartas,
+          }),
+        },
+      });
+    },
+
+    createDataLanjutan(context) {
+      const { reportId, dataDokumen, dataPetiKemas } = context.state;
+
+      return axios({
+        url: baseUrl + "/report/data-lanjutan",
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          dataLanjutan: AESEncrypt({
+            reportId,
+            dataDokumen,
+            dataPetiKemas,
+          }),
+        },
+      });
+    },
+
+    createDataBarang(context) {
+      const { reportId, listDataBarang } = context.state;
+
+      return axios({
+        url: baseUrl + "/report/data-barang",
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          dataBarang: AESEncrypt({
+            reportId,
+            listDataBarang,
+          }),
+        },
+      });
     },
   },
 };

@@ -10,8 +10,8 @@
           prepend-inner-icon="mdi-magnify"
           style="width:350px"
           outlined
+          v-model="optionsTableReports.search"
           dense
-          clearable
         ></v-text-field>
       </v-col>
       <v-col lg="2" style="text-align: right">
@@ -22,14 +22,20 @@
     </v-row>
     <v-data-table
       :headers="headers"
-      :items="data"
-      :items-per-page="5"
+      :items="reports.data"
+      :options.sync="optionsTableReports"
+      :server-items-length="reports.data_size"
+      no-data-text="Data not available"
+      no-results-text="Data not available"
       class="it-inventory-simple-table"
     >
-      <template v-slot:[`item.status`]="{ item }">
-        <approval-badge :status="item.status"></approval-badge>
+      <template v-slot:[`item.no`]="props">
+        {{ props.index + 1 }}
       </template>
-      <template v-slot:[`item.action`]>
+      <template v-slot:[`item.jalur`]="{ item }">
+        <approval-badge v-if="item.jalur" :status="item.jalur"></approval-badge>
+      </template>
+      <template v-slot:[`item.action`]="{ item }">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -53,13 +59,13 @@
                 View
               </v-list-item-title>
             </v-list-item>
-            <v-list-item>
+            <v-list-item v-if="item.edit">
               <v-list-item-title>
                 <v-icon left>mdi-pencil-outline </v-icon>
                 Edit
               </v-list-item-title>
             </v-list-item>
-            <v-list-item>
+            <v-list-item v-if="item.edit">
               <v-list-item-title>
                 <v-icon left>mdi-trash-can-outline</v-icon>
                 Delete
@@ -84,7 +90,7 @@
 </template>
 
 <script>
-import dataPLB from "@/dummy/plbDummy.json";
+import DetectReportType from "@/helper/DetectReportType";
 export default {
   name: "TableInventory",
   components: {
@@ -93,12 +99,13 @@ export default {
   },
   data() {
     return {
+      search: "",
       page: "",
       dialog: false,
       headers: [
         {
           text: "No",
-          value: "id",
+          value: "no",
         },
         {
           text: "Jenis Inventory",
@@ -109,29 +116,49 @@ export default {
           value: "nomorAjuan",
         },
         { text: "Tanggal Ajuan", value: "tanggalAjuan" },
-        { text: "No. Daftar", value: "noDaftar" },
-        { text: "Tanggal Daftar", value: "tanggalDaftar" },
+        // { text: "No. Daftar", value: "noDaftar" },
+        // { text: "Tanggal Daftar", value: "tanggalDaftar" },
         { text: "Pengirim", value: "pengirim" },
         { text: "Penerima", value: "penerima" },
-        { text: "Jalur", value: "status", sortable: false },
+        { text: "Jalur", value: "jalur", sortable: false },
         { text: "Action", value: "action", sortable: false },
       ],
-      data: dataPLB,
     };
+  },
+  watch: {
+    optionsTableReports: {
+      handler() {
+        this.fetchReports();
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    reports() {
+      return this.$store.state.report.reports;
+    },
+    optionsTableReports: {
+      get() {
+        return this.$store.state.report.optionsTableReports;
+      },
+      set(val) {
+        this.$store.commit("SET_OPTIONS_TABLE_REPORTS", val);
+      },
+    },
+  },
+  created() {
+    this.currentLocation = this.$route.path;
+    this.page = DetectReportType(this.currentLocation);
+    this.optionsTableReports.type = this.page.toUpperCase();
+    this.fetchReports();
   },
   methods: {
     handleModal() {
       this.dialog = !this.dialog;
     },
-  },
-  created() {
-    const getPath = this.$route.path;
-
-    if (getPath.includes("plb")) {
-      this.page = "PLB";
-    } else if (getPath.includes("ppftz")) {
-      this.page = "PPFTZ";
-    }
+    fetchReports() {
+      this.$store.dispatch("fetchAllReport", this.optionsTableReports);
+    },
   },
 };
 </script>

@@ -133,7 +133,7 @@ export default {
             const value = temp[i][j];
             this[key] = value;
           }
-          let [d, m, y] = this.tanggalDokumen.split("-");
+          let [y, m, d] = this.tanggalDokumen.split("-");
           d = d.toString().length > 1 ? d : "0" + d;
           m = m.toString().length > 1 ? m : "0" + m;
           const resultNewDate = `${d}-${m}-${y}`;

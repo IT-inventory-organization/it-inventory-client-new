@@ -15,7 +15,7 @@
             clearable
             label="Pengajuan Sebagai"
             v-model="pengajuanSebagai"
-            :items="['Test 1', 'Test 2']"
+            :items="['Importir', 'Exportir']"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Pengajauan Sebagai');
@@ -26,8 +26,8 @@
           <v-select
             clearable
             label="Diajukan Dikantor"
-            :items="['Test 1', 'Test 2']"
-            v-model="diajukanDikantor"
+            :items="['Kantor 1', 'Kantor 2']"
+            v-model="kantorPengajuan"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Diajukan Dikantor');
@@ -38,7 +38,7 @@
           <v-select
             clearable
             label="Jenis Pemberitahuan"
-            :items="['Test 1', 'Test 2']"
+            :items="['Import', 'Export']"
             v-model="jenisPemberitahuan"
             :rules="[
               (value) => {
@@ -51,7 +51,7 @@
             clearable
             label="Jenis Dokumen BC"
             v-model="BCDocumentType"
-            :items="['Test 1', 'Test 2']"
+            :items="dokumenBC"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Jenis Dokumen BC');
@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import DetectReportType from "@/helper/DetectReportType";
 import { FieldRequired } from "@/mixins/ValidationRules";
 
 export default {
@@ -80,6 +81,7 @@ export default {
   data() {
     return {
       page: "",
+      dokumenBC: [],
     };
   },
   computed: {
@@ -94,13 +96,13 @@ export default {
         });
       },
     },
-    diajukanDikantor: {
+    kantorPengajuan: {
       get() {
-        return this.$store.state.report.report.diajukanDikantor;
+        return this.$store.state.report.report.kantorPengajuan;
       },
       set(value) {
         this.$store.commit("SET_DATA_REPORT", {
-          key: "diajukanDikantor",
+          key: "kantorPengajuan",
           value,
         });
       },
@@ -135,20 +137,28 @@ export default {
     },
     handleSubmit() {
       if (this.$refs.initialReport.validate()) {
-        // this.$store.dispatch("createReport")
-        this.$router.push(`${this.$route.path}/add`);
+        this.$store.dispatch("createReport", this.page);
       } else {
         this.$swal("Data Belum Lengkap", "", "error");
       }
     },
   },
   created() {
-    const getPath = this.$route.path;
-
-    if (getPath.includes("plb")) {
-      this.page = "PLB";
-    } else if (getPath.includes("ppftz")) {
-      this.page = "PPFTZ";
+    this.currentLocation = this.$route.path;
+    this.page = DetectReportType(this.currentLocation);
+    if (this.page === "PLB") {
+      this.dokumenBC = [
+        "BC 2.3",
+        "BC 2.7",
+        "BC 4.0",
+        "BC 2.6.2",
+        "BC 4.1",
+        "BC 2.5",
+        "BC 2.7",
+        "BC 2.6.1",
+      ];
+    } else {
+      this.dokumenBC = ["BC 01", "BC 02", "BC 03"];
     }
   },
 };
