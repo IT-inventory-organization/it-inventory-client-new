@@ -150,10 +150,6 @@ export default {
       dataPemasukanPengeluaranDua: "a",
     };
   },
-  created() {
-    // const temp = this.$route.path
-    console.log(this.$route.path.includes('edit'))
-  },
   methods: {
     validateStepper() {
       if (
@@ -180,16 +176,11 @@ export default {
     },
 
     handleCreate() {
-      console.log("trigger 10")
       this.$store
         .dispatch("createDataHeader")
         .then((result) => {
           if (result.data.success) {
-            this.$swal.fire(
-              "Berhasil create data header!",
-              "",
-              "success"
-            );
+            this.$swal.fire("Berhasil create data header!", "", "success");
             this.$emit("handleSubmitStepper");
           }
         })
@@ -206,11 +197,7 @@ export default {
         .dispatch("editDataHeader")
         .then((result) => {
           if (result.data.success) {
-            this.$swal.fire(
-              "Berhasil edit data header!",
-              "",
-              "success"
-            );
+            this.$swal.fire("Berhasil edit data header!", "", "success");
             this.$emit("handleSubmitStepper");
           }
         })
@@ -240,10 +227,10 @@ export default {
           cancelButtonText: "Tidak",
         }).then((result) => {
           if (result.value) {
-            if(!this.$route.path.includes('edit')) {
-              this.handleCreate()
+            if (!this.$route.path.includes("edit")) {
+              this.handleCreate();
             } else {
-              this.handleEdit()
+              this.handleEdit();
             }
           }
         });

@@ -55,11 +55,10 @@ const user = {
         if (error.message === "Network Error") {
           Swal.fire("Tidak ada jaringan!", "", "error");
         }
-        console.log(error);
-        //   const response = error.response.data;
-        //   if (!response.success) {
-        //     Swal.fire("Gagal!", response.message, "error");
-        //   }
+        const response = error.response.data;
+        if (!response.success) {
+          Swal.fire("Gagal!", response.message, "error");
+        }
       }
     },
 
@@ -73,7 +72,7 @@ const user = {
       });
 
       if (result.data.success) {
-        console.log("trigger")
+        console.log("trigger");
         context.commit("SET_DATA_USER", AESDecrypt(result.data.data));
       }
     },

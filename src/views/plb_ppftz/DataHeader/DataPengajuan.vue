@@ -88,11 +88,6 @@ export default {
   data() {
     return {};
   },
-  watch: {
-    kantorPabeanAsal(val) {
-      console.log(val);
-    },
-  },
   computed: {
     kantorPabeanAsal: {
       get() {

@@ -8,6 +8,9 @@ const baseUrl = "http://localhost:3000";
 const report = {
   state: {
     reportId: "",
+    reportIdPreview: "",
+    preview: null,
+    previewIsLoading: false,
     optionsTableMerah: {
       page: 1,
       itemsPerPage: 5,
@@ -139,9 +142,26 @@ const report = {
       loadingEdit: false,
       loadingForm: false,
       deleteOne: false,
-    }
+    },
   },
   mutations: {
+    SET_REPORT_ID_PREVIEW(state, payload) {
+      state.reportIdPreview = payload;
+      localStorage.setItem("reportIdPreview", payload);
+    },
+    RESET_REPORT_ID(state) {
+      state.reportIdPreview = "";
+      localStorage.removeItem("reportIdPreview");
+    },
+    SET_PREVIEW(state, payload) {
+      state.preview = payload;
+    },
+    SET_PREVIEW_IS_LOADING(state, payload) {
+      state.previewIsLoading = payload;
+    },
+    RESET_PREVIEW(state) {
+      state.preview = null;
+    },
     SET_REPORT_ID(state, payload) {
       state.reportId = payload;
     },
@@ -264,15 +284,15 @@ const report = {
       state[payload.key] = payload.value;
     },
     SET_LOADING(state, payload) {
-      state.loading[payload.key] = payload.value
+      state.loading[payload.key] = payload.value;
     },
     DELETE_REPORT(state, id) {
-      const index = state.reports.data.findIndex(ele => ele.nomorAjuan == id)
-      if(index !== -1) {
-        state.reports.data.splice(index, 1)
-        state.reports["data_size"] -= 1
+      const index = state.reports.data.findIndex((ele) => ele.nomorAjuan == id);
+      if (index !== -1) {
+        state.reports.data.splice(index, 1);
+        state.reports["data_size"] -= 1;
       }
-    }
+    },
   },
   actions: {
     async createReport(context, payload) {
@@ -322,13 +342,14 @@ const report = {
       }
     },
     async getOneReport(context) {
-      context.commit("SET_LOADING", {key: "getOne", value: true})
+      context.commit("SET_LOADING", { key: "getOne", value: true });
       try {
         let result = await axios({
           url: baseUrl + "/report/get/OneReport/" + context.state.reportId,
           method: "GET",
           headers: {
-            authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
           },
         });
         if (result.data.success) {
@@ -357,7 +378,7 @@ const report = {
             DataPetiKema,
             listBarangs,
           } = decrypt;
-          
+
           context.commit("SET_STATE_GLOBAL", {
             key: "dataPengajuan",
             value: DataPengajuan,
@@ -416,9 +437,9 @@ const report = {
           });
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       } finally {
-        context.commit("SET_LOADING", {key: "getOne", value: false})
+        context.commit("SET_LOADING", { key: "getOne", value: false });
       }
     },
     async fetchAllTotalReport(context) {
@@ -583,9 +604,7 @@ const report = {
           authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
         },
         data: {
-          dataReport: AESEncrypt(
-            report,
-          ),
+          dataReport: AESEncrypt(report),
         },
       });
     },
@@ -665,25 +684,48 @@ const report = {
       });
     },
     async deleteReport(context, id) {
-      context.commit("SET_LOADING", {key: "deleteOne", value: true})
+      context.commit("SET_LOADING", { key: "deleteOne", value: true });
       try {
         const result = await axios({
           url: baseUrl + "/report/delete/" + id,
           method: "DELETE",
           headers: {
-            authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
           },
         });
-        if(result.data.success) {
+        if (result.data.success) {
           Swal.fire("Success!", result.data.message, "success");
-          context.commit("DELETE_REPORT", id)
+          context.commit("DELETE_REPORT", id);
         }
       } catch (error) {
         Swal.fire("Gagal!", error.response.data.message, "error");
       } finally {
-        context.commit("SET_LOADING", {key: "deleteOne", value: false})
+        context.commit("SET_LOADING", { key: "deleteOne", value: false });
       }
-    }
+    },
+
+    async previewReport(context) {
+      context.commit("SET_PREVIEW_IS_LOADING", true);
+      try {
+        const result = await axios({
+          url:
+            baseUrl + `/report/get/OneReport/${context.state.reportIdPreview}`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if (result.data.success) {
+          context.commit("SET_PREVIEW", AESDecrypt(result.data.data));
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        context.commit("SET_PREVIEW_IS_LOADING", false);
+      }
+    },
   },
 };
 

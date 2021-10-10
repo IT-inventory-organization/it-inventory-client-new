@@ -53,30 +53,36 @@
           </template>
 
           <v-list>
-            <v-list-item>
+            <v-list-item @click="handlePreview(item.nomorAjuan)">
               <v-list-item-title>
                 <v-icon left> mdi-format-list-bulleted </v-icon>
                 View
               </v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="item.edit" @click="handleEditModal(item.nomorAjuan)">
+            <v-list-item
+              v-if="item.edit"
+              @click="handleEditModal(item.nomorAjuan)"
+            >
               <v-list-item-title>
                 <v-icon left>mdi-pencil-outline</v-icon>
                 Edit
               </v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="item.edit" @click="handleDelete(item.nomorAjuan)">
+            <v-list-item
+              v-if="item.edit"
+              @click="handleDelete(item.nomorAjuan)"
+            >
               <v-list-item-title>
                 <v-icon left>mdi-trash-can-outline</v-icon>
                 Delete
               </v-list-item-title>
             </v-list-item>
-            <v-list-item>
+            <!-- <v-list-item>
               <v-list-item-title>
                 <v-icon left>mdi-printer-outline </v-icon>
                 Print
               </v-list-item-title>
-            </v-list-item>
+            </v-list-item> -->
           </v-list>
         </v-menu>
       </template>
@@ -89,6 +95,10 @@
     <v-dialog v-model="editDialog" persistent max-width="600px">
       <edit-modal @handleEditModal="handleEditModal" :reportId="editedId" />
     </v-dialog>
+    <!-- Modal Preview -->
+    <v-dialog v-model="dialogPreview" persistent width="1400px">
+      <preview-print-report @handleCloseDialog="handleCloseDialogPreview" />
+    </v-dialog>
   </div>
 </template>
 
@@ -99,15 +109,17 @@ export default {
   components: {
     ApprovalBadge: () => import("@/components/ApprovalBadge"),
     CreateNewModal: () => import("@/components/plb_ppftz/CreateNewModal"),
-    EditModal: () => import("@/components/plb_ppftz/EditModal")
+    EditModal: () => import("@/components/plb_ppftz/EditModal"),
+    PreviewPrintReport: () => import("@/views/PreviewPrintReport"),
   },
   data() {
     return {
       search: "",
       page: "",
       dialog: false,
+      dialogPreview: false,
       editedId: null,
-      editDialog: false, 
+      editDialog: false,
       headers: [
         {
           text: "No",
@@ -159,6 +171,16 @@ export default {
     this.fetchReports();
   },
   methods: {
+    handlePreview(reportId) {
+      this.dialogPreview = true;
+      this.$store.commit("SET_REPORT_ID_PREVIEW", reportId);
+      this.$store.dispatch("previewReport");
+    },
+    async handleCloseDialogPreview() {
+      this.dialogPreview = false;
+      await this.$store.commit("RESET_PREVIEW");
+      await this.$store.commit("RESET_REPORT_ID");
+    },
     handleModal() {
       this.dialog = !this.dialog;
     },
@@ -166,12 +188,12 @@ export default {
       this.$store.dispatch("fetchAllReport", this.optionsTableReports);
     },
     handleEditModal(id) {
-      this.editDialog= !this.editDialog
-      if(this.editDialog) {
-        this.$store.commit("SET_REPORT_ID", id)
-        localStorage.setItem("current_report_id", id)
-        this.$store.dispatch("getOneReport")
-        this.editedId = id
+      this.editDialog = !this.editDialog;
+      if (this.editDialog) {
+        this.$store.commit("SET_REPORT_ID", id);
+        localStorage.setItem("current_report_id", id);
+        this.$store.dispatch("getOneReport");
+        this.editedId = id;
       }
     },
     handleDelete(id) {
@@ -186,10 +208,10 @@ export default {
         cancelButtonText: "Tidak",
       }).then((result) => {
         if (result.value) {
-          this.$store.dispatch("deleteReport", id)
+          this.$store.dispatch("deleteReport", id);
         }
       });
-    }
+    },
   },
 };
 </script>
