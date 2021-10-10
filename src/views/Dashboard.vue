@@ -5,10 +5,10 @@
     >
     <v-row no-gutters>
       <DisplayCount
-        v-for="list in lists"
+        v-for="list in totalReport"
         :key="list.status"
-        :jumlahExport="list.export"
-        :jumlahImport="list.import"
+        :jumlahExport="list.Export"
+        :jumlahImport="list.Import"
         :status="list.status"
       ></DisplayCount>
     </v-row>
@@ -23,9 +23,8 @@
           </v-col>
           <v-col lg="2">
             <v-select
-              clearable
               class="filter_lists_merah"
-              value="Import"
+              v-model="type"
               outlined
               dense
               :items="filterListsJalurMerah"
@@ -39,7 +38,7 @@
         </v-card-title>
       </v-col>
     </v-row>
-    <lists-inventory-merah />
+    <lists-inventory-merah ref="tableMerah" :type="type" />
   </div>
 </template>
 
@@ -53,13 +52,40 @@ export default {
   },
   data() {
     return {
-      lists: [
-        { export: 450, import: 250, status: "hijau" },
-        { export: 320, import: 275, status: "kuning" },
-        { export: 140, import: 50, status: "merah" },
-      ],
       filterListsJalurMerah: ["Import", "Export"],
+      type: "",
     };
+  },
+  watch: {
+    type(val) {
+      if (val) this.optionsTableMerah.type = val;
+      // this.$store.dispatch("fetchReportInventoryMerah", this.optionsTableMerah);
+    },
+  },
+  computed: {
+    totalReport() {
+      return this.$store.state.report.totalReport;
+    },
+    optionsTableMerah: {
+      get() {
+        return this.$store.state.report.optionsTableMerah;
+      },
+      set(val) {
+        this.$store.commit("SET_OPTIONS_TABLE_MERAH", val);
+      },
+    },
+  },
+  created() {
+    if (this.totalReport.length < 3) {
+      this.fetchData();
+    }
+  },
+  methods: {
+    async fetchData() {
+      await this.$store.dispatch("fetchReportByStatus", "hijau");
+      await this.$store.dispatch("fetchReportByStatus", "kuning");
+      await this.$store.dispatch("fetchReportByStatus", "merah");
+    },
   },
 };
 </script>

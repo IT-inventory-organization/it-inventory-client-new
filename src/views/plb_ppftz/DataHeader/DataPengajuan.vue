@@ -4,10 +4,9 @@
       <v-row>
         <v-col lg="6" md="6" sm="12">
           <v-combobox
-            :items="[`Test1`, `Test2`]"
+            :items="[`Kantor 1`, `Kantor 2`]"
             outlined
             label="Kantor Pabean Asal"
-            clearable
             v-model="kantorPabeanAsal"
             :rules="[
               (value) => {
@@ -16,7 +15,6 @@
             ]"
           ></v-combobox>
           <v-select
-            clearable
             :items="['1 - Biasa']"
             label="Kategori Pemberitahuan"
             outlined
@@ -27,30 +25,32 @@
               },
             ]"
           ></v-select>
-          <v-text-field
+          <v-select
             label="Kategori Pengeluaran"
             outlined
             v-model="kategoryPengeluaran"
+            :items="['1 - Pengeluaran Biasa']"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Kategori Pengeluaran');
               },
             ]"
           >
-          </v-text-field>
+          </v-select>
         </v-col>
         <v-col lg="6" md="6" sm="12">
-          <v-text-field
+          <v-select
             label="Tujuan Pengeluaran"
             outlined
             v-model="tujuanPengeluaran"
+            :items="['20 - Lainnya']"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Tujuan Pengeluaran');
               },
             ]"
           >
-          </v-text-field>
+          </v-select>
           <v-text-field
             label="Asal Barang"
             outlined
@@ -62,17 +62,18 @@
             ]"
           >
           </v-text-field>
-          <v-text-field
+          <v-select
             label="Cara Pembayaran"
             outlined
             v-model="caraPembayaran"
+            :items="['4 - Transfer']"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Cara Pembayaran');
               },
             ]"
           >
-          </v-text-field>
+          </v-select>
         </v-col>
       </v-row>
     </v-form>
@@ -86,11 +87,6 @@ export default {
   mixins: [FieldRequired],
   data() {
     return {};
-  },
-  watch: {
-    kantorPabeanAsal(val) {
-      console.log(val);
-    },
   },
   computed: {
     kantorPabeanAsal: {

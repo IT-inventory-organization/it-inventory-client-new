@@ -78,3 +78,11 @@
     }
   }
 }
+
+.preview-simple-table {
+  & tr th,
+  & tr td {
+    font-size: 0.9rem !important;
+    font-family: "Arial", sans-serif !important;
+  }
+}

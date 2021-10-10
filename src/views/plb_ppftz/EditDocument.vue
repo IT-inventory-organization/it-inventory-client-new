@@ -3,7 +3,7 @@
     <v-row align="center">
       <v-col lg="10" md="10" sm="12">
         <v-card-title class="it-inventory-card-title">
-          Create New {{ page }}
+          Edit {{ page }}
         </v-card-title>
       </v-col>
       <v-col lg="2" md="2" sm="12" style="text-align: right">
@@ -120,9 +120,9 @@ export default {
     handleSubmitAll() {
       localStorage.removeItem("current_report_id")
       localStorage.removeItem('stepper')
-      if (this.page === "PLB") {
+      if (this.$route.path.toLowerCase().includes("plb")) {
         this.$router.push("/plb");
-      } else if (this.page === "PPFTZ") {
+      } else if (this.$route.path.toLowerCase().includes("ppftz")) {
         this.$router.push("/ppftz");
       }
     },

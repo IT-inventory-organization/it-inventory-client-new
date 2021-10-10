@@ -104,7 +104,8 @@
             label="Perkiraan Tanggal Pengeluaran"
             outlined
             type="date"
-            v-model="perkiraanTanggalPengeluaran"
+            :value="handleConvertDate(perkiraanTanggalPengeluaran)"
+            @change="handleChange('perkiraanTanggalPengeluaran', $event)"
             :rules="[
               (value) => {
                 return genericRequiredRule(
@@ -130,7 +131,13 @@
             v-model="beratBersih"
             :rules="[
               (value) => {
-                return genericRequiredRule(value, 'Berat Bersih Total (KGM)');
+                return genericRequiredRule(value, 'Berat Bersih');
+              },
+              (value) => {
+                return genericNumberRule(value, 'Berat Bersih');
+              },
+              (value) => {
+                return genericMinRule(value, 'Berat Bersih');
               },
             ]"
           >
@@ -141,7 +148,13 @@
             v-model="beratKotor"
             :rules="[
               (value) => {
-                return genericRequiredRule(value, 'Berat Kotor Total (KGM)');
+                return genericRequiredRule(value, 'Berat Kotor');
+              },
+              (value) => {
+                return genericNumberRule(value, 'Berat Kotor');
+              },
+              (value) => {
+                return genericMinRule(value, 'Berat Kotor');
               },
             ]"
           >
@@ -152,7 +165,13 @@
             v-model="volume"
             :rules="[
               (value) => {
-                return genericRequiredRule(value, 'Volume (M3)');
+                return genericRequiredRule(value, 'Volume');
+              },
+              (value) => {
+                return genericNumberRule(value, 'Volume');
+              },
+              (value) => {
+                return genericMinRule(value, 'Volume');
               },
             ]"
           >
@@ -181,13 +200,13 @@
           <!-- Data Tempat Penimbunan -->
           <v-card-title
             class="it-inventory-card-title it-inventory-card-title__sub"
-            >Data Tempat Penimbunan</v-card-title
+            >Data Lartas Barang</v-card-title
           >
           <v-combobox
-            :items="[`Test1`, `Test2`]"
+            :items="[`Narkotika`, `Bom`]"
             outlined
             label="Data Lartas Barang"
-            v-model="dataLartasBarang"
+            v-model="name"
             clearable
             :rules="[
               (value) => {
@@ -349,13 +368,13 @@ export default {
     },
 
     // Data Lartas
-    dataLartasBarang: {
+    name: {
       get() {
-        return this.$store.state.report.dataLartas.dataLartasBarang;
+        return this.$store.state.report.dataLartas.name;
       },
       set(value) {
         this.$store.commit("SET_DATA_LARTAS", {
-          key: "dataLartasBarang",
+          key: "name",
           value,
         });
       },
@@ -364,6 +383,17 @@ export default {
   methods: {
     handleValidate() {
       return this.$refs.formDataPemasukanDua.validate();
+    },
+    handleConvertDate(date) {
+      if (date) {
+        const [d, m, y] = date.split("-");
+        return `${y}-${m}-${d}`;
+      } else {
+        return "";
+      }
+    },
+    handleChange(key, event) {
+      this[key] = event;
     },
   },
 };

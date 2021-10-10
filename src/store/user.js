@@ -1,9 +1,9 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router/";
-import Encryption from "../helper/Encryption";
+import { AESDecrypt, AESEncrypt } from "../helper/Encryption";
 
-const baseUrl = "http://192.168.100.32:3000/";
+const baseUrl = "http://localhost:3000/";
 
 const user = {
   state: {
@@ -13,6 +13,11 @@ const user = {
     },
     token: "",
     isLoading: false,
+    dataUser: {
+      name: "",
+      npwp: "",
+      address: "",
+    },
   },
   mutations: {
     SET_USER(state, payload) {
@@ -27,6 +32,9 @@ const user = {
     SET_ISLOADING(state, payload) {
       state.isLoading = payload;
     },
+    SET_DATA_USER(state, payload) {
+      state.dataUser = payload;
+    },
   },
   actions: {
     async loginActionUser(context) {
@@ -36,13 +44,9 @@ const user = {
           url: `${baseUrl}login`,
           method: "POST",
           data: {
-            dataLogin: Encryption.AESEncrypt(context.state.user),
+            dataLogin: AESEncrypt(context.state.user),
           },
         });
-        // const result = await axios.post(
-        //   `${baseUrl}login`,
-        //   Encryption.AESEncrypt()
-        // );
         context.commit("SET_ISLOADING", false);
         context.commit("SET_TOKEN", result.data.data);
         localStorage.setItem("token_it_inventory", result.data.data);
@@ -51,11 +55,25 @@ const user = {
         if (error.message === "Network Error") {
           Swal.fire("Tidak ada jaringan!", "", "error");
         }
-
         const response = error.response.data;
         if (!response.success) {
           Swal.fire("Gagal!", response.message, "error");
         }
+      }
+    },
+
+    async getDataUser(context) {
+      const result = await axios({
+        url: baseUrl + "report/get/user",
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+      });
+
+      if (result.data.success) {
+        console.log("trigger");
+        context.commit("SET_DATA_USER", AESDecrypt(result.data.data));
       }
     },
   },

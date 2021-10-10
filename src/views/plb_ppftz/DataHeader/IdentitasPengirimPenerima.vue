@@ -8,10 +8,10 @@
       <v-row>
         <v-col lg="6" md="6" sm="12">
           <v-select
-            clearable
             :items="['5 - NPWP - 15 Digits']"
             label="Jenis Identitas Pengirim"
             outlined
+            disabled
             v-model="jenisIdentitasPengirim"
             :rules="[
               (value) => {
@@ -22,7 +22,8 @@
           <v-text-field
             label="Nama Pengirim"
             outlined
-            v-model="namaPengirim"
+            v-model="dataUser.name"
+            disabled
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Nama Pengirim');
@@ -46,8 +47,9 @@
         <v-col lg="6" md="6" sm="12">
           <v-text-field
             label="Nomor Identitas Pengirim"
+            disabled
             outlined
-            v-model="nomorIdentitasPengirim"
+            v-model="dataUser.npwp"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Nomor Identitas Pengirim');
@@ -57,8 +59,9 @@
           </v-text-field>
           <v-text-field
             label="Alamat Pengirim"
+            disabled
             outlined
-            v-model="alamatPengirim"
+            v-model="dataUser.address"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Alamat Pengirim');
@@ -69,7 +72,8 @@
           <v-text-field
             label="Tanggal Ijin Bpk Pengirim"
             outlined
-            v-model="tanggalIjinBpkPengirim"
+            :value="handleConvertDate(tanggalIjinBpkPengirim)"
+            @change="handleChange('tanggalIjinBpkPengirim', $event)"
             type="date"
             :rules="[
               (value) => {
@@ -89,7 +93,6 @@
       <v-row>
         <v-col lg="6" md="6" sm="12">
           <v-select
-            clearable
             :items="['5 - NPWP - 15 Digits']"
             label="Jenis Identitas Penerima"
             outlined
@@ -151,6 +154,9 @@ export default {
   data() {
     return {};
   },
+  created() {
+    this.$store.dispatch("getDataUser");
+  },
   computed: {
     // Pengirim
     identitasPengirim: {
@@ -162,6 +168,11 @@ export default {
           key: "identitasPengirim",
           value,
         });
+      },
+    },
+    dataUser: {
+      get() {
+        return this.$store.state.user.dataUser;
       },
     },
     jenisIdentitasPengirim: {
@@ -285,6 +296,17 @@ export default {
   methods: {
     handleValidate() {
       return this.$refs.formIdentitas.validate();
+    },
+    handleConvertDate(date) {
+      if (date) {
+        const [d, m, y] = date.split("-");
+        return `${y}-${m}-${d}`;
+      } else {
+        return "";
+      }
+    },
+    handleChange(key, event) {
+      this[key] = event;
     },
   },
 };

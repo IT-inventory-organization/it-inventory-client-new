@@ -9,7 +9,7 @@
         <v-col lg="6" md="6" sm="12">
           <v-select
             clearable
-            :items="['4 - Transaksi']"
+            :items="['14 - Transaksi']"
             label="Transaksi"
             outlined
             v-model="transaksi"
@@ -20,7 +20,6 @@
             ]"
           ></v-select>
           <v-select
-            clearable
             :items="['USD - US Dollar']"
             label="Valuta"
             outlined
@@ -35,9 +34,16 @@
             label="CIF"
             outlined
             v-model="cif"
+            @blur="handleCIF($event)"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'CIF');
+              },
+              (value) => {
+                return genericNumberRule(value, 'CIF');
+              },
+              (value) => {
+                return genericMinRule(value, 'CIF');
               },
             ]"
           >
@@ -49,6 +55,12 @@
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Freight');
+              },
+              (value) => {
+                return genericNumberRule(value, 'Freight');
+              },
+              (value) => {
+                return genericMinRule(value, 'Freight');
               },
             ]"
           >
@@ -97,6 +109,12 @@
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Harga Penyerahan');
+              },
+              (value) => {
+                return genericNumberRule(value, 'Harga Penyerahan');
+              },
+              (value) => {
+                return genericMinRule(value, 'Harga Penyerahan');
               },
             ]"
           >
@@ -314,9 +332,23 @@ export default {
     },
     // End Data Pengangkut
   },
+  watch: {
+    valuta(val) {
+      if (val && val === "USD - US Dollar") {
+        this.kursNDPBM = 14256.85;
+      } else {
+        this.kursNDPBM = 1;
+      }
+    },
+  },
   methods: {
     handleValidate() {
       return this.$refs.formDataPemasukanSatu.validate();
+    },
+    handleCIF(e) {
+      if (!isNaN(e.target.value)) {
+        this.cif = +e.target.value * this.kursNDPBM;
+      }
     },
   },
 };

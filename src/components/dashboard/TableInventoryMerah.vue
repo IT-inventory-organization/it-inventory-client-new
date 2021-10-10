@@ -1,8 +1,8 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="data"
-    :items-per-page="5"
+    :items="reportInventoryMerah"
+    :options.sync="optionsTableMerah"
     class="it-inventory-simple-table"
   >
     <template v-slot:[`item.status`]="{ item }">
@@ -29,16 +29,36 @@ export default {
         { text: "Penerima", value: "penerima" },
         { text: "Jalur", value: "status", sortable: false },
       ],
-      data: [
-        {
-          jenisInventory: "PLB - BC 4.1",
-          tanggalAjuan: "12-11-2013",
-          pengirim: "Emelina",
-          penerima: "Paton",
-          status: "merah",
-        },
-      ],
     };
+  },
+  watch: {
+    optionsTableMerah: {
+      handler() {
+        this.fetchData();
+      },
+      deep: true,
+    },
+  },
+  methods: {
+    fetchData() {
+      this.$store.dispatch("fetchReportInventoryMerah", this.optionsTableMerah);
+    },
+  },
+  computed: {
+    reportInventoryMerah() {
+      return this.$store.state.report.reportInventoryMerah;
+    },
+    optionsTableMerah: {
+      get() {
+        return this.$store.state.report.optionsTableMerah;
+      },
+      set(val) {
+        this.$store.commit("SET_OPTIONS_TABLE_MERAH", val);
+      },
+    },
+  },
+  created() {
+    this.fetchData();
   },
 };
 </script>

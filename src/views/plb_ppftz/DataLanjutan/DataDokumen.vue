@@ -30,7 +30,7 @@
             class="it-inventory-simple-table"
           >
             <template v-slot:[`item.no`]="props">
-              {{ props.index + 1 }}
+              {{ (props.index += 1) }}
             </template>
 
             <template v-slot:[`item.status`]="{ item }">
@@ -68,8 +68,8 @@
                       Copy
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item>
-                    <v-list-item-title @click="handleDelete(props.item)">
+                  <v-list-item @click.prevent="handleDelete(props.item)">
+                    <v-list-item-title>
                       <v-icon left>mdi-trash-can-outline</v-icon>
                       Delete
                     </v-list-item-title>
@@ -133,12 +133,10 @@ export default {
             const value = temp[i][j];
             this[key] = value;
           }
-          const newDate = new Date(this.tanggalDokumen);
-          const getDate = newDate.getDate();
-          const getMonth = newDate.getMonth();
-          const getYear = newDate.getFullYear();
-          const resultNewDate = `${getDate}-${getMonth + 1}-${getYear}`;
-
+          let [y, m, d] = this.tanggalDokumen.split("-");
+          d = d.toString().length > 1 ? d : "0" + d;
+          m = m.toString().length > 1 ? m : "0" + m;
+          const resultNewDate = `${d}-${m}-${y}`;
           const payload = {
             kodeDokumen: this.kodeDokumen,
             tanggalDokumen: resultNewDate,
@@ -222,12 +220,10 @@ export default {
         this.editedItem = Object.assign({}, item);
         this.editedIndex = index;
 
-        // Convert tanggal(dd-mm-yyyy) to (yyyy-mm-dd)
-        const newDate = new Date(this.editedItem.tanggalDokumen);
-        const getDate = newDate.getDate();
-        const getMonth = newDate.getMonth();
-        const getYear = newDate.getFullYear();
-        const resultNewDate = `${getYear}-${getMonth + 1}-${getDate}`;
+        let [d, m, y] = this.editedItem.tanggalDokumen.split("-");
+        d = d.toString().length > 1 ? d : "0" + d;
+        m = m.toString().length > 1 ? m : "0" + m;
+        const resultNewDate = `${y}-${m}-${d}`;
         // const [d, m, y] = this.editedItem.tanggalDokumen.split("-");
         // this.editedItem.tanggalDokumen = `${y}-${m}-${d}`;
         this.editedItem.tanggalDokumen = resultNewDate;

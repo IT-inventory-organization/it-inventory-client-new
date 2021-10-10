@@ -4,6 +4,7 @@ import Dashboard from "@/views/Dashboard";
 import PLB from "@/views/PLB";
 import PPFTZ from "@/views/PPFTZ";
 import CreateDocument from "@/views/plb_ppftz/CreateDocument";
+import EditDocument from "@/views/plb_ppftz/EditDocument";
 import TableInventory from "@/views/plb_ppftz/TableInventory";
 import Login from "@/views/Login";
 
@@ -39,6 +40,11 @@ const routes = [
         name: "PLBCreateDocument",
         component: CreateDocument,
       },
+      {
+        path: "edit",
+        name: "PLBEditDocument",
+        component: EditDocument,
+      },
     ],
   },
   {
@@ -54,6 +60,11 @@ const routes = [
         path: "add",
         name: "PPFTZCreateDocument",
         component: CreateDocument,
+      },
+      {
+        path: "edit",
+        name: "PPFTZEditDocument",
+        component: EditDocument,
       },
     ],
   },

@@ -120,6 +120,48 @@ export default {
         this[key] = false;
       }
     },
+    handleCreate() {
+      this.$store
+        .dispatch("createDataLanjutan")
+        .then((result) => {
+          if (result.data.success) {
+            this.$swal.fire(
+              "Berhasil create data lanjutan!",
+              "",
+              "success"
+            );
+            this.$emit("handleSubmitStepper");
+          }
+        })
+        .catch((error) => {
+          this.$swal.fire(
+            "Gagal membuat data lanjutan!",
+            error.response.data.message,
+            "error"
+          );
+        });
+    },
+    handleEdit() {
+      this.$store
+        .dispatch("editDataLanjutan")
+        .then((result) => {
+          if (result.data.success) {
+            this.$swal.fire(
+              "Berhasil edit data lanjutan!",
+              "",
+              "success"
+            );
+            this.$emit("handleSubmitStepper");
+          }
+        })
+        .catch((error) => {
+          this.$swal.fire(
+            "Gagal edit data lanjutan!",
+            error.response.data.message,
+            "error"
+          );
+        });
+    },
     handleSubmit() {
       if (this.$store.state.report.dataDokumen.length > 0) {
         this.dataDokumenForm = true;
@@ -127,24 +169,28 @@ export default {
         this.dataDokumenForm = false;
       }
       this.handleValidate("dataPetiKemasForm");
-      this.$swal({
-        title: "Apakah data anda sudah benar ?",
-        type: "warning",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#5682ff",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Ya",
-        cancelButtonText: "Tidak",
-      }).then((result) => {
-        if (result.value) {
-          if (this.validateStepper()) {
-            this.$emit("handleSubmitStepper");
-          } else {
-            this.$swal("Data Belum Lengkap", "", "error");
+      if (this.dataDokumenForm && this.dataPetiKemasForm) {
+        this.$swal({
+          title: "Apakah data anda sudah benar ?",
+          type: "warning",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#5682ff",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya",
+          cancelButtonText: "Tidak",
+        }).then((result) => {
+          if (result.value) {
+            if(!this.$route.path.includes('edit')) {
+              this.handleCreate()
+            } else {
+              this.handleEdit()
+            }
           }
-        }
-      });
+        });
+      } else {
+        this.$swal("Data Belum Lengkap", "", "error");
+      }
     },
   },
 };

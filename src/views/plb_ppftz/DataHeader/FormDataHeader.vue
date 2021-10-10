@@ -175,29 +175,68 @@ export default {
       }
     },
 
+    handleCreate() {
+      this.$store
+        .dispatch("createDataHeader")
+        .then((result) => {
+          if (result.data.success) {
+            this.$swal.fire("Berhasil create data header!", "", "success");
+            this.$emit("handleSubmitStepper");
+          }
+        })
+        .catch((error) => {
+          this.$swal.fire(
+            "Gagal membuat data header!",
+            error.response.data.message,
+            "error"
+          );
+        });
+    },
+    handleEdit() {
+      this.$store
+        .dispatch("editDataHeader")
+        .then((result) => {
+          if (result.data.success) {
+            this.$swal.fire("Berhasil edit data header!", "", "success");
+            this.$emit("handleSubmitStepper");
+          }
+        })
+        .catch((error) => {
+          this.$swal.fire(
+            "Gagal edit data header!",
+            error.response.data.message,
+            "error"
+          );
+        });
+    },
+
     handleSubmit() {
       this.handleValidate("dataPengajuanForm");
       this.handleValidate("identitasPengirimPenerima");
       this.handleValidate("dataPemasukanPengeluaranSatu");
       this.handleValidate("dataPemasukanPengeluaranDua");
-      this.$swal({
-        title: "Apakah data anda sudah benar?",
-        type: "warning",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#5682ff",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Ya",
-        cancelButtonText: "Tidak",
-      }).then((result) => {
-        if (result.value) {
-          if (this.validateStepper()) {
-            this.$emit("handleSubmitStepper");
-          } else {
-            this.$swal("Data Belum Lengkap", "", "error");
+      if (this.validateStepper()) {
+        this.$swal({
+          title: "Apakah data anda sudah benar?",
+          type: "warning",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#5682ff",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya",
+          cancelButtonText: "Tidak",
+        }).then((result) => {
+          if (result.value) {
+            if (!this.$route.path.includes("edit")) {
+              this.handleCreate();
+            } else {
+              this.handleEdit();
+            }
           }
-        }
-      });
+        });
+      } else {
+        this.$swal("Data Belum Lengkap", "", "error");
+      }
     },
   },
 };

@@ -15,7 +15,8 @@
             <v-text-field
               label="Pos Tarif"
               outlined
-              v-model="posTarif"
+              v-model="item.posTarif"
+              @change="handleChange('posTarif', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Pos Tarif');
@@ -28,7 +29,8 @@
             <v-text-field
               label="Hs Code"
               outlined
-              v-model="hsCode"
+              v-model="item.hsCode"
+              @change="handleChange('hsCode', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Hs Code');
@@ -43,7 +45,8 @@
             <v-textarea
               name="uraian"
               label="Uraian"
-              v-model="uraian"
+              v-model="item.uraian"
+              @change="handleChange('uraian', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Uraian');
@@ -58,7 +61,8 @@
             <v-text-field
               label="Netto, Bruto, Volume"
               outlined
-              v-model="nettoBrutoVolume"
+              v-model="item.nettoBrutoVolume"
+              @change="handleChange('nettoBrutoVolume', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Netto, Bruto, Volume');
@@ -71,7 +75,8 @@
             <v-text-field
               label="Satuan Kemasan"
               outlined
-              v-model="satuanKemasan"
+              v-model="item.satuanKemasan"
+              @change="handleChange('satuanKemasan', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Satuan Kemasan');
@@ -84,7 +89,8 @@
             <v-text-field
               label="Nilai Pabean, Harga Penyerahan"
               outlined
-              v-model="nilaiPabeanHargaPenyerahan"
+              v-model="item.nilaiPabeanHargaPenyerahan"
+              @change="handleChange('nilaiPabeanHargaPenyerahan', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(
@@ -114,28 +120,35 @@
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
-  name: "FormDataBarang",
+  name: "FormEditDataBarang",
   mixins: [FieldRequired],
-  props: ["handleModal"],
-  data() {
-    return {
-      posTarif: 0,
-      uraian: "",
-      nettoBrutoVolume: 0,
-      satuanKemasan: 0,
-      nilaiPabeanHargaPenyerahan: 0,
-      hsCode: "",
-    };
-  },
+  props: ["item", "index"],
   methods: {
-    handleSubmit() {
+    handleChange(key, value) {
+      this.$emit("handleChangeEdit", key, value);
+    },
+    async handleSubmit() {
+      const payload = {
+        posTarif: this.item.posTarif,
+        uraian: this.item.uraian,
+        nettoBrutoVolume: this.item.nettoBrutoVolume,
+        satuanKemasan: this.item.satuanKemasan,
+        nilaiPabeanHargaPenyerahan: this.item.nilaiPabeanHargaPenyerahan,
+        hsCode: this.item.hsCode,
+      };
+      const data = {
+        payload,
+        index: this.index,
+      };
       if (this.$refs.formDataBarang.validate()) {
-        this.$emit("handleModal");
+        // this.$emit("handleEdit", payload, this.index)
+        this.$store.commit("UPDATE_DATA_LIST_BARANG", data);
+        this.handleDialog();
       }
     },
     handleDialog() {
-      this.$emit("handleModal");
       this.$refs.formDataBarang.resetValidation();
+      this.$emit("handleEdit");
     },
   },
 };

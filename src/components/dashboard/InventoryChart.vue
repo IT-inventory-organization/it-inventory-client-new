@@ -3,7 +3,7 @@
     <apexchart
       type="donut"
       :options="chartOptions"
-      :series="chartOptions.series"
+      :series="[Number(totalReportAll.Export), Number(totalReportAll.Import)]"
     />
   </div>
 </template>
@@ -11,7 +11,13 @@
 <script>
 export default {
   name: "InventoryChart",
+  created() {
+    this.$store.dispatch("fetchAllTotalReport");
+  },
   computed: {
+    totalReportAll() {
+      return this.$store.state.report.totalReportAll;
+    },
     chartOptions: function() {
       return {
         colors: ["#5682FF", "#F27B61"],
@@ -67,7 +73,6 @@ export default {
           },
         },
         responsive: [],
-        series: [1250, 4500],
       };
     },
   },

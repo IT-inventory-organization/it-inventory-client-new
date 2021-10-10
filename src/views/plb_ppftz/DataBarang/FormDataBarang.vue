@@ -190,11 +190,16 @@ export default {
   },
   methods: {
     handleSubmit() {
+      const payload = {
+        posTarif: this.posTarif,
+        uraian: this.uraian,
+        nettoBrutoVolume: this.nettoBrutoVolume,
+        satuanKemasan: this.satuanKemasan,
+        nilaiPabeanHargaPenyerahan: this.nilaiPabeanHargaPenyerahan,
+        hsCode: this.hsCode,
+      };
       if (this.$refs.formDataBarang.validate()) {
-        this.$store.commit(
-          "SET_LIST_DATA_BARANG",
-          this.$store.state.report.dataBarang
-        );
+        this.$store.commit("SET_LIST_DATA_BARANG", payload);
         this.posTarif = "";
         this.uraian = "";
         this.nettoBrutoVolume = "";

@@ -1,15 +1,23 @@
 <template>
-  <v-card>
+  <v-card min-height="500">
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
-        <span class="text-h6">Create New</span>
+        <span class="text-h6">Edit report</span>
         <span style="cursor: pointer" @click.prevent="handleDialog"
           ><v-icon>mdi-close</v-icon></span
         >
       </v-row>
     </v-card-title>
-    <v-card-text>
-      <v-form ref="initialReport" @submit.prevent="handleSubmit">
+    <v-row v-if="loadingGetOne" style="height: 80%" justify="center" align-content="center">
+      <v-progress-circular
+        :size="50"
+        color="primary"
+        justify="center"
+        indeterminate
+      ></v-progress-circular>
+    </v-row>
+    <v-card-text v-if="!loadingGetOne">
+      <v-form ref="initialEditReport" @submit.prevent="handleSubmit">
         <v-container>
           <v-select
             clearable
@@ -61,9 +69,12 @@
           ></v-select>
         </v-container>
         <v-card-actions>
+          <button @click.prevent="handleSubmit('done')" class="btn_save pr-3">
+            <span>Done</span>
+          </button>
           <v-spacer></v-spacer>
           <button type="submit" class="btn_save">
-            <span>Next</span> <img src="../../assets/icons/ic_bulletnext.svg" />
+            <span>Update More</span> <img src="../../assets/icons/ic_bulletnext.svg" />
           </button>
         </v-card-actions>
       </v-form>
@@ -78,6 +89,7 @@ import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "CreateNewModal",
   mixins: [FieldRequired],
+  props: ["reportId"],
   data() {
     return {
       page: "",
@@ -85,6 +97,12 @@ export default {
     };
   },
   computed: {
+    loadingGetOne() {
+     return this.$store.state.report.loading.getOne
+    },
+    loadingEdit() {
+     return this.$store.state.report.loading.loadingEdit
+    },
     pengajuanSebagai: {
       get() {
         return this.$store.state.report.report.pengajuanSebagai;
@@ -132,15 +150,27 @@ export default {
   },
   methods: {
     handleDialog() {
-      this.$emit("handleModal");
-      this.$refs.initialReport.resetValidation();
+      // this.$refs.initialEditReport.resetValidation();
+      this.$emit("handleEditModal");
     },
-    handleSubmit() {
-      if (this.$refs.initialReport.validate()) {
-        this.$store.dispatch("createReport", this.page);
-      } else {
-        this.$swal("Data Belum Lengkap", "", "error");
-      }
+    handleSubmit(condition) {
+      this.$store.commit("SET_LOADING", {key: "loadingEdit", value: true})
+      this.$store.dispatch("editReport")
+        .then((result) => {
+          if(result.data.success) {
+            this.$swal("Success edit data", "", )
+          }
+        })
+        .catch(err => {
+          this.$swal("Error edit data", err.response.data.message, "error")
+        })
+        .finally(()=> {
+          this.$store.commit("SET_LOADING", {key: "loadingEdit", value: false})
+          this.$router.push(`/${this.page.toLowerCase()}/edit`)
+          if(condition) {
+            this.$emit("handleEditModal");
+          } else this.$router.push(`/${this.page}/edit`)
+        })
     },
   },
   created() {
@@ -164,4 +194,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.v-progress-circular {
+  margin: 1rem;
+}
+</style>
