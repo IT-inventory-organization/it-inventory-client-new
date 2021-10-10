@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import router from "@/router/";
 import { AESDecrypt, AESEncrypt } from "../helper/Encryption";
 
-const baseUrl = "http://192.168.100.32:3000";
+const baseUrl = "http://localhost:3000";
 
 const user = {
   state: {
@@ -55,11 +55,11 @@ const user = {
         if (error.message === "Network Error") {
           Swal.fire("Tidak ada jaringan!", "", "error");
         }
-
-        const response = error.response.data;
-        if (!response.success) {
-          Swal.fire("Gagal!", response.message, "error");
-        }
+        console.log(error);
+        //   const response = error.response.data;
+        //   if (!response.success) {
+        //     Swal.fire("Gagal!", response.message, "error");
+        //   }
       }
     },
 
