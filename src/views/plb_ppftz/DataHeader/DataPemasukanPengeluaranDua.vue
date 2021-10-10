@@ -200,7 +200,7 @@
           <!-- Data Tempat Penimbunan -->
           <v-card-title
             class="it-inventory-card-title it-inventory-card-title__sub"
-            >Data Tempat Penimbunan</v-card-title
+            >Data Lartas Barang</v-card-title
           >
           <v-combobox
             :items="[`Narkotika`, `Bom`]"

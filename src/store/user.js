@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import router from "@/router/";
 import { AESDecrypt, AESEncrypt } from "../helper/Encryption";
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = "http://localhost:3000/";
 
 const user = {
   state: {
@@ -65,7 +65,7 @@ const user = {
 
     async getDataUser(context) {
       const result = await axios({
-        url: baseUrl + "/report/get/user",
+        url: baseUrl + "report/get/user",
         method: "GET",
         headers: {
           authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
@@ -73,6 +73,7 @@ const user = {
       });
 
       if (result.data.success) {
+        console.log("trigger")
         context.commit("SET_DATA_USER", AESDecrypt(result.data.data));
       }
     },

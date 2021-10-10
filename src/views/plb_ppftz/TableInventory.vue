@@ -59,13 +59,13 @@
                 View
               </v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="item.edit">
+            <v-list-item v-if="item.edit" @click="handleEditModal(item.nomorAjuan)">
               <v-list-item-title>
-                <v-icon left>mdi-pencil-outline </v-icon>
+                <v-icon left>mdi-pencil-outline</v-icon>
                 Edit
               </v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="item.edit">
+            <v-list-item v-if="item.edit" @click="handleDelete(item.nomorAjuan)">
               <v-list-item-title>
                 <v-icon left>mdi-trash-can-outline</v-icon>
                 Delete
@@ -86,6 +86,9 @@
     <v-dialog v-model="dialog" persistent max-width="600px">
       <create-new-modal @handleModal="handleModal" />
     </v-dialog>
+    <v-dialog v-model="editDialog" persistent max-width="600px">
+      <edit-modal @handleEditModal="handleEditModal" :reportId="editedId" />
+    </v-dialog>
   </div>
 </template>
 
@@ -96,12 +99,15 @@ export default {
   components: {
     ApprovalBadge: () => import("@/components/ApprovalBadge"),
     CreateNewModal: () => import("@/components/plb_ppftz/CreateNewModal"),
+    EditModal: () => import("@/components/plb_ppftz/EditModal")
   },
   data() {
     return {
       search: "",
       page: "",
       dialog: false,
+      editedId: null,
+      editDialog: false, 
       headers: [
         {
           text: "No",
@@ -109,7 +115,7 @@ export default {
         },
         {
           text: "Jenis Inventory",
-          value: "jenisInvetory",
+          value: "jenisInventory",
         },
         {
           text: "Nomor Ajuan",
@@ -159,6 +165,31 @@ export default {
     fetchReports() {
       this.$store.dispatch("fetchAllReport", this.optionsTableReports);
     },
+    handleEditModal(id) {
+      this.editDialog= !this.editDialog
+      if(this.editDialog) {
+        this.$store.commit("SET_REPORT_ID", id)
+        localStorage.setItem("current_report_id", id)
+        this.$store.dispatch("getOneReport")
+        this.editedId = id
+      }
+    },
+    handleDelete(id) {
+      this.$swal({
+        title: `Apakah data anda yakin untuk menghapus data dengan nomor ajuan ${id} ?`,
+        type: "warning",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#5682ff",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Tidak",
+      }).then((result) => {
+        if (result.value) {
+          this.$store.dispatch("deleteReport", id)
+        }
+      });
+    }
   },
 };
 </script>

@@ -1,5 +1,7 @@
 <template>
-  <div class="preview-card">
+<div>
+  <div v-if="loadingGetOne"></div>
+  <div v-if="!loadingGetOne" class="preview-card">
     <!-- Judul -->
     <div id="nomor-dokumen">
       <h1 class="preview-title">Inventory #{{ reportId }}</h1>
@@ -303,6 +305,7 @@
     </div>
     <!-- End Dokumen Pengiriman Barang -->
   </div>
+</div>
 </template>
 
 <script>
@@ -346,6 +349,9 @@ export default {
     };
   },
   computed: {
+    loadingGetOne() {
+      return this.$store.state.report.loading.getOne
+    },
     report() {
       return this.$store.state.report.report;
     },
@@ -396,6 +402,9 @@ export default {
     },
   },
   created() {
+    if(localStorage.getItem("current_report_id")) {
+      this.$store.commit("SET_REPORT_ID", localStorage.getItem("current_report_id"))
+    }
     this.$store.dispatch("getOneReport");
   },
 };

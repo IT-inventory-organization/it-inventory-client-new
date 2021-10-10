@@ -247,6 +247,48 @@ export default {
     handleImportCSV(key, value) {
       this[key] = value;
     },
+    handleCreate() {
+      this.$store
+        .dispatch("createDataBarang")
+        .then((result) => {
+          if (result.data.success) {
+            this.$swal.fire(
+              "Berhasil create data barang!",
+              "",
+              "success"
+            );
+            this.$emit("handleSubmitStepper");
+          }
+        })
+        .catch((error) => {
+          this.$swal.fire(
+            "Gagal membuat data barang!",
+            error.response.data.message,
+            "error"
+          );
+        });
+    },
+    handleEdit() {
+      this.$store
+        .dispatch("editDataBarang")
+        .then((result) => {
+          if (result.data.success) {
+            this.$swal.fire(
+              "Berhasil edit data barang!",
+              "",
+              "success"
+            );
+            this.$emit("handleSubmitStepper");
+          }
+        })
+        .catch((error) => {
+          this.$swal.fire(
+            "Gagal edit data barang!",
+            error.response.data.message,
+            "error"
+          );
+        });
+    },
     handleSubmit() {
       if (this.tableListBarangValidate) {
         this.$swal({
@@ -260,25 +302,11 @@ export default {
           cancelButtonText: "Tidak",
         }).then((result) => {
           if (result.value) {
-            this.$store
-              .dispatch("createDataBarang")
-              .then((result) => {
-                if (result.data.success) {
-                  this.$swal.fire(
-                    "Berhasil create data barang!",
-                    "",
-                    "success"
-                  );
-                  this.$emit("handleSubmitStepper");
-                }
-              })
-              .catch((error) => {
-                this.$swal.fire(
-                  "Gagal membuat data barang!",
-                  error.response.data.message,
-                  "error"
-                );
-              });
+            if(!this.$route.path.includes("edit")) {
+              this.handleCreate()
+            } else {
+              this.handleEdit()
+            }
           }
         });
       } else {

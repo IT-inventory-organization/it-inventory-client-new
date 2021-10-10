@@ -150,6 +150,10 @@ export default {
       dataPemasukanPengeluaranDua: "a",
     };
   },
+  created() {
+    // const temp = this.$route.path
+    console.log(this.$route.path.includes('edit'))
+  },
   methods: {
     validateStepper() {
       if (
@@ -175,6 +179,50 @@ export default {
       }
     },
 
+    handleCreate() {
+      console.log("trigger 10")
+      this.$store
+        .dispatch("createDataHeader")
+        .then((result) => {
+          if (result.data.success) {
+            this.$swal.fire(
+              "Berhasil create data header!",
+              "",
+              "success"
+            );
+            this.$emit("handleSubmitStepper");
+          }
+        })
+        .catch((error) => {
+          this.$swal.fire(
+            "Gagal membuat data header!",
+            error.response.data.message,
+            "error"
+          );
+        });
+    },
+    handleEdit() {
+      this.$store
+        .dispatch("editDataHeader")
+        .then((result) => {
+          if (result.data.success) {
+            this.$swal.fire(
+              "Berhasil edit data header!",
+              "",
+              "success"
+            );
+            this.$emit("handleSubmitStepper");
+          }
+        })
+        .catch((error) => {
+          this.$swal.fire(
+            "Gagal edit data header!",
+            error.response.data.message,
+            "error"
+          );
+        });
+    },
+
     handleSubmit() {
       this.handleValidate("dataPengajuanForm");
       this.handleValidate("identitasPengirimPenerima");
@@ -192,25 +240,11 @@ export default {
           cancelButtonText: "Tidak",
         }).then((result) => {
           if (result.value) {
-            this.$store
-              .dispatch("createDataHeader")
-              .then((result) => {
-                if (result.data.success) {
-                  this.$swal.fire(
-                    "Berhasil create data header!",
-                    "",
-                    "success"
-                  );
-                  this.$emit("handleSubmitStepper");
-                }
-              })
-              .catch((error) => {
-                this.$swal.fire(
-                  "Gagal membuat data header!",
-                  error.response.data.message,
-                  "error"
-                );
-              });
+            if(!this.$route.path.includes('edit')) {
+              this.handleCreate()
+            } else {
+              this.handleEdit()
+            }
           }
         });
       } else {

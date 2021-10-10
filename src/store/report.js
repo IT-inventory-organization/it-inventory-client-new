@@ -134,6 +134,12 @@ const report = {
       nilaiPabeanHargaPenyerahan: "",
       hsCode: "",
     },
+    loading: {
+      getOne: false,
+      loadingEdit: false,
+      loadingForm: false,
+      deleteOne: false,
+    }
   },
   mutations: {
     SET_REPORT_ID(state, payload) {
@@ -257,6 +263,16 @@ const report = {
     SET_STATE_GLOBAL(state, payload) {
       state[payload.key] = payload.value;
     },
+    SET_LOADING(state, payload) {
+      state.loading[payload.key] = payload.value
+    },
+    DELETE_REPORT(state, id) {
+      const index = state.reports.data.findIndex(ele => ele.nomorAjuan == id)
+      if(index !== -1) {
+        state.reports.data.splice(index, 1)
+        state.reports["data_size"] -= 1
+      }
+    }
   },
   actions: {
     async createReport(context, payload) {
@@ -306,97 +322,103 @@ const report = {
       }
     },
     async getOneReport(context) {
-      let result = await axios({
-        url: baseUrl + "/report/get/OneReport/" + context.state.reportId,
-        method: "GET",
-        headers: {
-          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
-        },
-      });
-      console.log(result);
-      if (result.data.success) {
-        const decrypt = AESDecrypt(result.data.data);
-        context.commit("SET_REPORT_ID", decrypt.id);
-        const tempReport = {
-          pengajuanSebagai: decrypt.pengajuanSebagai,
-          kantorPengajuan: decrypt.kantorPengajuan,
-          jenisPemberitahuan: decrypt.jenisPemberitahuan,
-          BCDocumentType: decrypt.BCDocumentType,
-        };
-        context.commit("SET_REPORT", tempReport);
-        const {
-          DataPengajuan,
-          reportIdentitasPenerima,
-          IdentitasPengirim,
-          TransaksiPerdagangan,
-          DataPengangkutan,
-          DataPelabuhanMuatBongkar,
-          DataBeratDanVolume,
-          DataPetiKemasDanPengema,
-          DataPerkiraanTanggalPengeluaran,
-          DataTempatPenimbunan,
-          DataLarta,
-          ListDokumens,
-          DataPetiKema,
-          listBarangs,
-        } = decrypt;
-
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataPengajuan",
-          value: DataPengajuan,
+      context.commit("SET_LOADING", {key: "getOne", value: true})
+      try {
+        let result = await axios({
+          url: baseUrl + "/report/get/OneReport/" + context.state.reportId,
+          method: "GET",
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
         });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "identitasPenerima",
-          value: reportIdentitasPenerima,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "identitasPengirim",
-          value: IdentitasPengirim,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "transaksiPerdagangan",
-          value: TransaksiPerdagangan,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataPengangkutan",
-          value: DataPengangkutan,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataPelabuhanMuatBongkar",
-          value: DataPelabuhanMuatBongkar,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataBeratDanVolume",
-          value: DataBeratDanVolume,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataPetiKemasDanPengemas",
-          value: DataPetiKemasDanPengema,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataPerkiraanTanggalPengeluaran",
-          value: DataPerkiraanTanggalPengeluaran,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataTempatPenimbunan",
-          value: DataTempatPenimbunan,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataLartas",
-          value: DataLarta,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataDokumen",
-          value: ListDokumens,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "dataPetiKemas",
-          value: DataPetiKema,
-        });
-        context.commit("SET_STATE_GLOBAL", {
-          key: "listDataBarang",
-          value: listBarangs,
-        });
+        if (result.data.success) {
+          const decrypt = AESDecrypt(result.data.data);
+          context.commit("SET_REPORT_ID", decrypt.id);
+          const tempReport = {
+            pengajuanSebagai: decrypt.pengajuanSebagai,
+            kantorPengajuan: decrypt.kantorPengajuan,
+            jenisPemberitahuan: decrypt.jenisPemberitahuan,
+            BCDocumentType: decrypt.BCDocumentType,
+          };
+          context.commit("SET_REPORT", tempReport);
+          const {
+            DataPengajuan,
+            reportIdentitasPenerima,
+            IdentitasPengirim,
+            TransaksiPerdagangan,
+            DataPengangkutan,
+            DataPelabuhanMuatBongkar,
+            DataBeratDanVolume,
+            DataPetiKemasDanPengema,
+            DataPerkiraanTanggalPengeluaran,
+            DataTempatPenimbunan,
+            DataLarta,
+            ListDokumens,
+            DataPetiKema,
+            listBarangs,
+          } = decrypt;
+          
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataPengajuan",
+            value: DataPengajuan,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "identitasPenerima",
+            value: reportIdentitasPenerima,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "identitasPengirim",
+            value: IdentitasPengirim,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "transaksiPerdagangan",
+            value: TransaksiPerdagangan,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataPengangkutan",
+            value: DataPengangkutan,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataPelabuhanMuatBongkar",
+            value: DataPelabuhanMuatBongkar,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataBeratDanVolume",
+            value: DataBeratDanVolume,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataPetiKemasDanPengemas",
+            value: DataPetiKemasDanPengema,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataPerkiraanTanggalPengeluaran",
+            value: DataPerkiraanTanggalPengeluaran,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataTempatPenimbunan",
+            value: DataTempatPenimbunan,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataLartas",
+            value: DataLarta,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataDokumen",
+            value: ListDokumens,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "dataPetiKemas",
+            value: DataPetiKema,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "listDataBarang",
+            value: listBarangs,
+          });
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        context.commit("SET_LOADING", {key: "getOne", value: false})
       }
     },
     async fetchAllTotalReport(context) {
@@ -551,6 +573,117 @@ const report = {
         },
       });
     },
+    editReport(context) {
+      const { reportId, report } = context.state;
+
+      return axios({
+        url: baseUrl + "/report/update/" + reportId,
+        method: "PUT",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          dataReport: AESEncrypt(
+            report,
+          ),
+        },
+      });
+    },
+    editDataHeader(context) {
+      const {
+        reportId,
+        dataPengajuan,
+        identitasPenerima,
+        identitasPengirim,
+        transaksiPerdagangan,
+        dataPengangkutan,
+        dataPelabuhanMuatBongkar,
+        dataBeratDanVolume,
+        dataPetiKemasDanPengemas,
+        dataPerkiraanTanggalPengeluaran,
+        dataTempatPenimbunan,
+        dataLartas,
+      } = context.state;
+
+      return axios({
+        url: baseUrl + "/report/update/data-header/" + reportId,
+        method: "PUT",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          dataHeader: AESEncrypt({
+            reportId,
+            dataPengajuan,
+            identitasPenerima,
+            identitasPengirim,
+            transaksiPerdagangan,
+            dataPengangkutan,
+            dataPelabuhanMuatBongkar,
+            dataBeratDanVolume,
+            dataPetiKemasDanPengemas,
+            dataPerkiraanTanggalPengeluaran,
+            dataTempatPenimbunan,
+            dataLartas,
+          }),
+        },
+      });
+    },
+    editDataLanjutan(context) {
+      const { reportId, dataDokumen, dataPetiKemas } = context.state;
+
+      return axios({
+        url: baseUrl + "/report/update/data-lanjutan/" + reportId,
+        method: "PUT",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          dataLanjutan: AESEncrypt({
+            reportId,
+            dataDokumen,
+            dataPetiKemas,
+          }),
+        },
+      });
+    },
+    editDataBarang(context) {
+      const { reportId, listDataBarang } = context.state;
+
+      return axios({
+        url: baseUrl + "/report/update/data-barang/" + reportId,
+        method: "PUT",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          dataBarang: AESEncrypt({
+            reportId,
+            listDataBarang,
+          }),
+        },
+      });
+    },
+    async deleteReport(context, id) {
+      context.commit("SET_LOADING", {key: "deleteOne", value: true})
+      try {
+        const result = await axios({
+          url: baseUrl + "/report/delete/" + id,
+          method: "DELETE",
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if(result.data.success) {
+          Swal.fire("Success!", result.data.message, "success");
+          context.commit("DELETE_REPORT", id)
+        }
+      } catch (error) {
+        Swal.fire("Gagal!", error.response.data.message, "error");
+      } finally {
+        context.commit("SET_LOADING", {key: "deleteOne", value: false})
+      }
+    }
   },
 };
 

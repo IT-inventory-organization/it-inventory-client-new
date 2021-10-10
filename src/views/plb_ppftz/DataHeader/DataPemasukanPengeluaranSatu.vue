@@ -9,7 +9,7 @@
         <v-col lg="6" md="6" sm="12">
           <v-select
             clearable
-            :items="['4 - Transaksi']"
+            :items="['14 - Transaksi']"
             label="Transaksi"
             outlined
             v-model="transaksi"
