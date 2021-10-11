@@ -3,7 +3,7 @@ import { AESDecrypt, AESEncrypt } from "../helper/Encryption";
 import router from "@/router/";
 import Swal from "sweetalert2";
 import user from "@/store/user";
-const baseUrl = "http://localhost:3000";
+const baseUrl = "http://192.168.100.32:3000";
 
 const report = {
   state: {
@@ -143,6 +143,7 @@ const report = {
       loadingForm: false,
       deleteOne: false,
     },
+    previewXML: "",
   },
   mutations: {
     SET_REPORT_ID_PREVIEW(state, payload) {
@@ -161,6 +162,9 @@ const report = {
     },
     RESET_PREVIEW(state) {
       state.preview = null;
+    },
+    RESET_PREVIEW_XML(state) {
+      state.previewXML = "";
     },
     SET_REPORT_ID(state, payload) {
       state.reportId = payload;
@@ -292,6 +296,102 @@ const report = {
         state.reports.data.splice(index, 1);
         state.reports["data_size"] -= 1;
       }
+    },
+    RESET_STATE(state) {
+      (state.preview = null),
+        (state.previewIsLoading = false),
+        (state.report = {
+          pengajuanSebagai: "",
+          kantorPengajuan: "",
+          jenisPemberitahuan: "",
+          BCDocumentType: "",
+        });
+      // Data Header
+      state.dataPengajuan = {
+        kantorPabeanAsal: "",
+        kategoryPemberitahuan: "",
+        kategoryPengeluaran: "",
+        tujuanPengeluaran: "",
+        asalBarang: "",
+        caraPembayaran: "",
+      };
+      state.identitasPengirim = {
+        jenisIdentitasPengirim: "5 - NPWP - 15 Digits",
+        nomorIdentitasPengirim: "",
+        namaPengirim: "",
+        alamatPengirim: "",
+        nomorIjinBpkPengirim: "",
+        tanggalIjinBpkPengirim: "",
+      };
+      state.identitasPenerima = {
+        jenisIdentitasPenerima: "5 - NPWP - 15 Digits",
+        nomorIdentitasPenerima: "",
+        namaPenerima: "",
+        alamatPenerima: "",
+      };
+      state.transaksiPerdagangan = {
+        transaksi: "",
+        transaksiLainnya: "",
+        valuta: "",
+        kursNDPBM: "",
+        cif: "",
+        voluntaryDeclaration: "",
+        freight: "",
+        hargaPenyerahan: "",
+      };
+      state.dataPengangkutan = {
+        caraAngkut: "",
+        namaPengangkut: "",
+        bendera: "",
+        nomorVoyFlightPol: "",
+      };
+      state.dataPelabuhanMuatBongkar = {
+        pelabuhanMuat: "",
+        pelabuhanTujuan: "",
+        pelabuhanTransit: "",
+      };
+      state.dataBeratDanVolume = {
+        beratBersih: "",
+        beratKotor: "",
+        volume: "",
+      };
+      state.dataPetiKemasDanPengemas = {
+        jumlahJenisKemasan: "",
+        jumlahPetiKemas: "",
+        jumlahJenisBarang: "",
+      };
+      state.dataTempatPenimbunan = {
+        tempatPenimbunan: "",
+      };
+      state.dataPerkiraanTanggalPengeluaran = {
+        perkiraanTanggalPengeluaran: "",
+      };
+      state.dataLartas = {
+        name: "",
+      };
+      (state.dataDokumen = []),
+        (state.dataPetiKemas = {
+          dataKontainer: "",
+          volumeKontainer: "",
+        });
+      (state.listDataBarang = []),
+        (state.dataBarang = {
+          posTarif: "",
+          uraian: "",
+          nettoBrutoVolume: "",
+          satuanKemasan: "",
+          nilaiPabeanHargaPenyerahan: "",
+          hsCode: "",
+        });
+      state.loading = {
+        getOne: false,
+        loadingEdit: false,
+        loadingForm: false,
+        deleteOne: false,
+      };
+    },
+    SET_PREVIEW_XML(state, payload) {
+      state.previewXML = payload;
     },
   },
   actions: {
@@ -719,6 +819,27 @@ const report = {
         });
         if (result.data.success) {
           context.commit("SET_PREVIEW", AESDecrypt(result.data.data));
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        context.commit("SET_PREVIEW_IS_LOADING", false);
+      }
+    },
+
+    async previewXML(context) {
+      context.commit("SET_PREVIEW_IS_LOADING", true);
+      try {
+        const result = await axios({
+          url: baseUrl + `/report/get/getXML/${context.state.reportIdPreview}`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if (result.data.success) {
+          context.commit("SET_PREVIEW_XML", AESDecrypt(result.data.data));
         }
       } catch (error) {
         console.log(error);

@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import router from "@/router/";
 import { AESDecrypt, AESEncrypt } from "../helper/Encryption";
 
-const baseUrl = "http://localhost:3000/";
+const baseUrl = "http://192.168.100.32:3000";
 
 const user = {
   state: {
@@ -41,7 +41,7 @@ const user = {
       try {
         context.commit("SET_ISLOADING", true);
         const result = await axios({
-          url: `${baseUrl}login`,
+          url: `${baseUrl}/login`,
           method: "POST",
           data: {
             dataLogin: AESEncrypt(context.state.user),
@@ -64,7 +64,7 @@ const user = {
 
     async getDataUser(context) {
       const result = await axios({
-        url: baseUrl + "report/get/user",
+        url: baseUrl + "/report/get/user",
         method: "GET",
         headers: {
           authorization: "Bearer " + localStorage.getItem("token_it_inventory"),

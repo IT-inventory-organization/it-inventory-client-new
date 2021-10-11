@@ -118,8 +118,9 @@ export default {
       localStorage.setItem("stepper", +this.step);
     },
     handleSubmitAll() {
-      localStorage.removeItem("current_report_id")
-      localStorage.removeItem('stepper')
+      localStorage.removeItem("current_report_id");
+      localStorage.removeItem("stepper");
+      this.$store.commit("RESET_STATE");
       if (this.page === "PLB") {
         this.$router.push("/plb");
       } else if (this.page === "PPFTZ") {

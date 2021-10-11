@@ -29,7 +29,10 @@
           rounded
           height="6"
         ></v-progress-linear>
-        <print-dokumen id="printdokumen" v-if="!previewIsLoading" />
+        <print-dokumen
+          id="printdokumen"
+          v-if="!previewIsLoading && preview !== null"
+        />
       </div>
     </v-card-text>
   </v-card>
@@ -44,6 +47,9 @@ export default {
   computed: {
     reportIdPreview() {
       return this.$store.state.report.reportIdPreview;
+    },
+    preview() {
+      return this.$store.state.report.preview;
     },
     previewIsLoading() {
       return this.$store.state.report.previewIsLoading;
