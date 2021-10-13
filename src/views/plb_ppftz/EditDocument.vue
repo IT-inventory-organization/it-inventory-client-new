@@ -111,6 +111,7 @@ export default {
     if (localStorage.getItem("stepper")) {
       this.step = +localStorage.getItem("stepper");
     }
+    this.$store.dispatch("getOneReport");
   },
   methods: {
     handleSubmitStepper() {
@@ -118,8 +119,8 @@ export default {
       localStorage.setItem("stepper", +this.step);
     },
     handleSubmitAll() {
-      localStorage.removeItem("current_report_id")
-      localStorage.removeItem('stepper')
+      localStorage.removeItem("current_report_id");
+      localStorage.removeItem("stepper");
       if (this.$route.path.toLowerCase().includes("plb")) {
         this.$router.push("/plb");
       } else if (this.$route.path.toLowerCase().includes("ppftz")) {

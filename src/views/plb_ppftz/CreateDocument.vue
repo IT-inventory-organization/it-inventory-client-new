@@ -71,7 +71,7 @@
       <!-- Preview -->
       <v-stepper-items>
         <v-stepper-content step="4">
-          <data-preview />
+          <data-preview v-if="step === 4" />
         </v-stepper-content>
       </v-stepper-items>
       <!-- End Preview -->

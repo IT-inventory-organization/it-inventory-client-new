@@ -150,11 +150,9 @@ const report = {
   mutations: {
     SET_REPORT_ID_PREVIEW(state, payload) {
       state.reportIdPreview = payload;
-      localStorage.setItem("reportIdPreview", payload);
     },
     RESET_REPORT_ID(state) {
       state.reportIdPreview = "";
-      localStorage.removeItem("reportIdPreview");
     },
     SET_PREVIEW(state, payload) {
       state.preview = payload;
@@ -300,14 +298,16 @@ const report = {
       }
     },
     RESET_STATE(state) {
-      (state.preview = null),
-        (state.previewIsLoading = false),
-        (state.report = {
-          pengajuanSebagai: "",
-          kantorPengajuan: "",
-          jenisPemberitahuan: "",
-          BCDocumentType: "",
-        });
+      state.reportId = "";
+      localStorage.removeItem("current_report_id");
+      state.preview = null;
+      state.previewIsLoading = false;
+      state.report = {
+        pengajuanSebagai: "",
+        kantorPengajuan: "",
+        jenisPemberitahuan: "",
+        BCDocumentType: "",
+      };
       // Data Header
       state.dataPengajuan = {
         kantorPabeanAsal: "",
@@ -371,20 +371,20 @@ const report = {
       state.dataLartas = {
         name: "",
       };
-      (state.dataDokumen = []),
-        (state.dataPetiKemas = {
-          dataKontainer: "",
-          volumeKontainer: "",
-        });
-      (state.listDataBarang = []),
-        (state.dataBarang = {
-          posTarif: "",
-          uraian: "",
-          nettoBrutoVolume: "",
-          satuanKemasan: "",
-          nilaiPabeanHargaPenyerahan: "",
-          hsCode: "",
-        });
+      state.dataDokumen = [];
+      state.dataPetiKemas = {
+        dataKontainer: "",
+        volumeKontainer: "",
+      };
+      state.listDataBarang = [];
+      state.dataBarang = {
+        posTarif: "",
+        uraian: "",
+        nettoBrutoVolume: "",
+        satuanKemasan: "",
+        nilaiPabeanHargaPenyerahan: "",
+        hsCode: "",
+      };
       state.loading = {
         getOne: false,
         loadingEdit: false,

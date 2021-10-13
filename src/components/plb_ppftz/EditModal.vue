@@ -8,7 +8,12 @@
         >
       </v-row>
     </v-card-title>
-    <v-row v-if="loadingGetOne" style="height: 80%" justify="center" align-content="center">
+    <v-row
+      v-if="loadingGetOne"
+      style="height: 80%"
+      justify="center"
+      align-content="center"
+    >
       <v-progress-circular
         :size="50"
         color="primary"
@@ -74,7 +79,8 @@
           </button>
           <v-spacer></v-spacer>
           <button type="submit" class="btn_save">
-            <span>Update More</span> <img src="../../assets/icons/ic_bulletnext.svg" />
+            <span>Update More</span>
+            <img src="../../assets/icons/ic_bulletnext.svg" />
           </button>
         </v-card-actions>
       </v-form>
@@ -98,10 +104,10 @@ export default {
   },
   computed: {
     loadingGetOne() {
-     return this.$store.state.report.loading.getOne
+      return this.$store.state.report.loading.getOne;
     },
     loadingEdit() {
-     return this.$store.state.report.loading.loadingEdit
+      return this.$store.state.report.loading.loadingEdit;
     },
     pengajuanSebagai: {
       get() {
@@ -151,26 +157,33 @@ export default {
   methods: {
     handleDialog() {
       // this.$refs.initialEditReport.resetValidation();
+      this.$store.commit("RESET_STATE");
       this.$emit("handleEditModal");
     },
     handleSubmit(condition) {
-      this.$store.commit("SET_LOADING", {key: "loadingEdit", value: true})
-      this.$store.dispatch("editReport")
+      this.$store.commit("SET_LOADING", { key: "loadingEdit", value: true });
+      this.$store
+        .dispatch("editReport")
         .then((result) => {
-          if(result.data.success) {
-            this.$swal("Success edit data", "", )
+          if (result.data.success) {
+            this.$swal("Success edit data", "");
           }
         })
-        .catch(err => {
-          this.$swal("Error edit data", err.response.data.message, "error")
+        .catch((err) => {
+          this.$swal("Error edit data", err.response.data.message, "error");
         })
-        .finally(()=> {
-          this.$store.commit("SET_LOADING", {key: "loadingEdit", value: false})
-          this.$router.push(`/${this.page.toLowerCase()}/edit`)
-          if(condition) {
+        .finally(() => {
+          this.$store.commit("SET_LOADING", {
+            key: "loadingEdit",
+            value: false,
+          });
+
+          if (condition === "done") {
             this.$emit("handleEditModal");
-          } else this.$router.push(`/${this.page}/edit`)
-        })
+          } else {
+            this.$router.push(`/${this.page.toLowerCase()}/edit`);
+          }
+        });
     },
   },
   created() {
