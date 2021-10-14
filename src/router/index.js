@@ -7,6 +7,7 @@ import CreateDocument from "@/views/plb_ppftz/CreateDocument";
 import EditDocument from "@/views/plb_ppftz/EditDocument";
 import TableInventory from "@/views/plb_ppftz/TableInventory";
 import Login from "@/views/Login";
+import StockBarang from "@/views/StockBarang";
 
 Vue.use(VueRouter);
 
@@ -67,6 +68,11 @@ const routes = [
         component: EditDocument,
       },
     ],
+  },
+  {
+    path: "/stockbarang",
+    name: "stockbarang",
+    component: StockBarang,
   },
   {
     path: "/login",

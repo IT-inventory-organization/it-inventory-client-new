@@ -40,9 +40,9 @@ export default {
         icon: "akar-icons:file",
       },
       {
-        name: "Barang",
-        path: "/barang",
-        icon: "akar-icons:shipping-box-01",
+        name: "Stock Barang",
+        path: "/stockbarang",
+        icon: "vaadin:stock",
       },
     ],
   }),
