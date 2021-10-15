@@ -132,17 +132,11 @@ const report = {
     // ],
     listDataBarang: [],
     dataBarang: {
-      idBarang: "",
-      quantity: 0,
-      nilaiPabeanHargaPenyerahan: "",
-      hsCode: "",
-    },
-    barang: {
-      nama: "",
+      posTarif: "",
+      uraian: "",
       nettoBrutoVolume: "",
       satuanKemasan: "",
-      stock: "",
-      posTarif: "",
+      nilaiPabeanHargaPenyerahan: "",
       hsCode: "",
     },
     loading: {
@@ -279,9 +273,6 @@ const report = {
       if (index != -1) {
         state.listDataBarang.splice(index, 1);
       }
-    },
-    SET_BARANG(state, payload) {
-      state.barang[payload.key] = payload.value;
     },
     UPDATE_DATA_LIST_BARANG(state, payload) {
       const temp = [...state.listDataBarang];

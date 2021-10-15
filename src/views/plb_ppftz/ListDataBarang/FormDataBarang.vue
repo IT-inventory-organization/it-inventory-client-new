@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
-        <span class="text-h6">Tambah Stock Barang</span>
+        <span class="text-h6">Add New List</span>
         <span style="cursor: pointer" @click.prevent="handleDialog"
           ><v-icon>mdi-close</v-icon></span
         >
@@ -11,54 +11,61 @@
     <v-card-text class="py-4">
       <v-form ref="formDataBarang" @submit.prevent="handleSubmit">
         <v-row>
-          <v-col lg="6" md="6" sm="12">
-            <v-text-field
-              label="Pos Tarif"
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-select
               outlined
-              v-model="posTarif"
+              label="Jenis Barang"
               :rules="[
                 (value) => {
-                  return genericRequiredRule(value, 'Pos Tarif');
+                  return genericRequiredRule(value, 'Jenis Barang');
                 },
               ]"
             >
-            </v-text-field>
+            </v-select>
           </v-col>
-          <v-col lg="6" md="6" sm="12">
+          <v-col cols="12" lg="6" md="6" sm="12">
             <v-text-field
-              label="Hs Code"
               outlined
-              v-model="hsCode"
-              :rules="[
-                (value) => {
-                  return genericRequiredRule(value, 'Hs Code');
-                },
-              ]"
-            >
-            </v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-textarea
-              name="uraian"
               label="Uraian"
-              v-model="uraian"
+              disabled
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Uraian');
                 },
               ]"
-              outlined
-            ></v-textarea>
+            >
+            </v-text-field>
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col lg="4" md="4" sm="12">
+          <v-col cols="12" lg="6" md="6" sm="12">
             <v-text-field
-              label="Netto, Bruto, Volume"
               outlined
-              v-model="nettoBrutoVolume"
+              label="Stock"
+              disabled
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Stock');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-text-field
+              outlined
+              label="Quantity"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Quantity');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="4" md="4" sm="12">
+            <v-text-field
+              outlined
+              disabled
+              label="Netto, Bruto, Volume"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Netto, Bruto, Volume');
@@ -67,11 +74,11 @@
             >
             </v-text-field>
           </v-col>
-          <v-col lg="4" md="4" sm="12">
+          <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
-              label="Satuan Kemasan"
               outlined
-              v-model="satuanKemasan"
+              disabled
+              label="Satuan Kemasan"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Satuan Kemasan');
@@ -80,17 +87,42 @@
             >
             </v-text-field>
           </v-col>
-          <v-col lg="4" md="4" sm="12">
+          <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
-              label="Nilai Pabean, Harga Penyerahan"
               outlined
-              v-model="nilaiPabeanHargaPenyerahan"
+              label="Nilai Pabean, Harga Penyerahan"
               :rules="[
                 (value) => {
                   return genericRequiredRule(
                     value,
                     'Nilai Pabean, Harga Penyerahan'
                   );
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-text-field
+              outlined
+              disabled
+              label="Pos Tarif"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Pos Tarif');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-text-field
+              outlined
+              disabled
+              label="HS Code"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'HS Code');
                 },
               ]"
             >
@@ -114,8 +146,12 @@
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
-  name: "CreateStockBarang",
+  name: "FormDataBarang",
   mixins: [FieldRequired],
+  props: ["handleModal"],
+  data() {
+    return {};
+  },
   computed: {
     posTarif: {
       get() {
@@ -185,13 +221,31 @@ export default {
     },
   },
   methods: {
-    handleDialog() {
-      this.$emit("handleCloseDialogAddBarang");
-    },
     handleSubmit() {
+      const payload = {
+        posTarif: this.posTarif,
+        uraian: this.uraian,
+        nettoBrutoVolume: this.nettoBrutoVolume,
+        satuanKemasan: this.satuanKemasan,
+        nilaiPabeanHargaPenyerahan: this.nilaiPabeanHargaPenyerahan,
+        hsCode: this.hsCode,
+      };
       if (this.$refs.formDataBarang.validate()) {
-        this.$emit("handleCloseDialogAddBarang");
+        this.$store.commit("SET_LIST_DATA_BARANG", payload);
+        this.posTarif = "";
+        this.uraian = "";
+        this.nettoBrutoVolume = "";
+        this.satuanKemasan = "";
+        this.nilaiPabeanHargaPenyerahan = "";
+        this.hsCode = "";
+        this.$emit("handleModal");
+      } else {
+        this.$swal("Data Belum Lengkap", "", "error");
       }
+    },
+    handleDialog() {
+      this.$emit("handleModal");
+      this.$refs.formDataBarang.resetValidation();
     },
   },
 };

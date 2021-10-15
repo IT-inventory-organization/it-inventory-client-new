@@ -3,20 +3,11 @@
     <v-row no-gutters>
       <v-col lg="9" md="9"><div class="text-h6">List Data Barang</div></v-col>
       <v-col lg="3" md="3" style="display:flex; justify-content: flex-end">
-        <button class="btn mr-6" @click.prevent="handleImport">
-          <v-icon left>mdi-tray-arrow-down</v-icon> Import CSV
+        <button @click.prevent="handleOpenDialogAddBarang" class="btn mr-4">
+          <v-icon left>mdi-pencil-outline</v-icon> Buat Data Barang
         </button>
-        <input
-          type="file"
-          @change="handleCSV"
-          ref="fileInput"
-          accept=".csv"
-          multiple="false"
-          hidden
-          @click="$refs.fileInput.value = ''"
-        />
         <button @click.prevent="handleModal" class="btn">
-          <v-icon left>mdi-plus-box-outline</v-icon> Add
+          <v-icon left>mdi-plus-box-outline</v-icon> Tambah List Data Barang
         </button>
       </v-col>
     </v-row>
@@ -101,6 +92,9 @@
         @handleChangeEdit="handleChangeEdit"
       />
     </v-dialog>
+    <v-dialog v-model="dialogAddBarang" persistent max-width="800px">
+      <form-barang @handleCloseDialogAddBarang="handleCloseDialogAddBarang" />
+    </v-dialog>
   </div>
 </template>
 
@@ -108,15 +102,18 @@
 export default {
   name: "TableBarang",
   components: {
-    FormDataBarang: () => import("@/views/plb_ppftz/DataBarang/FormDataBarang"),
+    FormDataBarang: () =>
+      import("@/views/plb_ppftz/ListDataBarang/FormDataBarang"),
     FormEditDataBarang: () =>
-      import("@/views/plb_ppftz/DataBarang/FormEditDataBarang"),
+      import("@/views/plb_ppftz/ListDataBarang/FormEditDataBarang"),
+    FormBarang: () => import("@/components/Barang/CreateStockBarang"),
   },
   data() {
     return {
       dialog: false,
       tableListBarangValidate: false,
       editDialog: false,
+      dialogAddBarang: false,
       editedItem: {
         posTarif: "",
         uraian: "",
@@ -152,6 +149,11 @@ export default {
           sortable: false,
         },
         { text: "Satuan Kemasan", value: "satuanKemasan", sortable: false },
+        {
+          text: "Qty",
+          value: "quantity",
+          sortable: false,
+        },
         {
           text: "Nilai Pabean, Harga Penyerahan",
           value: "nilaiPabeanHargaPenyerahan",
@@ -192,71 +194,23 @@ export default {
         this.nettoBrutoVolume;
       }
     },
-    csvData(val) {
-      // Belum bisa
-      if (val.length && val.length > 0) {
-        let temp = [...val];
-        temp.pop();
-        for (let i = 1; i < temp.length; i++) {
-          temp[i] = temp[i].split(",");
-          const payload = {
-            posTarif: temp[i][0],
-            uraian: temp[i][1],
-            nettoBrutoVolume: temp[i][2],
-            satuanKemasan: temp[i][3],
-            nilaiPabeanHargaPenyerahan: temp[i][4],
-            hsCode: temp[i][5],
-          };
-          this.$store.commit("SET_LIST_DATA_BARANG", payload);
-        }
-        this.posTarif = "";
-        this.uraian = "";
-        this.nettoBrutoVolume = "";
-        this.satuanKemasan = "";
-        this.nilaiPabeanHargaPenyerahan = "";
-        this.hsCode = "";
-      }
-    },
   },
   methods: {
     handleModal() {
       this.dialog = !this.dialog;
     },
-    handleImport() {
-      this.$refs.fileInput.click();
-
-      // fileReader.click;
+    handleOpenDialogAddBarang() {
+      this.dialogAddBarang = true;
     },
-    handleCSV(e) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        this.csvData = await e.target.result.split(/\r\n|\r|\n/);
-
-        this.posTarif = "";
-        this.uraian = "";
-        this.nettoBrutoVolume = "";
-        this.satuanKemasan = "";
-        this.nilaiPabeanHargaPenyerahan = "";
-        this.hsCode = "";
-        // Mematikan resetCSV
-        // this.csvData = [];
-      };
-      reader.readAsText(file);
-    },
-    handleImportCSV(key, value) {
-      this[key] = value;
+    handleCloseDialogAddBarang() {
+      this.dialogAddBarang = false;
     },
     handleCreate() {
       this.$store
         .dispatch("createDataBarang")
         .then((result) => {
           if (result.data.success) {
-            this.$swal.fire(
-              "Berhasil create data barang!",
-              "",
-              "success"
-            );
+            this.$swal.fire("Berhasil create data barang!", "", "success");
             this.$emit("handleSubmitStepper");
           }
         })
@@ -273,11 +227,7 @@ export default {
         .dispatch("editDataBarang")
         .then((result) => {
           if (result.data.success) {
-            this.$swal.fire(
-              "Berhasil edit data barang!",
-              "",
-              "success"
-            );
+            this.$swal.fire("Berhasil edit data barang!", "", "success");
             this.$emit("handleSubmitStepper");
           }
         })
@@ -302,10 +252,10 @@ export default {
           cancelButtonText: "Tidak",
         }).then((result) => {
           if (result.value) {
-            if(!this.$route.path.includes("edit")) {
-              this.handleCreate()
+            if (!this.$route.path.includes("edit")) {
+              this.handleCreate();
             } else {
-              this.handleEdit()
+              this.handleEdit();
             }
           }
         });

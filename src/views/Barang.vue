@@ -51,10 +51,16 @@
                 Edit
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="dialogStock = true">
+            <v-list-item @click="handleOpenDialogUpdateStock">
               <v-list-item-title>
                 <v-icon left> mdi-plus-minus-variant </v-icon>
                 Tambah/Kurangi Stock
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="handleOpenDialogHistory">
+              <v-list-item-title>
+                <v-icon left> mdi-clock-time-four-outline </v-icon>
+                History
               </v-list-item-title>
             </v-list-item>
           </v-list>
@@ -66,8 +72,13 @@
         @handleCloseDialogAddBarang="handleCloseDialogAddBarang"
       />
     </v-dialog>
-    <v-dialog v-model="dialogStock" max-width="500px">
-      <form-update-stock />
+    <v-dialog v-model="dialogStock" persistent max-width="500px">
+      <form-update-stock
+        @handleCloseDialogUpdateStock="handleCloseDialogUpdateStock"
+      />
+    </v-dialog>
+    <v-dialog v-model="dialogHistory" persistent max-width="1000px">
+      <history-barang @handleCloseDialogHistory="handleCloseDialogHistory" />
     </v-dialog>
   </div>
 </template>
@@ -77,52 +88,53 @@ export default {
   name: "stockbarang",
   components: {
     FormCreateStockBarang: () =>
-      import("@/components/StockBarang/CreateStockBarang"),
-    FormUpdateStock: () => import("@/components/StockBarang/UpdateStock"),
+      import("@/components/Barang/CreateStockBarang"),
+    FormUpdateStock: () => import("@/components/Barang/UpdateStock"),
+    HistoryBarang: () => import("@/components/Barang/HistoryBarang"),
   },
   data() {
     return {
       dialogAddBarang: false,
       dialogEditBarang: false,
       dialogStock: false,
+      dialogHistory: false,
       headers: [
         {
           text: "No",
           value: "no",
-          sortable: false,
+        },
+        {
+          text: "Nama",
+          value: "nama",
         },
         {
           text: "Pos Tarif",
           value: "posTarif",
-          sortable: false,
         },
         {
           text: "Uraian",
           value: "uraian",
-          sortable: false,
         },
         {
           text: "Neto, Bruto, Volume",
           value: "nettoBrutoVolume",
-          sortable: false,
         },
-        { text: "Satuan Kemasan", value: "satuanKemasan", sortable: false },
+        { text: "Satuan Kemasan", value: "satuanKemasan" },
         {
-          text: "Nilai Pabean, Harga Penyerahan",
-          value: "nilaiPabeanHargaPenyerahan",
-          sortable: false,
+          text: "Stock",
+          value: "stock",
         },
-        { text: "Hs Code", value: "hsCode", sortable: false },
+        { text: "Hs Code", value: "hsCode" },
         { text: "Action", value: "action", sortable: false },
       ],
       data: [
         {
+          nama: "Minyak Mentah",
           posTarif: 2300032,
           uraian: "Bensin",
           nettoBrutoVolume: 300,
           satuanKemasan: "Liter",
           stock: 20,
-          nilaiPabeanHargaPenyerahan: 23333,
           hsCode: "GHASS",
         },
       ],
@@ -134,6 +146,18 @@ export default {
     },
     handleCloseDialogAddBarang() {
       this.dialogAddBarang = false;
+    },
+    handleOpenDialogUpdateStock() {
+      this.dialogStock = true;
+    },
+    handleCloseDialogUpdateStock() {
+      this.dialogStock = false;
+    },
+    handleOpenDialogHistory() {
+      this.dialogHistory = true;
+    },
+    handleCloseDialogHistory() {
+      this.dialogHistory = false;
     },
   },
 };

@@ -87,7 +87,8 @@ export default {
     FormDataHeader: () => import("@/views/plb_ppftz/DataHeader/FormDataHeader"),
     FormDataLanjutan: () =>
       import("@/views/plb_ppftz/DataLanjutan/FormDataLanjutan"),
-    FormDataBarang: () => import("@/views/plb_ppftz/DataBarang/TableBarang"),
+    FormDataBarang: () =>
+      import("@/views/plb_ppftz/ListDataBarang/TableBarang"),
     DataPreview: () => import("@/views/plb_ppftz/DataPreview/DataPreview"),
   },
   data() {

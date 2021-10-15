@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
-        <span class="text-h6">Add New List</span>
+        <span class="text-h6">Tambah Stock Barang</span>
         <span style="cursor: pointer" @click.prevent="handleDialog"
           ><v-icon>mdi-close</v-icon></span
         >
@@ -11,63 +11,46 @@
     <v-card-text class="py-4">
       <v-form ref="formDataBarang" @submit.prevent="handleSubmit">
         <v-row>
-          <v-col lg="6" md="6" sm="12">
+          <v-col cols="12" lg="6" md="5" sm="12">
             <v-text-field
-              label="Pos Tarif"
+              label="Nama"
               outlined
-              v-model="posTarif"
+              v-model="nama"
               :rules="[
                 (value) => {
-                  return genericRequiredRule(value, 'Pos Tarif');
+                  return genericRequiredRule(value, 'Nama');
                 },
               ]"
             >
             </v-text-field>
           </v-col>
-          <v-col lg="6" md="6" sm="12">
+          <v-col cols="12" lg="6" md="7" sm="12">
             <v-text-field
-              label="Hs Code"
-              outlined
-              v-model="hsCode"
-              :rules="[
-                (value) => {
-                  return genericRequiredRule(value, 'Hs Code');
-                },
-              ]"
-            >
-            </v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-textarea
-              name="uraian"
               label="Uraian"
+              outlined
               v-model="uraian"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Uraian');
                 },
               ]"
-              outlined
-            ></v-textarea>
+            >
+            </v-text-field>
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col lg="4" md="4" sm="12">
+          <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
-              label="Netto, Bruto, Volume"
+              label="Netto Bruto Volume"
               outlined
               v-model="nettoBrutoVolume"
               :rules="[
                 (value) => {
-                  return genericRequiredRule(value, 'Netto, Bruto, Volume');
+                  return genericRequiredRule(value, 'Netto Bruto Volume');
                 },
               ]"
             >
             </v-text-field>
           </v-col>
-          <v-col lg="4" md="4" sm="12">
+          <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
               label="Satuan Kemasan"
               outlined
@@ -80,17 +63,40 @@
             >
             </v-text-field>
           </v-col>
-          <v-col lg="4" md="4" sm="12">
+          <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
-              label="Nilai Pabean, Harga Penyerahan"
+              label="Stock"
               outlined
-              v-model="nilaiPabeanHargaPenyerahan"
+              v-model="stock"
               :rules="[
                 (value) => {
-                  return genericRequiredRule(
-                    value,
-                    'Nilai Pabean, Harga Penyerahan'
-                  );
+                  return genericRequiredRule(value, 'Stock');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-text-field
+              label="Pos Tarif"
+              outlined
+              v-model="posTarif"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Pos Tarif');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-text-field
+              label="HS Code"
+              outlined
+              v-model="hsCode"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'HS Code');
                 },
               ]"
             >
@@ -114,19 +120,26 @@
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
-  name: "FormDataBarang",
+  name: "CreateStockBarang",
   mixins: [FieldRequired],
-  props: ["handleModal"],
-  data() {
-    return {};
-  },
   computed: {
-    posTarif: {
+    nama: {
       get() {
-        return this.$store.state.report.dataBarang.posTarif;
+        return this.$store.state.report.barang.nama;
       },
       set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
+        this.$store.commit("SET_BARANG", {
+          key: "nama",
+          value,
+        });
+      },
+    },
+    posTarif: {
+      get() {
+        return this.$store.state.report.barang.posTarif;
+      },
+      set(value) {
+        this.$store.commit("SET_BARANG", {
           key: "posTarif",
           value,
         });
@@ -134,10 +147,10 @@ export default {
     },
     uraian: {
       get() {
-        return this.$store.state.report.dataBarang.uraian;
+        return this.$store.state.report.barang.uraian;
       },
       set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
+        this.$store.commit("SET_BARANG", {
           key: "uraian",
           value,
         });
@@ -145,10 +158,10 @@ export default {
     },
     nettoBrutoVolume: {
       get() {
-        return this.$store.state.report.dataBarang.nettoBrutoVolume;
+        return this.$store.state.report.barang.nettoBrutoVolume;
       },
       set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
+        this.$store.commit("SET_BARANG", {
           key: "nettoBrutoVolume",
           value,
         });
@@ -156,10 +169,10 @@ export default {
     },
     satuanKemasan: {
       get() {
-        return this.$store.state.report.dataBarang.satuanKemasan;
+        return this.$store.state.report.barang.satuanKemasan;
       },
       set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
+        this.$store.commit("SET_BARANG", {
           key: "satuanKemasan",
           value,
         });
@@ -167,10 +180,10 @@ export default {
     },
     nilaiPabeanHargaPenyerahan: {
       get() {
-        return this.$store.state.report.dataBarang.nilaiPabeanHargaPenyerahan;
+        return this.$store.state.report.barang.nilaiPabeanHargaPenyerahan;
       },
       set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
+        this.$store.commit("SET_BARANG", {
           key: "nilaiPabeanHargaPenyerahan",
           value,
         });
@@ -178,42 +191,35 @@ export default {
     },
     hsCode: {
       get() {
-        return this.$store.state.report.dataBarang.hsCode;
+        return this.$store.state.report.barang.hsCode;
       },
       set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
+        this.$store.commit("SET_BARANG", {
           key: "hsCode",
+          value,
+        });
+      },
+    },
+    stock: {
+      get() {
+        return this.$store.state.report.barang.stock;
+      },
+      set(value) {
+        this.$store.commit("SET_BARANG", {
+          key: "stock",
           value,
         });
       },
     },
   },
   methods: {
-    handleSubmit() {
-      const payload = {
-        posTarif: this.posTarif,
-        uraian: this.uraian,
-        nettoBrutoVolume: this.nettoBrutoVolume,
-        satuanKemasan: this.satuanKemasan,
-        nilaiPabeanHargaPenyerahan: this.nilaiPabeanHargaPenyerahan,
-        hsCode: this.hsCode,
-      };
-      if (this.$refs.formDataBarang.validate()) {
-        this.$store.commit("SET_LIST_DATA_BARANG", payload);
-        this.posTarif = "";
-        this.uraian = "";
-        this.nettoBrutoVolume = "";
-        this.satuanKemasan = "";
-        this.nilaiPabeanHargaPenyerahan = "";
-        this.hsCode = "";
-        this.$emit("handleModal");
-      } else {
-        this.$swal("Data Belum Lengkap", "", "error");
-      }
-    },
     handleDialog() {
-      this.$emit("handleModal");
-      this.$refs.formDataBarang.resetValidation();
+      this.$emit("handleCloseDialogAddBarang");
+    },
+    handleSubmit() {
+      if (this.$refs.formDataBarang.validate()) {
+        this.$emit("handleCloseDialogAddBarang");
+      }
     },
   },
 };

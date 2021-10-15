@@ -7,7 +7,7 @@ import CreateDocument from "@/views/plb_ppftz/CreateDocument";
 import EditDocument from "@/views/plb_ppftz/EditDocument";
 import TableInventory from "@/views/plb_ppftz/TableInventory";
 import Login from "@/views/Login";
-import StockBarang from "@/views/StockBarang";
+import Barang from "@/views/Barang";
 
 Vue.use(VueRouter);
 
@@ -70,9 +70,9 @@ const routes = [
     ],
   },
   {
-    path: "/stockbarang",
-    name: "stockbarang",
-    component: StockBarang,
+    path: "/databarang",
+    name: "databarang",
+    component: Barang,
   },
   {
     path: "/login",
