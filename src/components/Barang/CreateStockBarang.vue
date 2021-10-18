@@ -15,7 +15,7 @@
             <v-text-field
               label="Nama"
               outlined
-              v-model="nama"
+              v-model="name"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Nama');
@@ -46,6 +46,12 @@
                 (value) => {
                   return genericRequiredRule(value, 'Netto Bruto Volume');
                 },
+                (value) => {
+                  return genericNumberRule(value, 'Netto Bruto Volume');
+                },
+                (value) => {
+                  return genericMinRule(value, 'Netto Bruto Volume');
+                },
               ]"
             >
             </v-text-field>
@@ -72,6 +78,12 @@
                 (value) => {
                   return genericRequiredRule(value, 'Stock');
                 },
+                (value) => {
+                  return genericNumberRule(value, 'Stock');
+                },
+                (value) => {
+                  return genericMinRule(value, 'Stock');
+                },
               ]"
             >
             </v-text-field>
@@ -84,6 +96,12 @@
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Pos Tarif');
+                },
+                (value) => {
+                  return genericNumberRule(value, 'Pos Tarif');
+                },
+                (value) => {
+                  return genericMinRule(value, 'Pos Tarif');
                 },
               ]"
             >
@@ -123,13 +141,13 @@ export default {
   name: "CreateStockBarang",
   mixins: [FieldRequired],
   computed: {
-    nama: {
+    name: {
       get() {
-        return this.$store.state.report.barang.nama;
+        return this.$store.state.report.barang.name;
       },
       set(value) {
         this.$store.commit("SET_BARANG", {
-          key: "nama",
+          key: "name",
           value,
         });
       },
@@ -216,8 +234,27 @@ export default {
     handleDialog() {
       this.$emit("handleCloseDialogAddBarang");
     },
+    handleCreate() {
+      this.$store
+        .dispatch("createBarang")
+        .then((result) => {
+          if (result.data.success) {
+            this.$swal.fire("Berhasil membuat barang!", "", "success");
+            this.$refs.formDataBarang.reset();
+          }
+        })
+        .catch((error) => {
+          this.$refs.formDataBarang.reset();
+          this.$swal.fire(
+            "Gagal membuat barang!",
+            error.response.data.message,
+            "error"
+          );
+        });
+    },
     handleSubmit() {
       if (this.$refs.formDataBarang.validate()) {
+        this.handleCreate();
         this.$emit("handleCloseDialogAddBarang");
       }
     },

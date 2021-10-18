@@ -31,4 +31,19 @@
   &_datetime_barang {
     text-align: right;
   }
+
+  &_qty_dec {
+    ::v-deep {
+      input {
+        color: #de3d33 !important;
+      }
+    }
+  }
+  &_qty_inc {
+    ::v-deep {
+      input {
+        color: #3cb774 !important;
+      }
+    }
+  }
 }

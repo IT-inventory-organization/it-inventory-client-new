@@ -15,7 +15,7 @@ const report = {
     previewIsLoading: false,
     optionsTableMerah: {
       page: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       type: "",
     },
     report: {
@@ -27,7 +27,7 @@ const report = {
     reports: [],
     optionsTableReports: {
       page: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       type: "",
       search: "",
     },
@@ -137,19 +137,31 @@ const report = {
       nilaiPabeanHargaPenyerahan: "",
       hsCode: "",
     },
+    listBarang: [],
     barang: {
-      nama: "",
+      name: "",
+      uraian: "",
       nettoBrutoVolume: "",
       satuanKemasan: "",
       stock: "",
       posTarif: "",
       hsCode: "",
     },
+    optionsTableBarang: {
+      page: 1,
+      itemsPerPage: 10,
+    },
+    historyBarang: [],
+    updateStockBarang: {
+      increase: 0,
+      decrease: 0,
+    },
     loading: {
       getOne: false,
       loadingEdit: false,
       loadingForm: false,
       deleteOne: false,
+      loadingHistoryBarang: false,
     },
     previewXML: "",
   },
@@ -267,7 +279,7 @@ const report = {
       state.dataPetiKemas[payload.key] = payload.value;
     },
 
-    // Data Barang
+    // Page PLB/PPFTZ Data Barang
     SET_LIST_DATA_BARANG(state, payload) {
       state.listDataBarang = [...state.listDataBarang, payload];
     },
@@ -280,8 +292,25 @@ const report = {
         state.listDataBarang.splice(index, 1);
       }
     },
+
+    // Page Data Barang
+    SET_LIST_BARANG(state, payload) {
+      state.listBarang = payload;
+    },
+    SET_OPTIONS_TABLE_BARANG(state, payload) {
+      state.optionsTableBarang = Object.assign({}, payload);
+    },
     SET_BARANG(state, payload) {
       state.barang[payload.key] = payload.value;
+    },
+    SET_HISTORY_BARANG(state, payload) {
+      state.historyBarang = payload;
+    },
+    SET_UPDATE_STOCK(state, payload) {
+      state.updateStockBarang[payload.key] = payload.value;
+    },
+    RESET_HISTORY_BARANG(state) {
+      state.historyBarang = [];
     },
     UPDATE_DATA_LIST_BARANG(state, payload) {
       const temp = [...state.listDataBarang];
@@ -857,6 +886,78 @@ const report = {
       } finally {
         context.commit("SET_PREVIEW_IS_LOADING", false);
       }
+    },
+    async fetchBarang(context) {
+      try {
+        const result = await axios({
+          url:
+            baseUrl +
+            `/barang/?pageSize=${context.state.optionsTableBarang.itemsPerPage}&pageNo=${context.state.optionsTableBarang.page}`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if (result.data.success) {
+          context.commit("SET_LIST_BARANG", AESDecrypt(result.data.data));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    createBarang(context) {
+      const { barang } = context.state;
+      return axios({
+        url: baseUrl + "/barang/save",
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          item: AESEncrypt(barang),
+        },
+      });
+    },
+
+    async fetchHistoryBarang(context, id) {
+      context.commit("SET_LOADING", {
+        key: "loadingHistoryBarang",
+        value: true,
+      });
+      try {
+        const result = await axios({
+          url: baseUrl + `/barang/history/${id}`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if (result.data.success) {
+          context.commit("SET_HISTORY_BARANG", AESDecrypt(result.data.data));
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        context.commit("SET_LOADING", {
+          key: "loadingHistoryBarang",
+          value: false,
+        });
+      }
+    },
+
+    updateStockBarang(context, id) {
+      console.log(context.state.updateStockBarang, id);
+
+      // return axios({
+      //   url: baseUrl + `/barang/update-stock/${id}?status=increase`,
+      //     method: "GET",
+      //     headers: {
+      //       authorization:
+      //         "Bearer " + localStorage.getItem("token_it_inventory"),
+      //     },
+      // })
     },
   },
 };

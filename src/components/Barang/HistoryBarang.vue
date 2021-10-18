@@ -8,12 +8,26 @@
         >
       </v-row>
     </v-card-title>
-    <v-card-text>
+    <v-card-text v-if="loadingHistoryBarang">
+      <v-progress-linear
+        class="my-4"
+        indeterminate
+        color="blue"
+      ></v-progress-linear>
+    </v-card-text>
+    <v-card-text class="text-center" v-if="historyBarang.length <= 0">
+      <p class="my-5">History not available</p>
+    </v-card-text>
+    <v-card-text v-if="!loadingHistoryBarang && historyBarang.length > 0">
       <div class="history_nama_barang mt-2 mb-4">
-        Minyak
+        {{ historyBarang[0].name }}
       </div>
       <!-- List -->
-      <v-row no-gutters>
+      <v-row
+        v-for="(history, index) in historyBarang"
+        :key="index.toString()"
+        no-gutters
+      >
         <v-col cols="1" class="history_list">
           <div class="history_list_dot"></div>
           <div class="history_list_line"></div>
@@ -22,15 +36,22 @@
           <v-row align="center">
             <v-col cols="8">
               <v-chip color="#3CB774" class="mr-2" text-color="white">
-                Inventory #1
+                Inventory #{{ history.nomorAjuan }}
               </v-chip>
-              <v-chip color="#F27B61" text-color="white">
-                PLB | Export
+              <v-chip
+                :color="
+                  history.jenisPemberitahuan === 'Export'
+                    ? '#F27B61'
+                    : '#5682FF'
+                "
+                text-color="white"
+              >
+                {{ history.typeReport }} | {{ history.jenisPemberitahuan }}
               </v-chip>
             </v-col>
             <v-col cols="4">
               <div class="history_datetime_barang">
-                01-01-2021 &nbsp;&nbsp; | &nbsp;&nbsp; 1:20 pm
+                {{ handleDate(history.updatedAt) }}
               </div>
             </v-col>
           </v-row>
@@ -39,14 +60,14 @@
               <v-text-field
                 disabled
                 label="Nomor Dokumen"
-                value="1231"
+                :value="history.nomorDokumen"
                 outlined
                 dense
               ></v-text-field>
             </v-col>
             <v-col cols="2">
               <v-text-field
-                value="BC.04"
+                :value="history.BCDocumentType"
                 label="Jenis Dokumen BC"
                 outlined
                 disabled
@@ -56,7 +77,7 @@
             <v-col cols="4">
               <v-text-field
                 label="Penerima"
-                value="Ikhwan"
+                :value="history.namaPenerima"
                 disabled
                 outlined
                 dense
@@ -65,10 +86,11 @@
             <v-col cols="2">
               <v-text-field
                 label="Quantity"
-                value="2"
+                :value="history.quantity"
                 disabled
                 outlined
                 dense
+                class="history_qty_dec"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -82,9 +104,29 @@
 <script>
 export default {
   name: "HistoryBarang",
+  computed: {
+    loadingHistoryBarang() {
+      return this.$store.state.report.loading.loadingHistoryBarang;
+    },
+    historyBarang() {
+      return this.$store.state.report.historyBarang;
+    },
+  },
   methods: {
     handleDialog() {
+      this.$store.commit("RESET_HISTORY_BARANG");
       this.$emit("handleCloseDialogHistory");
+    },
+    handleDate(value) {
+      const date = new Date(value);
+      const getDate = `${date.getDate()}-${date.getMonth() +
+        1}-${date.getFullYear()}`;
+      const getTime = date.toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+      return `${getDate} | ${getTime}`;
     },
   },
 };

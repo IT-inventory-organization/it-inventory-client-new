@@ -19,7 +19,9 @@
 
     <v-data-table
       :headers="headers"
-      :items="data"
+      :items="listBarang.data"
+      :options.sync="optionsTableBarang"
+      :server-items-length="listBarang.data_size"
       no-data-text="Data not available"
       no-results-text="Data not available"
       class="it-inventory-simple-table"
@@ -27,7 +29,7 @@
       <template v-slot:[`item.no`]="props">
         {{ (props.index += 1) }}
       </template>
-      <template v-slot:[`item.action`]>
+      <template v-slot:[`item.action`]="props">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -57,10 +59,16 @@
                 Tambah/Kurangi Stock
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="handleOpenDialogHistory">
+            <v-list-item @click="handleHistoryBarang(props.item.id)">
               <v-list-item-title>
                 <v-icon left> mdi-clock-time-four-outline </v-icon>
                 History
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>
+                <v-icon left> mdi-trash-can-outline </v-icon>
+                Delete
               </v-list-item-title>
             </v-list-item>
           </v-list>
@@ -105,7 +113,7 @@ export default {
         },
         {
           text: "Nama",
-          value: "nama",
+          value: "name",
         },
         {
           text: "Pos Tarif",
@@ -127,20 +135,36 @@ export default {
         { text: "Hs Code", value: "hsCode" },
         { text: "Action", value: "action", sortable: false },
       ],
-      data: [
-        {
-          nama: "Minyak Mentah",
-          posTarif: 2300032,
-          uraian: "Bensin",
-          nettoBrutoVolume: 300,
-          satuanKemasan: "Liter",
-          stock: 20,
-          hsCode: "GHASS",
-        },
-      ],
     };
   },
+  watch: {
+    optionsTableBarang: {
+      handler() {
+        this.fetchBarang();
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    listBarang() {
+      return this.$store.state.report.listBarang;
+    },
+    optionsTableBarang: {
+      get() {
+        return this.$store.state.report.optionsTableBarang;
+      },
+      set(val) {
+        this.$store.commit("SET_OPTIONS_TABLE_BARANG", val);
+      },
+    },
+  },
+  created() {
+    this.fetchBarang();
+  },
   methods: {
+    fetchBarang() {
+      this.$store.dispatch("fetchBarang");
+    },
     handleOpenDialogAddBarang() {
       this.dialogAddBarang = true;
     },
@@ -158,6 +182,10 @@ export default {
     },
     handleCloseDialogHistory() {
       this.dialogHistory = false;
+    },
+    handleHistoryBarang(id) {
+      this.$store.dispatch("fetchHistoryBarang", id);
+      this.handleOpenDialogHistory();
     },
   },
 };
