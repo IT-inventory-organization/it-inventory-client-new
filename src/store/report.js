@@ -135,8 +135,10 @@ const report = {
       idBarang: "",
       quantity: 0,
       nilaiPabeanHargaPenyerahan: "",
-      hsCode: "",
     },
+
+    // Page Data Barang
+    idBarang: "",
     listBarang: [],
     barang: {
       name: "",
@@ -156,12 +158,16 @@ const report = {
       increase: 0,
       decrease: 0,
     },
+    //END Page Data Barang
+
     loading: {
       getOne: false,
       loadingEdit: false,
       loadingForm: false,
       deleteOne: false,
       loadingHistoryBarang: false,
+      getOneBarang: false,
+      deleteOneBarang: false,
     },
     previewXML: "",
   },
@@ -169,7 +175,7 @@ const report = {
     SET_REPORT_ID_PREVIEW(state, payload) {
       state.reportIdPreview = payload;
     },
-    RESET_REPORT_ID(state) {
+    RESET_REPORT_ID_PREVIEW(state) {
       state.reportIdPreview = "";
     },
     SET_PREVIEW(state, payload) {
@@ -185,6 +191,9 @@ const report = {
       state.previewXML = "";
     },
     SET_REPORT_ID(state, payload) {
+      state.reportId = payload;
+    },
+    RESET_REPORT_ID(state, payload) {
       state.reportId = payload;
     },
     // Data Header
@@ -292,10 +301,47 @@ const report = {
         state.listDataBarang.splice(index, 1);
       }
     },
+    UPDATE_DATA_LIST_BARANG(state, payload) {
+      const temp = [...state.listDataBarang];
+      state.listDataBarang = [];
+      state.listDataBarang = temp.map((ele, ind) => {
+        if (ind === payload.index) {
+          ele = Object.assign({}, payload.payload);
+        }
+        return ele;
+      });
+    },
 
     // Page Data Barang
     SET_LIST_BARANG(state, payload) {
       state.listBarang = payload;
+    },
+    SET_BARANG_TO_LIST_BARANG(state, payload) {
+      state.listBarang.data = [...state.listBarang.data, payload];
+    },
+    UPDATE_BARANG(state, payload) {
+      const temp = [...state.listBarang.data];
+      state.listBarang.data = [];
+      state.listBarang.data = temp.map((ele) => {
+        if (ele.id === payload.id) {
+          ele = Object.assign({}, payload);
+        }
+        return ele;
+      });
+    },
+    UPDATE_STOCK_BARANG(state) {
+      const temp = [...state.listBarang.data];
+      state.listBarang.data = [];
+      state.listBarang.data = temp.map((ele) => {
+        if (ele.id === state.idBarang) {
+          if (state.updateStockBarang.increase > 0) {
+            ele.stock += state.updateStockBarang.increase;
+          } else {
+            ele.stock -= state.updateStockBarang.decrease;
+          }
+        }
+        return ele;
+      });
     },
     SET_OPTIONS_TABLE_BARANG(state, payload) {
       state.optionsTableBarang = Object.assign({}, payload);
@@ -309,19 +355,30 @@ const report = {
     SET_UPDATE_STOCK(state, payload) {
       state.updateStockBarang[payload.key] = payload.value;
     },
+    RESET_UPDATE_STOCK(state) {
+      state.updateStockBarang = {
+        increase: 0,
+        decrease: 0,
+      };
+    },
+    SET_ID_BARANG(state, payload) {
+      state.idBarang = payload;
+    },
+    RESET_ID_BARANG(state) {
+      state.idBarang = "";
+    },
     RESET_HISTORY_BARANG(state) {
       state.historyBarang = [];
     },
-    UPDATE_DATA_LIST_BARANG(state, payload) {
-      const temp = [...state.listDataBarang];
-      state.listDataBarang = [];
-      state.listDataBarang = temp.map((ele, ind) => {
-        if (ind === payload.index) {
-          ele = Object.assign({}, payload.payload);
-        }
-        return ele;
-      });
+    DELETE_BARANG(state, id) {
+      const index = state.listBarang.data.findIndex((ele) => ele.id == id);
+      if (index !== -1) {
+        state.listBarang.data.splice(index, 1);
+        state.listBarang["data_size"] -= 1;
+      }
     },
+    // ------------ //
+
     SET_STATE_GLOBAL(state, payload) {
       state[payload.key] = payload.value;
     },
@@ -463,6 +520,7 @@ const report = {
         // context.commit("SET_LOADING_CREATE", false);
       }
     },
+
     async fetchAllReport(context) {
       const size =
         context.state.optionsTableReports.itemsPerPage === -1
@@ -481,6 +539,7 @@ const report = {
         context.commit("SET_REPORTS", AESDecrypt(result.data.data));
       }
     },
+
     async getOneReport(context) {
       context.commit("SET_LOADING", { key: "getOne", value: true });
       try {
@@ -582,6 +641,7 @@ const report = {
         context.commit("SET_LOADING", { key: "getOne", value: false });
       }
     },
+
     async fetchAllTotalReport(context) {
       // /report/get/getTotalReport
       let result = await axios({
@@ -595,6 +655,7 @@ const report = {
         context.commit("SET_TOTAL_REPORT_ALL", AESDecrypt(result.data.data));
       }
     },
+
     async fetchReportByStatus(context, payload) {
       const extendedUrl = payload ? "?status=" + payload : "";
       let result = await axios({
@@ -623,6 +684,7 @@ const report = {
         context.commit("SET_TOTAL_REPORT_BY_STATUS", payloadMutation);
       }
     },
+
     async fetchReportInventoryMerah(context, payload) {
       const size = payload.itemsPerPage === -1 ? 100 : payload.itemsPerPage;
       const result = await axios({
@@ -719,7 +781,15 @@ const report = {
 
     createDataBarang(context) {
       const { reportId, listDataBarang } = context.state;
-
+      const newListBarang = [];
+      listDataBarang.forEach((item) => {
+        newListBarang.push({
+          idBarang: item.id,
+          quantity: Number(item.quantity),
+          nilaiPabeanHargaPenyerahan: Number(item.nilaiPabeanHargaPenyerahan),
+        });
+      });
+      console.log(newListBarang);
       return axios({
         url: baseUrl + "/report/data-barang",
         method: "POST",
@@ -729,11 +799,12 @@ const report = {
         data: {
           dataBarang: AESEncrypt({
             reportId,
-            listDataBarang,
+            listDataBarang: newListBarang,
           }),
         },
       });
     },
+
     editReport(context) {
       const { reportId, report } = context.state;
 
@@ -748,6 +819,7 @@ const report = {
         },
       });
     },
+
     editDataHeader(context) {
       const {
         reportId,
@@ -788,6 +860,7 @@ const report = {
         },
       });
     },
+
     editDataLanjutan(context) {
       const { reportId, dataDokumen, dataPetiKemas } = context.state;
 
@@ -806,6 +879,7 @@ const report = {
         },
       });
     },
+
     editDataBarang(context) {
       const { reportId, listDataBarang } = context.state;
 
@@ -823,6 +897,7 @@ const report = {
         },
       });
     },
+
     async deleteReport(context, id) {
       context.commit("SET_LOADING", { key: "deleteOne", value: true });
       try {
@@ -887,6 +962,7 @@ const report = {
         context.commit("SET_PREVIEW_IS_LOADING", false);
       }
     },
+
     async fetchBarang(context) {
       try {
         const result = await axios({
@@ -906,6 +982,7 @@ const report = {
         console.log(error);
       }
     },
+
     createBarang(context) {
       const { barang } = context.state;
       return axios({
@@ -947,17 +1024,105 @@ const report = {
       }
     },
 
-    updateStockBarang(context, id) {
-      console.log(context.state.updateStockBarang, id);
+    updateStockBarang(context) {
+      const { increase, decrease } = context.state.updateStockBarang;
+      let type = "";
+      let total = 0;
 
-      // return axios({
-      //   url: baseUrl + `/barang/update-stock/${id}?status=increase`,
-      //     method: "GET",
-      //     headers: {
-      //       authorization:
-      //         "Bearer " + localStorage.getItem("token_it_inventory"),
-      //     },
-      // })
+      if (increase > 0) {
+        type = "increase";
+        total = increase;
+      }
+
+      if (decrease > 0) {
+        type = "decrease";
+        total = decrease;
+      }
+
+      return axios({
+        url:
+          baseUrl +
+          `/barang/update-stock/${context.state.idBarang}?status=${type}`,
+        method: "PUT",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          Total: AESEncrypt({ total }),
+        },
+      });
+    },
+
+    async getOneBarang(context, id) {
+      context.commit("SET_LOADING", { key: "getOneBarang", value: true });
+      try {
+        const result = await axios({
+          url: baseUrl + "/barang/" + id,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if (result.data.success) {
+          const item = AESDecrypt(result.data.data)[0];
+          context.commit("SET_BARANG", { key: "name", value: item.name });
+          context.commit("SET_BARANG", { key: "uraian", value: item.uraian });
+          context.commit("SET_BARANG", {
+            key: "nettoBrutoVolume",
+            value: item.nettoBrutoVolume,
+          });
+          context.commit("SET_BARANG", {
+            key: "satuanKemasan",
+            value: item.satuanKemasan,
+          });
+          context.commit("SET_BARANG", { key: "stock", value: item.stock });
+          context.commit("SET_BARANG", {
+            key: "posTarif",
+            value: item.posTarif,
+          });
+          context.commit("SET_BARANG", { key: "hsCode", value: item.hsCode });
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        context.commit("SET_LOADING", { key: "getOneBarang", value: false });
+      }
+    },
+
+    editBarang(context) {
+      return axios({
+        url: baseUrl + `/barang/update/${context.state.idBarang}`,
+        method: "PUT",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
+        },
+        data: {
+          item: AESEncrypt(context.state.barang),
+        },
+      });
+    },
+
+    async deleteBarang(context, id) {
+      context.commit("SET_LOADING", { key: "deleteOneBarang", value: false });
+      try {
+        const result = await axios({
+          url: baseUrl + "/barang/delete/" + id,
+          method: "DELETE",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if (result.data.success) {
+          Swal.fire("Success!", result.data.message, "success");
+          context.commit("DELETE_BARANG", id);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        context.commit("SET_LOADING", { key: "deleteOneBarang", value: true });
+      }
     },
   },
 };

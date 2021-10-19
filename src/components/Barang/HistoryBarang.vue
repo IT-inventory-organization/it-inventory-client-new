@@ -90,7 +90,11 @@
                 disabled
                 outlined
                 dense
-                class="history_qty_dec"
+                :class="
+                  history.status === 'decrease'
+                    ? 'history_qty_dec'
+                    : 'history_qty_inc'
+                "
               ></v-text-field>
             </v-col>
           </v-row>

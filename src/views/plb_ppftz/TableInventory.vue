@@ -197,13 +197,13 @@ export default {
     async handleCloseDialogPreview() {
       this.dialogPreview = false;
       await this.$store.commit("RESET_PREVIEW");
-      await this.$store.commit("RESET_REPORT_ID");
+      await this.$store.commit("RESET_REPORT_ID_PREVIEW");
     },
 
     async handleCloseDialogXML() {
       this.dialogXML = false;
       await this.$store.commit("RESET_PREVIEW_XML");
-      await this.$store.commit("RESET_REPORT_ID");
+      await this.$store.commit("RESET_REPORT_ID_PREVIEW");
     },
 
     handleModal() {

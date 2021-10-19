@@ -106,7 +106,7 @@ export default {
       import("@/views/plb_ppftz/ListDataBarang/FormDataBarang"),
     FormEditDataBarang: () =>
       import("@/views/plb_ppftz/ListDataBarang/FormEditDataBarang"),
-    FormBarang: () => import("@/components/Barang/CreateStockBarang"),
+    FormBarang: () => import("@/components/Barang/CreateBarang"),
   },
   data() {
     return {
@@ -136,6 +136,11 @@ export default {
         {
           text: "Pos Tarif",
           value: "posTarif",
+          sortable: false,
+        },
+        {
+          text: "Nama",
+          value: "name",
           sortable: false,
         },
         {
@@ -289,6 +294,9 @@ export default {
     handleChangeEdit(key, value) {
       this.editedItem[key] = value;
     },
+  },
+  created() {
+    this.$store.dispatch("fetchBarang");
   },
 };
 </script>

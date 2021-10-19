@@ -15,6 +15,10 @@
             <v-select
               outlined
               label="Jenis Barang"
+              :items="listBarang.data"
+              :item-text="(item) => item.name"
+              :item-value="(item) => item"
+              v-model="barang"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Jenis Barang');
@@ -28,6 +32,7 @@
               outlined
               label="Uraian"
               disabled
+              v-model="barang.uraian"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Uraian');
@@ -40,6 +45,7 @@
             <v-text-field
               outlined
               label="Stock"
+              v-model="barang.stock"
               disabled
               :rules="[
                 (value) => {
@@ -53,6 +59,7 @@
             <v-text-field
               outlined
               label="Quantity"
+              v-model="quantity"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Quantity');
@@ -65,6 +72,7 @@
             <v-text-field
               outlined
               disabled
+              v-model="barang.nettoBrutoVolume"
               label="Netto, Bruto, Volume"
               :rules="[
                 (value) => {
@@ -79,6 +87,7 @@
               outlined
               disabled
               label="Satuan Kemasan"
+              v-model="barang.satuanKemasan"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Satuan Kemasan');
@@ -90,6 +99,7 @@
           <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
               outlined
+              v-model="nilaiPabeanHargaPenyerahan"
               label="Nilai Pabean, Harga Penyerahan"
               :rules="[
                 (value) => {
@@ -106,6 +116,7 @@
             <v-text-field
               outlined
               disabled
+              v-model="barang.posTarif"
               label="Pos Tarif"
               :rules="[
                 (value) => {
@@ -119,6 +130,7 @@
             <v-text-field
               outlined
               disabled
+              v-model="barang.hsCode"
               label="HS Code"
               :rules="[
                 (value) => {
@@ -150,94 +162,51 @@ export default {
   mixins: [FieldRequired],
   props: ["handleModal"],
   data() {
-    return {};
+    return {
+      barang: {
+        name: "",
+        uraian: "",
+        nettoBrutoVolume: "",
+        satuanKemasan: "",
+        stock: "",
+        posTarif: "",
+        hsCode: "",
+      },
+      nilaiPabeanHargaPenyerahan: "",
+      quantity: "",
+    };
   },
   computed: {
-    posTarif: {
-      get() {
-        return this.$store.state.report.dataBarang.posTarif;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "posTarif",
-          value,
-        });
-      },
-    },
-    uraian: {
-      get() {
-        return this.$store.state.report.dataBarang.uraian;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "uraian",
-          value,
-        });
-      },
-    },
-    nettoBrutoVolume: {
-      get() {
-        return this.$store.state.report.dataBarang.nettoBrutoVolume;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "nettoBrutoVolume",
-          value,
-        });
-      },
-    },
-    satuanKemasan: {
-      get() {
-        return this.$store.state.report.dataBarang.satuanKemasan;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "satuanKemasan",
-          value,
-        });
-      },
-    },
-    nilaiPabeanHargaPenyerahan: {
-      get() {
-        return this.$store.state.report.dataBarang.nilaiPabeanHargaPenyerahan;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "nilaiPabeanHargaPenyerahan",
-          value,
-        });
-      },
-    },
-    hsCode: {
-      get() {
-        return this.$store.state.report.dataBarang.hsCode;
-      },
-      set(value) {
-        this.$store.commit("SET_DATA_BARANG", {
-          key: "hsCode",
-          value,
-        });
-      },
+    listBarang() {
+      return this.$store.state.report.listBarang;
     },
   },
   methods: {
     handleSubmit() {
       const payload = {
-        posTarif: this.posTarif,
-        uraian: this.uraian,
-        nettoBrutoVolume: this.nettoBrutoVolume,
-        satuanKemasan: this.satuanKemasan,
+        id: this.barang.id,
+        quantity: this.quantity,
         nilaiPabeanHargaPenyerahan: this.nilaiPabeanHargaPenyerahan,
-        hsCode: this.hsCode,
+        name: this.barang.name,
+        uraian: this.barang.uraian,
+        nettoBrutoVolume: this.barang.nettoBrutoVolume,
+        satuanKemasan: this.barang.satuanKemasan,
+        posTarif: this.barang.posTarif,
+        hsCode: this.barang.hsCode,
       };
       if (this.$refs.formDataBarang.validate()) {
         this.$store.commit("SET_LIST_DATA_BARANG", payload);
-        this.posTarif = "";
-        this.uraian = "";
-        this.nettoBrutoVolume = "";
-        this.satuanKemasan = "";
+        this.barang = {
+          name: "",
+          uraian: "",
+          nettoBrutoVolume: "",
+          satuanKemasan: "",
+          stock: "",
+          posTarif: "",
+          hsCode: "",
+        };
+        this.quantity = "";
         this.nilaiPabeanHargaPenyerahan = "";
-        this.hsCode = "";
         this.$emit("handleModal");
       } else {
         this.$swal("Data Belum Lengkap", "", "error");

@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
-        <span class="text-h6">Tambah Stock Barang</span>
+        <span class="text-h6">Tambah Barang</span>
         <span style="cursor: pointer" @click.prevent="handleDialog"
           ><v-icon>mdi-close</v-icon></span
         >
@@ -137,8 +137,9 @@
 
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
+import { AESDecrypt } from "@/helper/Encryption";
 export default {
-  name: "CreateStockBarang",
+  name: "CreateBarang",
   mixins: [FieldRequired],
   computed: {
     name: {
@@ -237,8 +238,12 @@ export default {
     handleCreate() {
       this.$store
         .dispatch("createBarang")
-        .then((result) => {
+        .then(async (result) => {
           if (result.data.success) {
+            await this.$store.commit(
+              "SET_BARANG_TO_LIST_BARANG",
+              AESDecrypt(result.data.data)
+            );
             this.$swal.fire("Berhasil membuat barang!", "", "success");
             this.$refs.formDataBarang.reset();
           }

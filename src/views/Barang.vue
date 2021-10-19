@@ -19,7 +19,7 @@
 
     <v-data-table
       :headers="headers"
-      :items="listBarang.data"
+      :items="itemBarang"
       :options.sync="optionsTableBarang"
       :server-items-length="listBarang.data_size"
       no-data-text="Data not available"
@@ -47,25 +47,29 @@
           </template>
 
           <v-list>
-            <v-list-item>
+            <v-list-item
+              @click.prevent="handleOpenDialogEditBarang(props.item.id)"
+            >
               <v-list-item-title>
                 <v-icon left> mdi-pencil-outline </v-icon>
                 Edit
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="handleOpenDialogUpdateStock">
+            <v-list-item
+              @click.prevent="handleOpenDialogUpdateStock(props.item.id)"
+            >
               <v-list-item-title>
                 <v-icon left> mdi-plus-minus-variant </v-icon>
                 Tambah/Kurangi Stock
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="handleHistoryBarang(props.item.id)">
+            <v-list-item @click.prevent="handleHistoryBarang(props.item.id)">
               <v-list-item-title>
                 <v-icon left> mdi-clock-time-four-outline </v-icon>
                 History
               </v-list-item-title>
             </v-list-item>
-            <v-list-item>
+            <v-list-item @click.prevent="handleDeleteBarang(props.item.id)">
               <v-list-item-title>
                 <v-icon left> mdi-trash-can-outline </v-icon>
                 Delete
@@ -76,8 +80,13 @@
       </template>
     </v-data-table>
     <v-dialog v-model="dialogAddBarang" persistent max-width="800px">
-      <form-create-stock-barang
+      <form-create-barang
         @handleCloseDialogAddBarang="handleCloseDialogAddBarang"
+      />
+    </v-dialog>
+    <v-dialog v-model="dialogEditBarang" persistent max-width="800px">
+      <form-edit-barang
+        @handleCloseDialogEditBarang="handleCloseDialogEditBarang"
       />
     </v-dialog>
     <v-dialog v-model="dialogStock" persistent max-width="500px">
@@ -95,8 +104,8 @@
 export default {
   name: "stockbarang",
   components: {
-    FormCreateStockBarang: () =>
-      import("@/components/Barang/CreateStockBarang"),
+    FormCreateBarang: () => import("@/components/Barang/CreateBarang"),
+    FormEditBarang: () => import("@/components/Barang/EditBarang"),
     FormUpdateStock: () => import("@/components/Barang/UpdateStock"),
     HistoryBarang: () => import("@/components/Barang/HistoryBarang"),
   },
@@ -124,7 +133,7 @@ export default {
           value: "uraian",
         },
         {
-          text: "Neto, Bruto, Volume",
+          text: "Netto, Bruto, Volume",
           value: "nettoBrutoVolume",
         },
         { text: "Satuan Kemasan", value: "satuanKemasan" },
@@ -146,6 +155,9 @@ export default {
     },
   },
   computed: {
+    itemBarang() {
+      return this.$store.state.report.listBarang.data;
+    },
     listBarang() {
       return this.$store.state.report.listBarang;
     },
@@ -171,11 +183,22 @@ export default {
     handleCloseDialogAddBarang() {
       this.dialogAddBarang = false;
     },
-    handleOpenDialogUpdateStock() {
+    handleOpenDialogEditBarang(id) {
+      this.dialogEditBarang = true;
+      this.$store.commit("SET_ID_BARANG", id);
+      this.$store.dispatch("getOneBarang", id);
+    },
+    handleCloseDialogEditBarang() {
+      this.dialogEditBarang = false;
+      this.$store.commit("RESET_ID_BARANG");
+    },
+    handleOpenDialogUpdateStock(id) {
       this.dialogStock = true;
+      this.$store.commit("SET_ID_BARANG", id);
     },
     handleCloseDialogUpdateStock() {
       this.dialogStock = false;
+      this.$store.commit("RESET_ID_BARANG");
     },
     handleOpenDialogHistory() {
       this.dialogHistory = true;
@@ -186,6 +209,24 @@ export default {
     handleHistoryBarang(id) {
       this.$store.dispatch("fetchHistoryBarang", id);
       this.handleOpenDialogHistory();
+    },
+    handleDeleteBarang(id) {
+      this.$swal({
+        title: `Konfirmasi`,
+        text: `Apakah 
+        anda yakin untuk menghapus data dengan nomor barang ${id} ?`,
+        type: "warning",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#5682ff",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Tidak",
+      }).then((result) => {
+        if (result.value) {
+          this.$store.dispatch("deleteBarang", id);
+        }
+      });
     },
   },
 };
