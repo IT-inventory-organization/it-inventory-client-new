@@ -52,12 +52,12 @@
                       Edit
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="handleCopy(props.item)">
+                  <!-- <v-list-item @click="handleCopy(props.item)">
                     <v-list-item-title>
                       <v-icon left>mdi-content-copy </v-icon>
                       Copy
                     </v-list-item-title>
-                  </v-list-item>
+                  </v-list-item> -->
                   <v-list-item @click.prevent="handleDelete(props.item)">
                     <v-list-item-title>
                       <v-icon left>mdi-trash-can-outline</v-icon>
@@ -87,9 +87,12 @@
       <form-edit-data-barang
         ref="editListDataBarang"
         :item="editedItem"
+        :quantity="editedQuantity"
+        :nilaiPabeanHargaPenyerahan="editedNilaiPabeanHargaPenyerahan"
         :index="editedIndex"
         @handleEdit="handleEditDialog"
         @handleChangeEdit="handleChangeEdit"
+        @handleChangeOthers="handleChangeOthers"
       />
     </v-dialog>
     <v-dialog v-model="dialogAddBarang" persistent max-width="800px">
@@ -115,13 +118,17 @@ export default {
       editDialog: false,
       dialogAddBarang: false,
       editedItem: {
-        posTarif: "",
+        name: "",
         uraian: "",
+        posTarif: "",
         nettoBrutoVolume: "",
         satuanKemasan: "",
-        nilaiPabeanHargaPenyerahan: "",
         hsCode: "",
+        stock: "",
+        idBarang: "",
       },
+      editedQuantity: "",
+      editedNilaiPabeanHargaPenyerahan: "",
       csvData: [],
       Bruto: null,
       Netto: null,
@@ -278,21 +285,28 @@ export default {
       this.editDialog = !this.editDialog;
       if (this.editDialog) {
         this.editedItem = Object.assign({}, item);
+        this.editedQuantity = item.quantity;
+        this.editedNilaiPabeanHargaPenyerahan = item.nilaiPabeanHargaPenyerahan;
         this.editedIndex = index;
       } else {
         this.editedItem = {
-          posTarif: "",
+          name: "",
           uraian: "",
+          posTarif: "",
           nettoBrutoVolume: "",
           satuanKemasan: "",
-          nilaiPabeanHargaPenyerahan: "",
           hsCode: "",
+          stock: "",
+          idBarang: "",
         };
         this.editedIndex = null;
       }
     },
-    handleChangeEdit(key, value) {
-      this.editedItem[key] = value;
+    handleChangeEdit(value) {
+      this.editedItem = value;
+    },
+    handleChangeOthers(key, value) {
+      this[key] = value;
     },
   },
   created() {

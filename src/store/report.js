@@ -157,6 +157,7 @@ const report = {
     updateStockBarang: {
       increase: 0,
       decrease: 0,
+      deskripsi: "",
     },
     //END Page Data Barang
 
@@ -323,7 +324,7 @@ const report = {
       const temp = [...state.listBarang.data];
       state.listBarang.data = [];
       state.listBarang.data = temp.map((ele) => {
-        if (ele.id === payload.id) {
+        if (ele.idBarang === payload.idBarang) {
           ele = Object.assign({}, payload);
         }
         return ele;
@@ -333,7 +334,7 @@ const report = {
       const temp = [...state.listBarang.data];
       state.listBarang.data = [];
       state.listBarang.data = temp.map((ele) => {
-        if (ele.id === state.idBarang) {
+        if (ele.idBarang === state.idBarang) {
           if (state.updateStockBarang.increase > 0) {
             ele.stock += state.updateStockBarang.increase;
           } else {
@@ -371,7 +372,9 @@ const report = {
       state.historyBarang = [];
     },
     DELETE_BARANG(state, id) {
-      const index = state.listBarang.data.findIndex((ele) => ele.id == id);
+      const index = state.listBarang.data.findIndex(
+        (ele) => ele.idBarang == id
+      );
       if (index !== -1) {
         state.listBarang.data.splice(index, 1);
         state.listBarang["data_size"] -= 1;
@@ -382,6 +385,26 @@ const report = {
     SET_STATE_GLOBAL(state, payload) {
       state[payload.key] = payload.value;
     },
+    SET_STATE_LIST_BARANG(state, payload) {
+      state.listDataBarang = [];
+      payload.forEach((ele) => {
+        const temp = {
+          id: ele.id,
+          idBarang: ele.idBarang,
+          quantity: ele.quantity,
+          nilaiPabeanHargaPenyerahan: ele.nilaiPabeanHargaPenyerahan,
+          name: ele.Barang.name,
+          uraian: ele.Barang.uraian,
+          nettoBrutoVolume: ele.Barang.nettoBrutoVolume,
+          satuanKemasan: ele.Barang.satuanKemasan,
+          posTarif: ele.Barang.posTarif,
+          hsCode: ele.Barang.hsCode,
+          stock: ele.Barang.stock,
+        };
+        state.listDataBarang = [...state.listDataBarang, temp];
+      });
+    },
+
     SET_LOADING(state, payload) {
       state.loading[payload.key] = payload.value;
     },
@@ -473,18 +496,39 @@ const report = {
       };
       state.listDataBarang = [];
       state.dataBarang = {
-        posTarif: "",
+        idBarang: "",
+        quantity: 0,
+        nilaiPabeanHargaPenyerahan: "",
+      };
+
+      state.idBarang = "";
+      state.listBarang = [];
+      state.barang = {
+        name: "",
         uraian: "",
         nettoBrutoVolume: "",
         satuanKemasan: "",
-        nilaiPabeanHargaPenyerahan: "",
+        stock: "",
+        posTarif: "",
         hsCode: "",
+      };
+      state.optionsTableBarang = {
+        page: 1,
+        itemsPerPage: 10,
+      };
+      state.historyBarang = [];
+      state.updateStockBarang = {
+        increase: 0,
+        decrease: 0,
       };
       state.loading = {
         getOne: false,
         loadingEdit: false,
         loadingForm: false,
         deleteOne: false,
+        loadingHistoryBarang: false,
+        getOneBarang: false,
+        deleteOneBarang: false,
       };
     },
     SET_PREVIEW_XML(state, payload) {
@@ -630,10 +674,8 @@ const report = {
             key: "dataPetiKemas",
             value: DataPetiKema,
           });
-          context.commit("SET_STATE_GLOBAL", {
-            key: "listDataBarang",
-            value: listBarangs,
-          });
+
+          context.commit("SET_STATE_LIST_BARANG", listBarangs);
         }
       } catch (error) {
         console.log(error);
@@ -784,12 +826,11 @@ const report = {
       const newListBarang = [];
       listDataBarang.forEach((item) => {
         newListBarang.push({
-          idBarang: item.id,
+          idBarang: item.idBarang,
           quantity: Number(item.quantity),
           nilaiPabeanHargaPenyerahan: Number(item.nilaiPabeanHargaPenyerahan),
         });
       });
-      console.log(newListBarang);
       return axios({
         url: baseUrl + "/report/data-barang",
         method: "POST",
@@ -882,6 +923,15 @@ const report = {
 
     editDataBarang(context) {
       const { reportId, listDataBarang } = context.state;
+      const newListBarang = [];
+      listDataBarang.forEach((item) => {
+        newListBarang.push({
+          id: item.id,
+          idBarang: item.idBarang,
+          quantity: Number(item.quantity),
+          nilaiPabeanHargaPenyerahan: Number(item.nilaiPabeanHargaPenyerahan),
+        });
+      });
 
       return axios({
         url: baseUrl + "/report/update/data-barang/" + reportId,
@@ -892,7 +942,7 @@ const report = {
         data: {
           dataBarang: AESEncrypt({
             reportId,
-            listDataBarang,
+            listDataBarang: newListBarang,
           }),
         },
       });

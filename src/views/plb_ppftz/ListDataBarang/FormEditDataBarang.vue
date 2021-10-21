@@ -11,58 +11,77 @@
     <v-card-text class="py-4">
       <v-form ref="formDataBarang" @submit.prevent="handleSubmit">
         <v-row>
-          <v-col lg="6" md="6" sm="12">
-            <v-text-field
-              label="Pos Tarif"
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-select
               outlined
-              v-model="item.posTarif"
-              @change="handleChange('posTarif', $event)"
+              label="Jenis Barang"
+              :items="listBarang.data"
+              :item-text="(item) => item.name"
+              :value="item"
+              return-object
+              @change="handleChange($event)"
               :rules="[
                 (value) => {
-                  return genericRequiredRule(value, 'Pos Tarif');
+                  return genericRequiredRule(value, 'Jenis Barang');
                 },
               ]"
             >
-            </v-text-field>
+            </v-select>
           </v-col>
-          <v-col lg="6" md="6" sm="12">
+          <v-col cols="12" lg="6" md="6" sm="12">
             <v-text-field
-              label="Hs Code"
               outlined
-              v-model="item.hsCode"
-              @change="handleChange('hsCode', $event)"
-              :rules="[
-                (value) => {
-                  return genericRequiredRule(value, 'Hs Code');
-                },
-              ]"
-            >
-            </v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-textarea
-              name="uraian"
               label="Uraian"
+              disabled
               v-model="item.uraian"
-              @change="handleChange('uraian', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Uraian');
                 },
               ]"
-              outlined
-            ></v-textarea>
+            >
+            </v-text-field>
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col lg="4" md="4" sm="12">
+          <v-col cols="12" lg="6" md="6" sm="12">
             <v-text-field
-              label="Netto, Bruto, Volume"
               outlined
+              label="Stock"
+              v-model="item.stock"
+              disabled
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Stock');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-text-field
+              outlined
+              label="Quantity"
+              :value="quantity"
+              @change="handleChangeOthers('quantityEdit', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Quantity');
+                },
+                (value) => {
+                  return genericNumberRule(value, 'Quantity');
+                },
+                (value) => {
+                  return genericMinRule(value, 'Quantity');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="4" md="4" sm="12">
+            <v-text-field
+              outlined
+              disabled
               v-model="item.nettoBrutoVolume"
-              @change="handleChange('nettoBrutoVolume', $event)"
+              label="Netto, Bruto, Volume"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Netto, Bruto, Volume');
@@ -71,12 +90,12 @@
             >
             </v-text-field>
           </v-col>
-          <v-col lg="4" md="4" sm="12">
+          <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
-              label="Satuan Kemasan"
               outlined
+              disabled
+              label="Satuan Kemasan"
               v-model="item.satuanKemasan"
-              @change="handleChange('satuanKemasan', $event)"
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Satuan Kemasan');
@@ -85,18 +104,60 @@
             >
             </v-text-field>
           </v-col>
-          <v-col lg="4" md="4" sm="12">
+          <v-col cols="12" lg="4" md="4" sm="12">
             <v-text-field
-              label="Nilai Pabean, Harga Penyerahan"
               outlined
-              v-model="item.nilaiPabeanHargaPenyerahan"
-              @change="handleChange('nilaiPabeanHargaPenyerahan', $event)"
+              :value="nilaiPabeanHargaPenyerahan"
+              label="Nilai Pabean, Harga Penyerahan"
+              @change="
+                handleChangeOthers('nilaiPabeanHargaPenyerahanEdit', $event)
+              "
               :rules="[
                 (value) => {
                   return genericRequiredRule(
                     value,
                     'Nilai Pabean, Harga Penyerahan'
                   );
+                },
+                (value) => {
+                  return genericNumberRule(
+                    value,
+                    'Nilai Pabean, Harga Penyerahan'
+                  );
+                },
+                (value) => {
+                  return genericMinRule(
+                    value,
+                    'Nilai Pabean, Harga Penyerahan'
+                  );
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-text-field
+              outlined
+              disabled
+              v-model="item.posTarif"
+              label="Pos Tarif"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Pos Tarif');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" lg="6" md="6" sm="12">
+            <v-text-field
+              outlined
+              disabled
+              v-model="item.hsCode"
+              label="HS Code"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'HS Code');
                 },
               ]"
             >
@@ -122,19 +183,42 @@ import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "FormEditDataBarang",
   mixins: [FieldRequired],
-  props: ["item", "index"],
+  props: ["item", "index", "quantity", "nilaiPabeanHargaPenyerahan"],
+  computed: {
+    listBarang: {
+      get() {
+        return this.$store.state.report.listBarang;
+      },
+    },
+  },
+  data() {
+    return {
+      quantityEdit: "",
+      nilaiPabeanHargaPenyerahanEdit: "",
+    };
+  },
   methods: {
-    handleChange(key, value) {
-      this.$emit("handleChangeEdit", key, value);
+    handleChange(value) {
+      // console.log(value);
+      this.$emit("handleChangeEdit", value);
+    },
+    handleChangeOthers(key, value) {
+      this[key] = value;
     },
     async handleSubmit() {
       const payload = {
-        posTarif: this.item.posTarif,
+        idBarang: this.item.idBarang,
+        quantity: this.quantityEdit ? this.quantityEdit : this.quantity,
+        nilaiPabeanHargaPenyerahan: this.nilaiPabeanHargaPenyerahanEdit
+          ? this.nilaiPabeanHargaPenyerahanEdit
+          : this.nilaiPabeanHargaPenyerahan,
+        name: this.item.name,
         uraian: this.item.uraian,
         nettoBrutoVolume: this.item.nettoBrutoVolume,
         satuanKemasan: this.item.satuanKemasan,
-        nilaiPabeanHargaPenyerahan: this.item.nilaiPabeanHargaPenyerahan,
+        posTarif: this.item.posTarif,
         hsCode: this.item.hsCode,
+        stock: this.item.stock,
       };
       const data = {
         payload,

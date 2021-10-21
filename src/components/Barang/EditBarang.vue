@@ -255,7 +255,6 @@ export default {
             this.$refs.formDataBarang.reset();
             this.$emit("handleCloseDialogEditBarang");
           }
-
           this.$store.commit("UPDATE_BARANG", AESDecrypt(result.data.data));
         })
         .catch((error) => {

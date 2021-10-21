@@ -10,7 +10,7 @@
           >
 
           <v-combobox
-            :items="[`Test1`, `Test2`]"
+            :items="[`Pelabuhan Muat 1`, `Pelabuhan Muat 2`]"
             outlined
             label="Pelabuhan Muat"
             v-model="pelabuhanMuat"

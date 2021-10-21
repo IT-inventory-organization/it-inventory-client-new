@@ -17,8 +17,8 @@
               label="Jenis Barang"
               :items="listBarang.data"
               :item-text="(item) => item.name"
-              :item-value="(item) => item"
               v-model="barang"
+              return-object
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Jenis Barang');
@@ -64,6 +64,12 @@
                 (value) => {
                   return genericRequiredRule(value, 'Quantity');
                 },
+                (value) => {
+                  return genericNumberRule(value, 'Quantity');
+                },
+                (value) => {
+                  return genericMinRule(value, 'Quantity');
+                },
               ]"
             >
             </v-text-field>
@@ -104,6 +110,18 @@
               :rules="[
                 (value) => {
                   return genericRequiredRule(
+                    value,
+                    'Nilai Pabean, Harga Penyerahan'
+                  );
+                },
+                (value) => {
+                  return genericNumberRule(
+                    value,
+                    'Nilai Pabean, Harga Penyerahan'
+                  );
+                },
+                (value) => {
+                  return genericMinRule(
                     value,
                     'Nilai Pabean, Harga Penyerahan'
                   );
@@ -180,11 +198,14 @@ export default {
     listBarang() {
       return this.$store.state.report.listBarang;
     },
+    listDataBarang() {
+      return this.$store.state.report.listDataBarang;
+    },
   },
   methods: {
     handleSubmit() {
       const payload = {
-        id: this.barang.id,
+        idBarang: this.barang.idBarang,
         quantity: this.quantity,
         nilaiPabeanHargaPenyerahan: this.nilaiPabeanHargaPenyerahan,
         name: this.barang.name,
@@ -193,9 +214,36 @@ export default {
         satuanKemasan: this.barang.satuanKemasan,
         posTarif: this.barang.posTarif,
         hsCode: this.barang.hsCode,
+        stock: this.barang.stock,
       };
+
       if (this.$refs.formDataBarang.validate()) {
-        this.$store.commit("SET_LIST_DATA_BARANG", payload);
+        const index = this.listDataBarang.findIndex(
+          (data) => data.idBarang === payload.idBarang
+        );
+        if (index != -1) {
+          this.$swal({
+            title: `Data barang ini sudah ada !`,
+            text: `apakah anda ingin mengubah data dengan nama ${payload.name}?`,
+            type: "warning",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#5682ff",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Tidak",
+          }).then((result) => {
+            if (result.value) {
+              const data = {
+                payload,
+                index,
+              };
+              this.$store.commit("UPDATE_DATA_LIST_BARANG", data);
+            }
+          });
+        } else {
+          this.$store.commit("SET_LIST_DATA_BARANG", payload);
+        }
         this.barang = {
           name: "",
           uraian: "",
@@ -204,6 +252,8 @@ export default {
           stock: "",
           posTarif: "",
           hsCode: "",
+          quantity: "",
+          nilaiPabeanHargaPenyerahan: "",
         };
         this.quantity = "";
         this.nilaiPabeanHargaPenyerahan = "";

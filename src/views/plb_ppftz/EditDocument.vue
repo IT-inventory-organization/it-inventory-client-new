@@ -71,7 +71,7 @@
       <!-- Preview -->
       <v-stepper-items>
         <v-stepper-content step="4">
-          <data-preview />
+          <data-preview v-if="step === 4" />
         </v-stepper-content>
       </v-stepper-items>
       <!-- End Preview -->
@@ -122,6 +122,7 @@ export default {
     handleSubmitAll() {
       localStorage.removeItem("current_report_id");
       localStorage.removeItem("stepper");
+      this.$store.commit("RESET_STATE");
       if (this.$route.path.toLowerCase().includes("plb")) {
         this.$router.push("/plb");
       } else if (this.$route.path.toLowerCase().includes("ppftz")) {

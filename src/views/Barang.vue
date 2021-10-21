@@ -48,7 +48,7 @@
 
           <v-list>
             <v-list-item
-              @click.prevent="handleOpenDialogEditBarang(props.item.id)"
+              @click.prevent="handleOpenDialogEditBarang(props.item.idBarang)"
             >
               <v-list-item-title>
                 <v-icon left> mdi-pencil-outline </v-icon>
@@ -56,20 +56,26 @@
               </v-list-item-title>
             </v-list-item>
             <v-list-item
-              @click.prevent="handleOpenDialogUpdateStock(props.item.id)"
+              @click.prevent="handleOpenDialogUpdateStock(props.item.idBarang)"
             >
               <v-list-item-title>
                 <v-icon left> mdi-plus-minus-variant </v-icon>
                 Tambah/Kurangi Stock
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click.prevent="handleHistoryBarang(props.item.id)">
+            <v-list-item
+              @click.prevent="handleHistoryBarang(props.item.idBarang)"
+            >
               <v-list-item-title>
                 <v-icon left> mdi-clock-time-four-outline </v-icon>
                 History
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click.prevent="handleDeleteBarang(props.item.id)">
+            <v-list-item
+              @click.prevent="
+                handleDeleteBarang(props.item.idBarang, props.item.name)
+              "
+            >
               <v-list-item-title>
                 <v-icon left> mdi-trash-can-outline </v-icon>
                 Delete
@@ -210,11 +216,11 @@ export default {
       this.$store.dispatch("fetchHistoryBarang", id);
       this.handleOpenDialogHistory();
     },
-    handleDeleteBarang(id) {
+    handleDeleteBarang(id, name) {
       this.$swal({
-        title: `Konfirmasi`,
+        title: `Konfirmasi Hapus`,
         text: `Apakah 
-        anda yakin untuk menghapus data dengan nomor barang ${id} ?`,
+        anda yakin untuk menghapus data dengan nama barang ${name} ?`,
         type: "warning",
         icon: "question",
         showCancelButton: true,

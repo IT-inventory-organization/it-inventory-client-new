@@ -60,6 +60,17 @@
               "
             >
             </v-text-field>
+            <!-- <v-text-field
+              label="Deskripsi"
+              outlined
+              v-model="deskripsi"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Deskripsi');
+                },
+              ]"
+            >
+            </v-text-field> -->
           </v-col>
         </v-row>
         <v-row no-gutters style="justify-content: flex-end;">
@@ -96,6 +107,17 @@ export default {
         this.$store.commit("SET_UPDATE_STOCK", {
           key: "increase",
           value: Number(value),
+        });
+      },
+    },
+    deskripsi: {
+      get() {
+        return this.$store.state.report.updateStockBarang.deskripsi;
+      },
+      set(value) {
+        this.$store.commit("SET_UPDATE_STOCK", {
+          key: "deskripsi",
+          value: value,
         });
       },
     },

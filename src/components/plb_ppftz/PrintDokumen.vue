@@ -319,6 +319,11 @@ export default {
     return {
       headers: [
         {
+          text: "Nama",
+          value: "Barang.name",
+          sortable: false,
+        },
+        {
           text: "Post Tarif",
           value: "Barang.posTarif",
           sortable: false,
@@ -326,6 +331,11 @@ export default {
         {
           text: "Uraian",
           value: "Barang.uraian",
+          sortable: false,
+        },
+        {
+          text: "Quantity",
+          value: "quantity",
           sortable: false,
         },
         {
