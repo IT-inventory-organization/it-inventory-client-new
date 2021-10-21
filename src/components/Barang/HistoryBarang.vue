@@ -35,8 +35,13 @@
         <v-col cols="11">
           <v-row align="center">
             <v-col cols="8">
-              <v-chip color="#3CB774" class="mr-2" text-color="white">
-                Inventory #{{ history.nomorAjuan }}
+              <v-chip :color="history.nomorAjuan !== null ? '#3CB774' : history.status === 'decrease' ? '#de3d33' : '#3cb774'" class="mr-2" text-color="white">
+                <div v-if="history.nomorAjuan !== null">
+                  Inventory #{{ history.nomorAjuan }}
+                </div>
+                <div v-if="history.nomorAjuan == null">
+                  Updated stock | {{history.status}}
+                </div>
               </v-chip>
               <v-chip
                 :color="
@@ -45,6 +50,7 @@
                     : '#5682FF'
                 "
                 text-color="white"
+                v-if="history.nomorAjuan !== null"
               >
                 {{ history.typeReport }} | {{ history.jenisPemberitahuan }}
               </v-chip>

@@ -137,7 +137,6 @@
 
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
-import { AESDecrypt } from "@/helper/Encryption";
 export default {
   name: "CreateBarang",
   mixins: [FieldRequired],
@@ -240,10 +239,7 @@ export default {
         .dispatch("createBarang")
         .then(async (result) => {
           if (result.data.success) {
-            await this.$store.commit(
-              "SET_BARANG_TO_LIST_BARANG",
-              AESDecrypt(result.data.data)
-            );
+            await this.$store.dispatch("fetchBarang")
             this.$swal.fire("Berhasil membuat barang!", "", "success");
             this.$refs.formDataBarang.reset();
           }

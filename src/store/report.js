@@ -291,7 +291,11 @@ const report = {
 
     // Page PLB/PPFTZ Data Barang
     SET_LIST_DATA_BARANG(state, payload) {
-      state.listDataBarang = [...state.listDataBarang, payload];
+      if (state.listDataBarang.length < 1) {
+        state.listDataBarang.push(payload)
+      } else {
+        state.listDataBarang = [...state.listDataBarang, payload];
+      }
     },
     SET_DATA_BARANG(state, payload) {
       state.dataBarang[payload.key] = payload.value;
@@ -318,6 +322,13 @@ const report = {
       state.listBarang = payload;
     },
     SET_BARANG_TO_LIST_BARANG(state, payload) {
+      if (!state.listBarang.data) {
+        state.listBarang = {
+          data: [],
+          page: 1,
+          page_size: 10
+        }
+      }
       state.listBarang.data = [...state.listBarang.data, payload];
     },
     UPDATE_BARANG(state, payload) {
@@ -1166,7 +1177,7 @@ const report = {
         });
         if (result.data.success) {
           Swal.fire("Success!", result.data.message, "success");
-          context.commit("DELETE_BARANG", id);
+          context.dispatch("fetchBarang");
         }
       } catch (error) {
         console.log(error);
