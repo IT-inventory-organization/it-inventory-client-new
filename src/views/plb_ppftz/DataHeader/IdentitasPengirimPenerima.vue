@@ -86,30 +86,30 @@
       </v-row>
       <!-- Pengirim -->
 
-      <!-- Penerima -->
+      <!-- PPJK -->
       <v-card-title class="it-inventory-card-title it-inventory-card-title__sub"
-        >Penerima</v-card-title
+        >PPJK</v-card-title
       >
       <v-row>
         <v-col lg="6" md="6" sm="12">
           <v-select
             :items="['5 - NPWP - 15 Digits']"
-            label="Jenis Identitas Penerima"
+            label="Jenis Identitas PPJK"
             outlined
-            v-model="jenisIdentitasPenerima"
+            v-model="jenisIdentitasPPJK"
             :rules="[
               (value) => {
-                return genericRequiredRule(value, 'Jenis Identitas Penerima');
+                return genericRequiredRule(value, 'Jenis Identitas PPJK');
               },
             ]"
           ></v-select>
           <v-text-field
-            label="Nama Penerima"
+            label="Nama PPJK"
             outlined
-            v-model="namaPenerima"
+            v-model="namaPPJK"
             :rules="[
               (value) => {
-                return genericRequiredRule(value, 'Nama Penerima');
+                return genericRequiredRule(value, 'Nama PPJK');
               },
             ]"
           >
@@ -118,23 +118,23 @@
 
         <v-col lg="6" md="6" sm="12">
           <v-text-field
-            label="Nomor Identitas Penerima"
+            label="Nomor Identitas PPJK"
             outlined
-            v-model="nomorIdentitasPenerima"
+            v-model="nomorIdentitasPPJK"
             :rules="[
               (value) => {
-                return genericRequiredRule(value, 'Nomor Identitas Penerima');
+                return genericRequiredRule(value, 'Nomor Identitas PPJK');
               },
             ]"
           >
           </v-text-field>
           <v-text-field
-            label="Alamat Penerima"
+            label="Alamat PPJK"
             outlined
-            v-model="alamatPenerima"
+            v-model="alamatPPJK"
             :rules="[
               (value) => {
-                return genericRequiredRule(value, 'Alamat Penerima');
+                return genericRequiredRule(value, 'Alamat PPJK');
               },
             ]"
           >
@@ -142,7 +142,62 @@
         </v-col>
       </v-row>
     </v-form>
+    <!-- PPJK -->
+
     <!-- Penerima -->
+    <v-card-title class="it-inventory-card-title it-inventory-card-title__sub"
+      >Penerima</v-card-title
+    >
+    <v-row>
+      <v-col lg="6" md="6" sm="12">
+        <v-select
+          :items="['1 - Laut']"
+          label="Cara Angkut"
+          outlined
+          v-model="caraAngkut"
+          :rules="[
+            (value) => {
+              return genericRequiredRule(value, 'Cara Angkut');
+            },
+          ]"
+        ></v-select>
+        <v-select
+          :items="['IDN']"
+          label="Bendera"
+          outlined
+          v-model="bendera"
+          :rules="[
+            (value) => {
+              return genericRequiredRule(value, 'Bendera');
+            },
+          ]"
+        ></v-select>
+      </v-col>
+      <v-col lg="6" md="6" sm="12">
+        <v-text-field
+          label="Nama Pengangkut"
+          outlined
+          v-model="namaPengangkut"
+          :rules="[
+            (value) => {
+              return genericRequiredRule(value, 'Nama Pengangkut');
+            },
+          ]"
+        >
+        </v-text-field>
+        <v-text-field
+          label="Nomor Voly Flight Pol"
+          outlined
+          v-model="nomorVoyFlightPol"
+          :rules="[
+            (value) => {
+              return genericRequiredRule(value, 'Nomor Voly Flight Pol');
+            },
+          ]"
+        >
+        </v-text-field>
+      </v-col>
+    </v-row>
   </v-expansion-panel-content>
 </template>
 
@@ -244,54 +299,101 @@ export default {
         });
       },
     },
+    // End Pengirim
+
+    // PPJK
+    jenisIdentitasPPJK: {
+      get() {
+        return this.$store.state.report.identitasPPJK.jenisIdentitasPPJK;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PPJK", {
+          key: "jenisIdentitasPPJK",
+          value,
+        });
+      },
+    },
+    nomorIdentitasPPJK: {
+      get() {
+        return this.$store.state.report.identitasPPJK.nomorIdentitasPPJK;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PPJK", {
+          key: "nomorIdentitasPPJK",
+          value,
+        });
+      },
+    },
+    namaPPJK: {
+      get() {
+        return this.$store.state.report.identitasPPJK.namaPPJK;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PPJK", {
+          key: "namaPPJK",
+          value,
+        });
+      },
+    },
+    alamatPPJK: {
+      get() {
+        return this.$store.state.report.identitasPPJK.alamatPPJK;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_PPJK", {
+          key: "alamatPPJK",
+          value,
+        });
+      },
+    },
+    // END PPJK
 
     // Penerima
-    jenisIdentitasPenerima: {
+    caraAngkut: {
       get() {
-        return this.$store.state.report.identitasPenerima
-          .jenisIdentitasPenerima;
+        return this.$store.state.report.identitasPenerima.caraAngkut;
       },
       set(value) {
         this.$store.commit("SET_IDENTITAS_PENERIMA", {
-          key: "jenisIdentitasPenerima",
+          key: "caraAngkut",
           value,
         });
       },
     },
-    nomorIdentitasPenerima: {
+    namaPengangkut: {
       get() {
-        return this.$store.state.report.identitasPenerima
-          .nomorIdentitasPenerima;
+        return this.$store.state.report.identitasPenerima.namaPengangkut;
       },
       set(value) {
         this.$store.commit("SET_IDENTITAS_PENERIMA", {
-          key: "nomorIdentitasPenerima",
+          key: "namaPengangkut",
           value,
         });
       },
     },
-    namaPenerima: {
+    bendera: {
       get() {
-        return this.$store.state.report.identitasPenerima.namaPenerima;
+        return this.$store.state.report.identitasPenerima.bendera;
       },
       set(value) {
         this.$store.commit("SET_IDENTITAS_PENERIMA", {
-          key: "namaPenerima",
+          key: "bendera",
           value,
         });
       },
     },
-    alamatPenerima: {
+    nomorVoyFlightPol: {
       get() {
-        return this.$store.state.report.identitasPenerima.alamatPenerima;
+        return this.$store.state.report.identitasPenerima.nomorVoyFlightPol;
       },
       set(value) {
         this.$store.commit("SET_IDENTITAS_PENERIMA", {
-          key: "alamatPenerima",
+          key: "nomorVoyFlightPol",
           value,
         });
       },
     },
+    // End Penerima
   },
   methods: {
     handleValidate() {

@@ -54,11 +54,17 @@ const report = {
       nomorIjinBpkPengirim: "",
       tanggalIjinBpkPengirim: "",
     },
+    identitasPPJK: {
+      jenisIdentitasPPJK: "",
+      nomorIdentitasPPJK: "",
+      namaPPJK: "",
+      alamatPPJK: "",
+    },
     identitasPenerima: {
-      jenisIdentitasPenerima: "5 - NPWP - 15 Digits",
-      nomorIdentitasPenerima: "",
-      namaPenerima: "",
-      alamatPenerima: "",
+      caraAngkut: "",
+      namaPengangkut: "",
+      bendera: "",
+      nomorVoyFlightPol: "",
     },
     transaksiPerdagangan: {
       transaksi: "",
@@ -236,6 +242,9 @@ const report = {
         state.identitasPengirim[payload.key] = payload.value;
       }
     },
+    SET_IDENTITAS_PPJK(state, payload) {
+      state.identitasPPJK[payload.key] = payload.value;
+    },
     SET_IDENTITAS_PENERIMA(state, payload) {
       state.identitasPenerima[payload.key] = payload.value;
     },
@@ -292,7 +301,7 @@ const report = {
     // Page PLB/PPFTZ Data Barang
     SET_LIST_DATA_BARANG(state, payload) {
       if (state.listDataBarang.length < 1) {
-        state.listDataBarang.push(payload)
+        state.listDataBarang.push(payload);
       } else {
         state.listDataBarang = [...state.listDataBarang, payload];
       }
@@ -326,8 +335,8 @@ const report = {
         state.listBarang = {
           data: [],
           page: 1,
-          page_size: 10
-        }
+          page_size: 10,
+        };
       }
       state.listBarang.data = [...state.listBarang.data, payload];
     },
@@ -641,6 +650,7 @@ const report = {
             key: "identitasPenerima",
             value: reportIdentitasPenerima,
           });
+          // ----- ADD PPJK --------
           context.commit("SET_STATE_GLOBAL", {
             key: "identitasPengirim",
             value: IdentitasPengirim,
@@ -777,6 +787,7 @@ const report = {
         reportId,
         dataPengajuan,
         identitasPenerima,
+        identitasPPJK,
         identitasPengirim,
         transaksiPerdagangan,
         dataPengangkutan,
@@ -799,6 +810,7 @@ const report = {
             reportId,
             dataPengajuan,
             identitasPenerima,
+            identitasPPJK,
             identitasPengirim,
             transaksiPerdagangan,
             dataPengangkutan,
