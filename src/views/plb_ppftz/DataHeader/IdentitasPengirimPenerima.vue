@@ -154,7 +154,7 @@
           :items="['1 - Laut']"
           label="Cara Angkut"
           outlined
-          v-model="caraAngkut"
+          v-model="caraAngkutPenerima"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Cara Angkut');
@@ -165,7 +165,7 @@
           :items="['IDN']"
           label="Bendera"
           outlined
-          v-model="bendera"
+          v-model="benderaPenerima"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Bendera');
@@ -177,7 +177,7 @@
         <v-text-field
           label="Nama Pengangkut"
           outlined
-          v-model="namaPengangkut"
+          v-model="namaPengangkutPenerima"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Nama Pengangkut');
@@ -188,7 +188,7 @@
         <v-text-field
           label="Nomor Voly Flight Pol"
           outlined
-          v-model="nomorVoyFlightPol"
+          v-model="nomorVoyFlightPolPenerima"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Nomor Voly Flight Pol');
@@ -349,46 +349,48 @@ export default {
     // END PPJK
 
     // Penerima
-    caraAngkut: {
+    caraAngkutPenerima: {
       get() {
-        return this.$store.state.report.identitasPenerima.caraAngkut;
+        return this.$store.state.report.identitasPenerima.caraAngkutPenerima;
       },
       set(value) {
         this.$store.commit("SET_IDENTITAS_PENERIMA", {
-          key: "caraAngkut",
+          key: "caraAngkutPenerima",
           value,
         });
       },
     },
-    namaPengangkut: {
+    namaPengangkutPenerima: {
       get() {
-        return this.$store.state.report.identitasPenerima.namaPengangkut;
+        return this.$store.state.report.identitasPenerima
+          .namaPengangkutPenerima;
       },
       set(value) {
         this.$store.commit("SET_IDENTITAS_PENERIMA", {
-          key: "namaPengangkut",
+          key: "namaPengangkutPenerima",
           value,
         });
       },
     },
-    bendera: {
+    benderaPenerima: {
       get() {
-        return this.$store.state.report.identitasPenerima.bendera;
+        return this.$store.state.report.identitasPenerima.benderaPenerima;
       },
       set(value) {
         this.$store.commit("SET_IDENTITAS_PENERIMA", {
-          key: "bendera",
+          key: "benderaPenerima",
           value,
         });
       },
     },
-    nomorVoyFlightPol: {
+    nomorVoyFlightPolPenerima: {
       get() {
-        return this.$store.state.report.identitasPenerima.nomorVoyFlightPol;
+        return this.$store.state.report.identitasPenerima
+          .nomorVoyFlightPolPenerima;
       },
       set(value) {
         this.$store.commit("SET_IDENTITAS_PENERIMA", {
-          key: "nomorVoyFlightPol",
+          key: "nomorVoyFlightPolPenerima",
           value,
         });
       },

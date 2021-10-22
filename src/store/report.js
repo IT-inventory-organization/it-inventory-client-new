@@ -61,10 +61,10 @@ const report = {
       alamatPPJK: "",
     },
     identitasPenerima: {
-      caraAngkut: "",
-      namaPengangkut: "",
-      bendera: "",
-      nomorVoyFlightPol: "",
+      caraAngkutPenerima: "",
+      namaPengangkutPenerima: "",
+      benderaPenerima: "",
+      nomorVoyFlightPolPenerima: "",
     },
     transaksiPerdagangan: {
       transaksi: "",
