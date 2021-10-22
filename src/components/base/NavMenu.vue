@@ -34,11 +34,11 @@ export default {
         path: "/plb",
         icon: "akar-icons:file",
       },
-      {
-        name: "PPFTZ",
-        path: "/ppftz",
-        icon: "akar-icons:file",
-      },
+      // {
+      //   name: "PPFTZ",
+      //   path: "/ppftz",
+      //   icon: "akar-icons:file",
+      // },
       {
         name: "Data Barang",
         path: "/databarang",
