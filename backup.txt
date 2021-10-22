@@ -1,0 +1,150 @@
+<v-btn fill class="it_inven_create_btn">Create New</v-btn>
+
+
+
+{
+    "reportId": "1",
+    "dataDokumen": {
+        "tableDokumen": [
+            {
+                "kodeDokumen": "55154-2415",
+                "nomorDokumen": "08-239-6154",
+                "tanggalDokumen": "10-04-2016"
+            }, {
+                "kodeDokumen": "0573-2883",
+                "nomorDokumen": "94-838-5275",
+                "tanggalDokumen": "19-03-2021"
+            }, {
+                "kodeDokumen": "42254-164",
+                "nomorDokumen": "03-753-9138",
+                "tanggalDokumen": "07-05-2017"
+            }, {
+                "kodeDokumen": "41268-461",
+                "nomorDokumen": "00-020-6425",
+                "tanggalDokumen": "15-10-2012"
+            }, {
+                "kodeDokumen": "55111-661",
+                "nomorDokumen": "79-060-0347",
+                "tanggalDokumen": "10-08-2019"
+            }, {
+                "kodeDokumen": "11822-0067",
+                "nomorDokumen": "65-508-0719",
+                "tanggalDokumen": "06-04-2020"
+            }
+        ]
+    },
+    "dataPetiKemas": {
+        "dataKontainer": "Kontainer FGH",
+        "volumeKontainer": 9999.99
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<v-row>
+          <v-col lg="6" md="6" sm="12">
+            <v-text-field
+              label="Pos Tarif"
+              outlined
+              v-model="item.posTarif"
+              @change="handleChange('posTarif', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Pos Tarif');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col lg="6" md="6" sm="12">
+            <v-text-field
+              label="Hs Code"
+              outlined
+              v-model="item.hsCode"
+              @change="handleChange('hsCode', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Hs Code');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-textarea
+              name="uraian"
+              label="Uraian"
+              v-model="item.uraian"
+              @change="handleChange('uraian', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Uraian');
+                },
+              ]"
+              outlined
+            ></v-textarea>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col lg="4" md="4" sm="12">
+            <v-text-field
+              label="Netto, Bruto, Volume"
+              outlined
+              v-model="item.nettoBrutoVolume"
+              @change="handleChange('nettoBrutoVolume', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Netto, Bruto, Volume');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col lg="4" md="4" sm="12">
+            <v-text-field
+              label="Satuan Kemasan"
+              outlined
+              v-model="item.satuanKemasan"
+              @change="handleChange('satuanKemasan', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Satuan Kemasan');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col lg="4" md="4" sm="12">
+            <v-text-field
+              label="Nilai Pabean, Harga Penyerahan"
+              outlined
+              v-model="item.nilaiPabeanHargaPenyerahan"
+              @change="handleChange('nilaiPabeanHargaPenyerahan', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(
+                    value,
+                    'Nilai Pabean, Harga Penyerahan'
+                  );
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+        </v-row>

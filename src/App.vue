@@ -1,67 +1,52 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-        <v-text-field outlined />
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+  <div>
+    <v-app v-if="token">
+      <core-app-bar></core-app-bar>
 
-      <v-spacer></v-spacer>
+      <v-main>
+        <v-container fluid class="it-inventory-container">
+          <router-view />
+        </v-container>
+      </v-main>
+    </v-app>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-   
-    <v-main>
-      <router-view/>
-    </v-main>
-  </v-app>
+    <v-app v-if="!token">
+      <v-main>
+        <router-view />
+      </v-main>
+    </v-app>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
+  name: "App",
+  components: {
+    CoreAppBar: () => import("@/components/base/AppBar"),
+  },
   computed: {
+    token() {
+      return this.$store.state.user.token;
+    },
   },
-  data () {
-    return {
-      
-    }
+  data() {
+    return {};
   },
-  methods: {
-  },
+  methods: {},
   created() {
-    if(localStorage.getItem("token")) {
+    const token = localStorage.getItem("token_it_inventory");
+    if (!token) {
+      // eslint-disable-next-line no-unused-vars
       this.$router.push("/login")
     }
-  }
+
+    if (token) {
+      this.$store.commit("SET_TOKEN", token);
+    }
+  },
 };
 </script>
-<style>
-  
+<style lang="scss">
+@import "./assets/styles/index.scss";
+@import "./assets/styles/card.scss";
 </style>

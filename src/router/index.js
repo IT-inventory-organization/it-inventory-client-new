@@ -1,29 +1,90 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Dashboard from "@/views/Dashboard";
+import PLB from "@/views/PLB";
+import PPFTZ from "@/views/PPFTZ";
+import CreateDocument from "@/views/plb_ppftz/CreateDocument";
+import EditDocument from "@/views/plb_ppftz/EditDocument";
+import TableInventory from "@/views/plb_ppftz/TableInventory";
+import Login from "@/views/Login";
+import Barang from "@/views/Barang";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    
+    path: "/",
+    redirect: { name: "Dashboard" },
   },
   {
-    path: '/login',
-    name: 'login',
-    
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
-    path: '/register',
-    name: 'register',
+    path: "/plb",
+    component: PLB,
+    meta: {
+      requiresAuth: true,
+    },
+    children: [
+      {
+        path: "",
+        name: "PLB",
+        component: TableInventory,
+      },
+      {
+        path: "add",
+        name: "PLBCreateDocument",
+        component: CreateDocument,
+      },
+      {
+        path: "edit",
+        name: "PLBEditDocument",
+        component: EditDocument,
+      },
+    ],
   },
-]
+  {
+    path: "/ppftz",
+    component: PPFTZ,
+    children: [
+      {
+        path: "",
+        name: "PPFTZ",
+        component: TableInventory,
+      },
+      {
+        path: "add",
+        name: "PPFTZCreateDocument",
+        component: CreateDocument,
+      },
+      {
+        path: "edit",
+        name: "PPFTZEditDocument",
+        component: EditDocument,
+      },
+    ],
+  },
+  {
+    path: "/databarang",
+    name: "databarang",
+    component: Barang,
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
