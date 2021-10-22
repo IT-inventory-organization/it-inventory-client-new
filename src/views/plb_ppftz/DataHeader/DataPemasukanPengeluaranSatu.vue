@@ -8,7 +8,6 @@
       <v-row>
         <v-col lg="6" md="6" sm="12">
           <v-select
-            clearable
             :items="['14 - Transaksi']"
             label="Transaksi"
             outlined
@@ -91,7 +90,6 @@
           >
           </v-text-field>
           <v-select
-            clearable
             :items="['Ya', 'Tidak']"
             label="Voluntary Declaration"
             outlined
@@ -130,7 +128,6 @@
       <v-row>
         <v-col lg="6" md="6" sm="12">
           <v-select
-            clearable
             :items="['1 - Laut']"
             label="Cara Angkut"
             outlined
@@ -142,7 +139,6 @@
             ]"
           ></v-select>
           <v-select
-            clearable
             :items="['IDN']"
             label="Bendera"
             outlined

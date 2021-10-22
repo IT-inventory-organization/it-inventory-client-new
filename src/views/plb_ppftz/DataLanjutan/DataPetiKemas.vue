@@ -3,10 +3,9 @@
     <v-row>
       <v-col lg="6" md="6" sm="12">
         <v-select
-          clearable
           v-model="dataKontainer"
           label="Data Kontainer"
-          :items="['LCL', 'Test 2']"
+          :items="['LCL', 'Data Kontainer 2']"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Data Kontainer');

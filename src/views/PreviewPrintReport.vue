@@ -8,7 +8,7 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <v-row no-gutters class="mt-2" align="center" justify="space-between">
+      <v-row no-gutters class="my-2" align="center" justify="space-between">
         <div class="title" style="color: black">Preview</div>
         <div>
           <v-btn
@@ -22,14 +22,18 @@
           </v-btn>
         </div>
       </v-row>
-      <div class="preview-container">
+      <v-row no-gutters>
         <v-progress-linear
           v-if="previewIsLoading"
           indeterminate
-          rounded
-          height="6"
+          color="blue"
         ></v-progress-linear>
-        <print-dokumen id="printdokumen" v-if="!previewIsLoading" />
+      </v-row>
+      <div class="preview-container">
+        <print-dokumen
+          id="printdokumen"
+          v-if="!previewIsLoading && preview !== null"
+        />
       </div>
     </v-card-text>
   </v-card>
@@ -44,6 +48,9 @@ export default {
   computed: {
     reportIdPreview() {
       return this.$store.state.report.reportIdPreview;
+    },
+    preview() {
+      return this.$store.state.report.preview;
     },
     previewIsLoading() {
       return this.$store.state.report.previewIsLoading;

@@ -71,7 +71,7 @@
       <!-- Preview -->
       <v-stepper-items>
         <v-stepper-content step="4">
-          <data-preview />
+          <data-preview v-if="step === 4" />
         </v-stepper-content>
       </v-stepper-items>
       <!-- End Preview -->
@@ -87,7 +87,8 @@ export default {
     FormDataHeader: () => import("@/views/plb_ppftz/DataHeader/FormDataHeader"),
     FormDataLanjutan: () =>
       import("@/views/plb_ppftz/DataLanjutan/FormDataLanjutan"),
-    FormDataBarang: () => import("@/views/plb_ppftz/DataBarang/TableBarang"),
+    FormDataBarang: () =>
+      import("@/views/plb_ppftz/ListDataBarang/TableBarang"),
     DataPreview: () => import("@/views/plb_ppftz/DataPreview/DataPreview"),
   },
   data() {
@@ -111,6 +112,7 @@ export default {
     if (localStorage.getItem("stepper")) {
       this.step = +localStorage.getItem("stepper");
     }
+    this.$store.dispatch("getOneReport");
   },
   methods: {
     handleSubmitStepper() {
@@ -118,8 +120,9 @@ export default {
       localStorage.setItem("stepper", +this.step);
     },
     handleSubmitAll() {
-      localStorage.removeItem("current_report_id")
-      localStorage.removeItem('stepper')
+      localStorage.removeItem("current_report_id");
+      localStorage.removeItem("stepper");
+      this.$store.commit("RESET_STATE");
       if (this.$route.path.toLowerCase().includes("plb")) {
         this.$router.push("/plb");
       } else if (this.$route.path.toLowerCase().includes("ppftz")) {

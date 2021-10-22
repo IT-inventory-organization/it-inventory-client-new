@@ -10,11 +10,10 @@
           >
 
           <v-combobox
-            :items="[`Test1`, `Test2`]"
+            :items="[`Pelabuhan Muat 1`, `Pelabuhan Muat 2`]"
             outlined
             label="Pelabuhan Muat"
             v-model="pelabuhanMuat"
-            clearable
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Pelabuhan Muat');
@@ -184,9 +183,8 @@
             >Data Tempat Penimbunan</v-card-title
           >
           <v-combobox
-            :items="[`Test1`, `Test2`]"
+            :items="[`Tempat Penimbunan 1`, `Tempat Penimbunan 2`]"
             outlined
-            clearable
             label="Tempat Penimbunan"
             v-model="tempatPenimbunan"
             :rules="[
@@ -207,7 +205,6 @@
             outlined
             label="Data Lartas Barang"
             v-model="name"
-            clearable
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Data Lartas Barang');

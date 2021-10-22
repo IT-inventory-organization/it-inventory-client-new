@@ -59,6 +59,12 @@
                 View
               </v-list-item-title>
             </v-list-item>
+            <v-list-item @click="handlePreviewXML(item.nomorAjuan)">
+              <v-list-item-title>
+                <v-icon left> mdi-format-list-bulleted </v-icon>
+                View XML
+              </v-list-item-title>
+            </v-list-item>
             <v-list-item
               v-if="item.edit"
               @click="handleEditModal(item.nomorAjuan)"
@@ -99,6 +105,9 @@
     <v-dialog v-model="dialogPreview" persistent width="1400px">
       <preview-print-report @handleCloseDialog="handleCloseDialogPreview" />
     </v-dialog>
+    <v-dialog v-model="dialogXML" persistent width="1400px">
+      <preview-xml @handleCloseDialog="handleCloseDialogXML" />
+    </v-dialog>
   </div>
 </template>
 
@@ -111,6 +120,7 @@ export default {
     CreateNewModal: () => import("@/components/plb_ppftz/CreateNewModal"),
     EditModal: () => import("@/components/plb_ppftz/EditModal"),
     PreviewPrintReport: () => import("@/views/PreviewPrintReport"),
+    PreviewXml: () => import("@/views/PreviewXML"),
   },
   data() {
     return {
@@ -118,6 +128,7 @@ export default {
       page: "",
       dialog: false,
       dialogPreview: false,
+      dialogXML: false,
       editedId: null,
       editDialog: false,
       headers: [
@@ -176,11 +187,25 @@ export default {
       this.$store.commit("SET_REPORT_ID_PREVIEW", reportId);
       this.$store.dispatch("previewReport");
     },
+
+    handlePreviewXML(reportId) {
+      this.dialogXML = true;
+      this.$store.commit("SET_REPORT_ID_PREVIEW", reportId);
+      this.$store.dispatch("previewXML");
+    },
+
     async handleCloseDialogPreview() {
       this.dialogPreview = false;
       await this.$store.commit("RESET_PREVIEW");
-      await this.$store.commit("RESET_REPORT_ID");
+      await this.$store.commit("RESET_REPORT_ID_PREVIEW");
     },
+
+    async handleCloseDialogXML() {
+      this.dialogXML = false;
+      await this.$store.commit("RESET_PREVIEW_XML");
+      await this.$store.commit("RESET_REPORT_ID_PREVIEW");
+    },
+
     handleModal() {
       this.dialog = !this.dialog;
     },

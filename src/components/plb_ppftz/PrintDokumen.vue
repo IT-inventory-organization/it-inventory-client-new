@@ -319,23 +319,33 @@ export default {
     return {
       headers: [
         {
+          text: "Nama",
+          value: "Barang.name",
+          sortable: false,
+        },
+        {
           text: "Post Tarif",
-          value: "posTarif",
+          value: "Barang.posTarif",
           sortable: false,
         },
         {
           text: "Uraian",
-          value: "uraian",
+          value: "Barang.uraian",
+          sortable: false,
+        },
+        {
+          text: "Quantity",
+          value: "quantity",
           sortable: false,
         },
         {
           text: "Neto, Bruto, Volume",
-          value: "nettoBrutoVolume",
+          value: "Barang.nettoBrutoVolume",
           sortable: false,
         },
         {
           text: "Satuan Kemasan",
-          value: "satuanKemasan",
+          value: "Barang.satuanKemasan",
           sortable: false,
         },
         {
@@ -345,7 +355,7 @@ export default {
         },
         {
           text: "Hs Code",
-          value: "hsCode",
+          value: "Barang.hsCode",
           sortable: false,
         },
       ],

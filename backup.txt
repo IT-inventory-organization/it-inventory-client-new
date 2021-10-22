@@ -39,3 +39,112 @@
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<v-row>
+          <v-col lg="6" md="6" sm="12">
+            <v-text-field
+              label="Pos Tarif"
+              outlined
+              v-model="item.posTarif"
+              @change="handleChange('posTarif', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Pos Tarif');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col lg="6" md="6" sm="12">
+            <v-text-field
+              label="Hs Code"
+              outlined
+              v-model="item.hsCode"
+              @change="handleChange('hsCode', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Hs Code');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-textarea
+              name="uraian"
+              label="Uraian"
+              v-model="item.uraian"
+              @change="handleChange('uraian', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Uraian');
+                },
+              ]"
+              outlined
+            ></v-textarea>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col lg="4" md="4" sm="12">
+            <v-text-field
+              label="Netto, Bruto, Volume"
+              outlined
+              v-model="item.nettoBrutoVolume"
+              @change="handleChange('nettoBrutoVolume', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Netto, Bruto, Volume');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col lg="4" md="4" sm="12">
+            <v-text-field
+              label="Satuan Kemasan"
+              outlined
+              v-model="item.satuanKemasan"
+              @change="handleChange('satuanKemasan', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(value, 'Satuan Kemasan');
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col lg="4" md="4" sm="12">
+            <v-text-field
+              label="Nilai Pabean, Harga Penyerahan"
+              outlined
+              v-model="item.nilaiPabeanHargaPenyerahan"
+              @change="handleChange('nilaiPabeanHargaPenyerahan', $event)"
+              :rules="[
+                (value) => {
+                  return genericRequiredRule(
+                    value,
+                    'Nilai Pabean, Harga Penyerahan'
+                  );
+                },
+              ]"
+            >
+            </v-text-field>
+          </v-col>
+        </v-row>

@@ -71,7 +71,7 @@
       <!-- Preview -->
       <v-stepper-items>
         <v-stepper-content step="4">
-          <data-preview />
+          <data-preview v-if="step === 4" />
         </v-stepper-content>
       </v-stepper-items>
       <!-- End Preview -->
@@ -87,7 +87,8 @@ export default {
     FormDataHeader: () => import("@/views/plb_ppftz/DataHeader/FormDataHeader"),
     FormDataLanjutan: () =>
       import("@/views/plb_ppftz/DataLanjutan/FormDataLanjutan"),
-    FormDataBarang: () => import("@/views/plb_ppftz/DataBarang/TableBarang"),
+    FormDataBarang: () =>
+      import("@/views/plb_ppftz/ListDataBarang/TableBarang"),
     DataPreview: () => import("@/views/plb_ppftz/DataPreview/DataPreview"),
   },
   data() {
@@ -118,8 +119,9 @@ export default {
       localStorage.setItem("stepper", +this.step);
     },
     handleSubmitAll() {
-      localStorage.removeItem("current_report_id")
-      localStorage.removeItem('stepper')
+      localStorage.removeItem("current_report_id");
+      localStorage.removeItem("stepper");
+      this.$store.commit("RESET_STATE");
       if (this.page === "PLB") {
         this.$router.push("/plb");
       } else if (this.page === "PPFTZ") {

@@ -12,7 +12,6 @@
       <v-form ref="initialReport" @submit.prevent="handleSubmit">
         <v-container>
           <v-select
-            clearable
             label="Pengajuan Sebagai"
             v-model="pengajuanSebagai"
             :items="['Importir', 'Exportir']"
@@ -24,7 +23,6 @@
             outlined
           ></v-select>
           <v-select
-            clearable
             label="Diajukan Dikantor"
             :items="['Kantor 1', 'Kantor 2']"
             v-model="kantorPengajuan"
@@ -36,7 +34,6 @@
             outlined
           ></v-select>
           <v-select
-            clearable
             label="Jenis Pemberitahuan"
             :items="['Import', 'Export']"
             v-model="jenisPemberitahuan"
@@ -48,7 +45,6 @@
             outlined
           ></v-select>
           <v-select
-            clearable
             label="Jenis Dokumen BC"
             v-model="BCDocumentType"
             :items="dokumenBC"

@@ -1,6 +1,15 @@
 <template>
-  <div class="preview-container">
-    <preview-dokumen />
+  <div>
+    <v-row no-gutters>
+      <v-progress-linear
+        v-if="loadingGetOne"
+        indeterminate
+        color="blue"
+      ></v-progress-linear>
+    </v-row>
+    <div class="preview-container">
+      <preview-dokumen />
+    </div>
   </div>
 </template>
 
@@ -9,6 +18,11 @@ export default {
   name: "DataPreview",
   components: {
     PreviewDokumen: () => import("@/components/plb_ppftz/PreviewDokumen"),
+  },
+  computed: {
+    loadingGetOne() {
+      return this.$store.state.report.loading.getOne;
+    },
   },
 };
 </script>
