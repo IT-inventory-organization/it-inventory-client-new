@@ -80,9 +80,12 @@
 }
 
 .preview-simple-table {
-  & tr th,
-  & tr td {
-    font-size: 0.9rem !important;
-    font-family: "Arial", sans-serif !important;
+  ::v-deep {
+    & tr th,
+    & tr td {
+      color: #1a1a1a !important;
+      font-size: 0.8rem !important;
+      font-family: "Arial", sans-serif !important;
+    }
   }
 }
