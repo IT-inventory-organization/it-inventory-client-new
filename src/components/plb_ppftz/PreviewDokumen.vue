@@ -2,7 +2,7 @@
   <div v-if="!loadingGetOne && preview !== null" class="preview-card">
     <!-- Judul -->
     <div id="nomor-dokumen">
-      <h1 class="preview-title">Inventory #{{ preview.id }}</h1>
+      <h1 class="preview-title">Inventory #{{ preview.nomorAjuan }}</h1>
       <v-divider class="preview-divider"></v-divider>
     </div>
     <!-- End Judul -->
@@ -95,15 +95,13 @@
               <span>{{ preview.DataPengajuan.tujuanPengeluaran }}</span>
             </div>
             <div class="preview-text__field">
-              <div>Penerima</div>
-              <span>{{ preview.reportIdentitasPenerima.namaPenerima }}</span>
+              <div>PPJK</div>
+              <span>{{ preview.reportIdentitasPPJK.namaPPJK }}</span>
               <span
                 >{{ "NPWP" }} -
-                {{
-                  preview.reportIdentitasPenerima.nomorIdentitasPenerima
-                }}</span
+                {{ preview.reportIdentitasPPJK.nomorIdentitasPPJK }}</span
               >
-              <span>{{ preview.reportIdentitasPenerima.alamatPenerima }}</span>
+              <span>{{ preview.reportIdentitasPPJK.alamatPPJK }}</span>
             </div>
           </v-col>
           <v-col cols="4">
@@ -114,6 +112,17 @@
             <div class="preview-text__field">
               <div>Cara Pembayaran</div>
               <span>{{ preview.DataPengajuan.caraPembayaran }}</span>
+            </div>
+            <div class="preview-text__field">
+              <div>Penerima</div>
+              <span>{{ preview.IdentitasPenerima.caraAngkutPenerima }}</span>
+              <span>{{
+                preview.IdentitasPenerima.namaPengangkutPenerima
+              }}</span>
+              <span>{{ preview.IdentitasPenerima.benderaPenerima }}</span>
+              <span>{{
+                preview.IdentitasPenerima.nomorVoyFlightPolPenerima
+              }}</span>
             </div>
           </v-col>
         </v-row>
@@ -155,6 +164,14 @@
                   {{ preview.DataPetiKemasDanPengema.jumlahJenisBarang }}
                 </td>
               </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>Data Container</td>
+                <td>{{ preview.DataPetiKema.dataKontainer }}</td>
+              </tr>
             </table>
           </v-col>
           <v-col cols="6">
@@ -171,6 +188,14 @@
               <tr>
                 <td>Volume (M3)</td>
                 <td>{{ preview.DataBeratDanVolume.volume }}</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>Volume Container</td>
+                <td>{{ preview.DataPetiKema.volumeKontainer }}</td>
               </tr>
             </table>
           </v-col>

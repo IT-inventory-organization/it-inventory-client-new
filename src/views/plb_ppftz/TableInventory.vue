@@ -53,31 +53,31 @@
           </template>
 
           <v-list>
-            <v-list-item @click="handlePreview(item.nomorAjuan)">
+            <v-list-item @click="handlePreview(item.id)">
               <v-list-item-title>
                 <v-icon left> mdi-format-list-bulleted </v-icon>
                 View
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="handlePreviewXML(item.nomorAjuan)">
+            <v-list-item @click="handlePreviewXML(item.id)">
               <v-list-item-title>
                 <v-icon left> mdi-format-list-bulleted </v-icon>
                 View XML
               </v-list-item-title>
             </v-list-item>
-            <v-list-item
-              v-if="item.edit"
-              @click="handleEditModal(item.nomorAjuan)"
-            >
+            <v-list-item @click="handleCopyReport(item.id)">
+              <v-list-item-title>
+                <v-icon left> mdi-content-copy </v-icon>
+                Copy
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="item.edit" @click="handleEditModal(item.id)">
               <v-list-item-title>
                 <v-icon left>mdi-pencil-outline</v-icon>
                 Edit
               </v-list-item-title>
             </v-list-item>
-            <v-list-item
-              v-if="item.edit"
-              @click="handleDelete(item.nomorAjuan)"
-            >
+            <v-list-item v-if="item.edit" @click="handleDelete(item.id)">
               <v-list-item-title>
                 <v-icon left>mdi-trash-can-outline</v-icon>
                 Delete
@@ -220,6 +220,11 @@ export default {
         this.$store.dispatch("getOneReport");
         this.editedId = id;
       }
+    },
+    handleCopyReport(id) {
+      console.log(id);
+      // this.$store.commit("SET_REPORT_ID", id);
+      this.$store.dispatch("copyReport", id);
     },
     handleDelete(id) {
       this.$swal({

@@ -175,6 +175,7 @@ const report = {
       loadingHistoryBarang: false,
       getOneBarang: false,
       deleteOneBarang: false,
+      loadingCopyReport: false,
     },
     previewXML: "",
   },
@@ -624,10 +625,12 @@ const report = {
             jenisPemberitahuan: decrypt.jenisPemberitahuan,
             BCDocumentType: decrypt.BCDocumentType,
           };
+          console.log(decrypt);
           context.commit("SET_REPORT", tempReport);
           const {
             DataPengajuan,
-            reportIdentitasPenerima,
+            IdentitasPenerima,
+            reportIdentitasPPJK,
             IdentitasPengirim,
             TransaksiPerdagangan,
             DataPengangkutan,
@@ -648,9 +651,12 @@ const report = {
           });
           context.commit("SET_STATE_GLOBAL", {
             key: "identitasPenerima",
-            value: reportIdentitasPenerima,
+            value: IdentitasPenerima,
           });
-          // ----- ADD PPJK --------
+          context.commit("SET_STATE_GLOBAL", {
+            key: "identitasPPJK",
+            value: reportIdentitasPPJK,
+          });
           context.commit("SET_STATE_GLOBAL", {
             key: "identitasPengirim",
             value: IdentitasPengirim,
@@ -702,6 +708,31 @@ const report = {
         console.log(error);
       } finally {
         context.commit("SET_LOADING", { key: "getOne", value: false });
+      }
+    },
+
+    async copyReport(context, id) {
+      context.commit("SET_LOADING", { key: "loadingCopyReport", value: true });
+      try {
+        let result = await axios({
+          url: baseUrl + "/report/duplicate/" + id,
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if (result.data.success) {
+          Swal.fire("Success!", result.data.message, "success");
+          context.dispatch("fetchAllReport");
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        context.commit("SET_LOADING", {
+          key: "loadingCopyReport",
+          value: false,
+        });
       }
     },
 
@@ -889,6 +920,7 @@ const report = {
         reportId,
         dataPengajuan,
         identitasPenerima,
+        identitasPPJK,
         identitasPengirim,
         transaksiPerdagangan,
         dataPengangkutan,
@@ -910,6 +942,7 @@ const report = {
           dataHeader: AESEncrypt({
             reportId,
             dataPengajuan,
+            identitasPPJK,
             identitasPenerima,
             identitasPengirim,
             transaksiPerdagangan,

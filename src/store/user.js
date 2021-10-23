@@ -73,7 +73,6 @@ const user = {
       });
 
       if (result.data.success) {
-        console.log("trigger");
         context.commit("SET_DATA_USER", AESDecrypt(result.data.data));
       }
     },
