@@ -1,8 +1,11 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="reportInventoryMerah"
+    :items="reportInventoryMerah.data"
     :options.sync="optionsTableMerah"
+    :server-items-length="reportInventoryMerah.data_size"
+    no-data-text="Data not available"
+    no-results-text="Data not available"
     class="it-inventory-simple-table"
   >
     <template v-slot:[`item.status`]="{ item }">

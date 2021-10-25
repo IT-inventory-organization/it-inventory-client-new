@@ -54,11 +54,17 @@ const report = {
       nomorIjinBpkPengirim: "",
       tanggalIjinBpkPengirim: "",
     },
+    identitasPPJK: {
+      jenisIdentitasPPJK: "",
+      nomorIdentitasPPJK: "",
+      namaPPJK: "",
+      alamatPPJK: "",
+    },
     identitasPenerima: {
-      jenisIdentitasPenerima: "5 - NPWP - 15 Digits",
-      nomorIdentitasPenerima: "",
-      namaPenerima: "",
-      alamatPenerima: "",
+      caraAngkutPenerima: "",
+      namaPengangkutPenerima: "",
+      benderaPenerima: "",
+      nomorVoyFlightPolPenerima: "",
     },
     transaksiPerdagangan: {
       transaksi: "",
@@ -169,6 +175,7 @@ const report = {
       loadingHistoryBarang: false,
       getOneBarang: false,
       deleteOneBarang: false,
+      loadingCopyReport: false,
     },
     previewXML: "",
   },
@@ -236,6 +243,9 @@ const report = {
         state.identitasPengirim[payload.key] = payload.value;
       }
     },
+    SET_IDENTITAS_PPJK(state, payload) {
+      state.identitasPPJK[payload.key] = payload.value;
+    },
     SET_IDENTITAS_PENERIMA(state, payload) {
       state.identitasPenerima[payload.key] = payload.value;
     },
@@ -292,7 +302,7 @@ const report = {
     // Page PLB/PPFTZ Data Barang
     SET_LIST_DATA_BARANG(state, payload) {
       if (state.listDataBarang.length < 1) {
-        state.listDataBarang.push(payload)
+        state.listDataBarang.push(payload);
       } else {
         state.listDataBarang = [...state.listDataBarang, payload];
       }
@@ -326,8 +336,8 @@ const report = {
         state.listBarang = {
           data: [],
           page: 1,
-          page_size: 10
-        }
+          page_size: 10,
+        };
       }
       state.listBarang.data = [...state.listBarang.data, payload];
     },
@@ -420,7 +430,7 @@ const report = {
       state.loading[payload.key] = payload.value;
     },
     DELETE_REPORT(state, id) {
-      const index = state.reports.data.findIndex((ele) => ele.nomorAjuan == id);
+      const index = state.reports.data.findIndex((ele) => ele.id == id);
       if (index !== -1) {
         state.reports.data.splice(index, 1);
         state.reports["data_size"] -= 1;
@@ -454,11 +464,17 @@ const report = {
         nomorIjinBpkPengirim: "",
         tanggalIjinBpkPengirim: "",
       };
+      state.identitasPPJK = {
+        jenisIdentitasPPJK: "",
+        nomorIdentitasPPJK: "",
+        namaPPJK: "",
+        alamatPPJK: "",
+      };
       state.identitasPenerima = {
-        jenisIdentitasPenerima: "5 - NPWP - 15 Digits",
-        nomorIdentitasPenerima: "",
-        namaPenerima: "",
-        alamatPenerima: "",
+        caraAngkutPenerima: "",
+        namaPengangkutPenerima: "",
+        benderaPenerima: "",
+        nomorVoyFlightPolPenerima: "",
       };
       state.transaksiPerdagangan = {
         transaksi: "",
@@ -548,7 +564,7 @@ const report = {
   },
   actions: {
     async createReport(context, payload) {
-      // context.commit("SET_LOADING_CREATE", true);
+      context.commit("SET_LOADING_CREATE", true);
       try {
         let result = await axios({
           url: baseUrl + "/report/?type=" + payload,
@@ -572,7 +588,7 @@ const report = {
         const response = error.response.data;
         Swal.fire("Gagal!", response.message, "error");
       } finally {
-        // context.commit("SET_LOADING_CREATE", false);
+        context.commit("SET_LOADING_CREATE", false);
       }
     },
 
@@ -618,7 +634,8 @@ const report = {
           context.commit("SET_REPORT", tempReport);
           const {
             DataPengajuan,
-            reportIdentitasPenerima,
+            IdentitasPenerima,
+            reportIdentitasPPJK,
             IdentitasPengirim,
             TransaksiPerdagangan,
             DataPengangkutan,
@@ -639,7 +656,11 @@ const report = {
           });
           context.commit("SET_STATE_GLOBAL", {
             key: "identitasPenerima",
-            value: reportIdentitasPenerima,
+            value: IdentitasPenerima,
+          });
+          context.commit("SET_STATE_GLOBAL", {
+            key: "identitasPPJK",
+            value: reportIdentitasPPJK,
           });
           context.commit("SET_STATE_GLOBAL", {
             key: "identitasPengirim",
@@ -695,8 +716,33 @@ const report = {
       }
     },
 
+    async copyReport(context, id) {
+      context.commit("SET_LOADING", { key: "loadingCopyReport", value: true });
+      try {
+        let result = await axios({
+          url: baseUrl + "/report/duplicate/" + id,
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if (result.data.success) {
+          Swal.fire("Success!", result.data.message, "success");
+          context.dispatch("fetchAllReport");
+        }
+      } catch (error) {
+        console.log(error);
+        Swal.fire("Gagal!", "Gagal untuk menduplikat report", "error");
+      } finally {
+        context.commit("SET_LOADING", {
+          key: "loadingCopyReport",
+          value: false,
+        });
+      }
+    },
+
     async fetchAllTotalReport(context) {
-      // /report/get/getTotalReport
       let result = await axios({
         url: `${baseUrl + "/report/get/getTotalReport"}`,
         method: "GET",
@@ -777,6 +823,7 @@ const report = {
         reportId,
         dataPengajuan,
         identitasPenerima,
+        identitasPPJK,
         identitasPengirim,
         transaksiPerdagangan,
         dataPengangkutan,
@@ -799,6 +846,7 @@ const report = {
             reportId,
             dataPengajuan,
             identitasPenerima,
+            identitasPPJK,
             identitasPengirim,
             transaksiPerdagangan,
             dataPengangkutan,
@@ -877,6 +925,7 @@ const report = {
         reportId,
         dataPengajuan,
         identitasPenerima,
+        identitasPPJK,
         identitasPengirim,
         transaksiPerdagangan,
         dataPengangkutan,
@@ -898,6 +947,7 @@ const report = {
           dataHeader: AESEncrypt({
             reportId,
             dataPengajuan,
+            identitasPPJK,
             identitasPenerima,
             identitasPengirim,
             transaksiPerdagangan,

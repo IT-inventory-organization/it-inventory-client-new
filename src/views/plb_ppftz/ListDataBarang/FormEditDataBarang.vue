@@ -199,7 +199,6 @@ export default {
   },
   methods: {
     handleChange(value) {
-      // console.log(value);
       this.$emit("handleChangeEdit", value);
     },
     handleChangeOthers(key, value) {

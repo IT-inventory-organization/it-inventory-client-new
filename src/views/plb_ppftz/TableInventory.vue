@@ -53,31 +53,31 @@
           </template>
 
           <v-list>
-            <v-list-item @click="handlePreview(item.nomorAjuan)">
+            <v-list-item @click="handlePreview(item.id)">
               <v-list-item-title>
                 <v-icon left> mdi-format-list-bulleted </v-icon>
                 View
               </v-list-item-title>
             </v-list-item>
-            <v-list-item @click="handlePreviewXML(item.nomorAjuan)">
+            <v-list-item @click="handlePreviewXML(item.id)">
               <v-list-item-title>
                 <v-icon left> mdi-format-list-bulleted </v-icon>
                 View XML
               </v-list-item-title>
             </v-list-item>
-            <v-list-item
-              v-if="item.edit"
-              @click="handleEditModal(item.nomorAjuan)"
-            >
+            <v-list-item @click="handleCopyReport(item.id)">
+              <v-list-item-title>
+                <v-icon left> mdi-content-copy </v-icon>
+                Copy
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="item.edit" @click="handleEditModal(item.id)">
               <v-list-item-title>
                 <v-icon left>mdi-pencil-outline</v-icon>
                 Edit
               </v-list-item-title>
             </v-list-item>
-            <v-list-item
-              v-if="item.edit"
-              @click="handleDelete(item.nomorAjuan)"
-            >
+            <v-list-item v-if="item.edit" @click="handleDelete(item.id)">
               <v-list-item-title>
                 <v-icon left>mdi-trash-can-outline</v-icon>
                 Delete
@@ -221,9 +221,27 @@ export default {
         this.editedId = id;
       }
     },
+    handleCopyReport(id) {
+      this.$swal({
+        title: `Konfirmasi`,
+        text: `Apakah anda yakin ingin menggunakan data ini ?`,
+        type: "warning",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#5682ff",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Tidak",
+      }).then((result) => {
+        if (result.value) {
+          this.$store.dispatch("copyReport", id);
+        }
+      });
+    },
     handleDelete(id) {
       this.$swal({
-        title: `Apakah data anda yakin untuk menghapus data dengan nomor ajuan ${id} ?`,
+        title: `Konfirmasi`,
+        text: `Apakah anda yakin untuk menghapus data ini ?`,
         type: "warning",
         icon: "question",
         showCancelButton: true,

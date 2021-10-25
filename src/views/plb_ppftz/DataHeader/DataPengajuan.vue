@@ -3,17 +3,17 @@
     <v-form ref="formDataPengajuan" lazy-validation>
       <v-row>
         <v-col lg="6" md="6" sm="12">
-          <v-combobox
-            :items="[`Kantor 1`, `Kantor 2`]"
+          <v-text-field
             outlined
             label="Kantor Pabean Asal"
             v-model="kantorPabeanAsal"
+            disabled
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'kantor Pabean Asal');
               },
             ]"
-          ></v-combobox>
+          ></v-text-field>
           <v-select
             :items="['1 - Biasa']"
             label="Kategori Pemberitahuan"
@@ -82,11 +82,15 @@
 
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
+import DetectReportType from "@/helper/DetectReportType";
 export default {
   name: "DataPengajuan",
   mixins: [FieldRequired],
   data() {
-    return {};
+    return {
+      page: "",
+      currentLocation: "",
+    };
   },
   computed: {
     kantorPabeanAsal: {
@@ -171,6 +175,21 @@ export default {
     handleValidate() {
       return this.$refs.formDataPengajuan.validate();
     },
+  },
+  created() {
+    this.currentLocation = this.$route.path;
+    this.page = DetectReportType(this.currentLocation);
+    if (this.page === "PLB") {
+      this.$store.commit("SET_DATA_PENGAJUAN", {
+        key: "kantorPabeanAsal",
+        value: "Tanjungpinang",
+      });
+    } else {
+      this.$store.commit("SET_DATA_PENGAJUAN", {
+        key: "kantorPabeanAsal",
+        value: "Batam",
+      });
+    }
   },
 };
 </script>

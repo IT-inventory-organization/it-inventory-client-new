@@ -3,10 +3,10 @@
     <v-row no-gutters>
       <v-col lg="9" md="9"><div class="text-h6">List Dokumen</div></v-col>
       <v-col lg="3" md="3" style="display:flex; justify-content: flex-end">
-        <button class="btn mr-6" @click.prevent="handleImport">
+        <!-- <button class="btn mr-6" @click.prevent="handleImport">
           <v-icon left>mdi-tray-arrow-down</v-icon> Import CSV
-        </button>
-        <input
+        </button> -->
+        <!-- <input
           type="file"
           @change="handleCSV"
           ref="fileInput"
@@ -14,7 +14,7 @@
           multiple="false"
           hidden
           @click="$refs.fileInput.value = ''"
-        />
+        /> -->
         <button @click.prevent="handleModal" class="btn">
           <v-icon left>mdi-plus-box-outline</v-icon> Add
         </button>

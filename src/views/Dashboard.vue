@@ -52,14 +52,13 @@ export default {
   },
   data() {
     return {
-      filterListsJalurMerah: ["Import", "Export"],
-      type: "",
+      filterListsJalurMerah: ["All", "Import", "Export"],
+      type: "All",
     };
   },
   watch: {
     type(val) {
       if (val) this.optionsTableMerah.type = val;
-      // this.$store.dispatch("fetchReportInventoryMerah", this.optionsTableMerah);
     },
   },
   computed: {

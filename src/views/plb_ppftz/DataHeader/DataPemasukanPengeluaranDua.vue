@@ -9,17 +9,17 @@
             >Data Pelabuhan Muat Bongkar</v-card-title
           >
 
-          <v-combobox
-            :items="[`Pelabuhan Muat 1`, `Pelabuhan Muat 2`]"
+          <v-text-field
             outlined
             label="Pelabuhan Muat"
             v-model="pelabuhanMuat"
+            disabled
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Pelabuhan Muat');
               },
             ]"
-          ></v-combobox>
+          ></v-text-field>
 
           <v-text-field
             label="Pelabuhan Tujuan"
@@ -182,8 +182,7 @@
             class="it-inventory-card-title it-inventory-card-title__sub"
             >Data Tempat Penimbunan</v-card-title
           >
-          <v-combobox
-            :items="[`Tempat Penimbunan 1`, `Tempat Penimbunan 2`]"
+          <v-text-field
             outlined
             label="Tempat Penimbunan"
             v-model="tempatPenimbunan"
@@ -192,7 +191,7 @@
                 return genericRequiredRule(value, 'Tempat Penimbunan');
               },
             ]"
-          ></v-combobox>
+          ></v-text-field>
           <!-- End Data Tempat Penimbunan -->
 
           <!-- Data Tempat Penimbunan -->
@@ -220,11 +219,15 @@
 
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
+import DetectReportType from "@/helper/DetectReportType";
 export default {
   name: "DataPemasukanPengeluaranDua",
   mixins: [FieldRequired],
   data() {
-    return {};
+    return {
+      page: "",
+      currentLocation: "",
+    };
   },
   computed: {
     // Data Pelabuhan Muat Bongkat
@@ -392,6 +395,21 @@ export default {
     handleChange(key, event) {
       this[key] = event;
     },
+  },
+  created() {
+    this.currentLocation = this.$route.path;
+    this.page = DetectReportType(this.currentLocation);
+    if (this.page === "PLB") {
+      this.$store.commit("SET_DATA_PELABUHAN_MUAT_BONGKAR", {
+        key: "pelabuhanMuat",
+        value: "Tanjungpinang",
+      });
+    } else {
+      this.$store.commit("SET_DATA_PELABUHAN_MUAT_BONGKAR", {
+        key: "pelabuhanMuat",
+        value: "Batam",
+      });
+    }
   },
 };
 </script>

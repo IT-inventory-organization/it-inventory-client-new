@@ -5,7 +5,7 @@
         <v-select
           v-model="dataKontainer"
           label="Data Kontainer"
-          :items="['LCL', 'Data Kontainer 2']"
+          :items="['LCL', 'FCL']"
           :rules="[
             (value) => {
               return genericRequiredRule(value, 'Data Kontainer');
