@@ -430,7 +430,7 @@ const report = {
       state.loading[payload.key] = payload.value;
     },
     DELETE_REPORT(state, id) {
-      const index = state.reports.data.findIndex((ele) => ele.nomorAjuan == id);
+      const index = state.reports.data.findIndex((ele) => ele.id == id);
       if (index !== -1) {
         state.reports.data.splice(index, 1);
         state.reports["data_size"] -= 1;
@@ -464,11 +464,17 @@ const report = {
         nomorIjinBpkPengirim: "",
         tanggalIjinBpkPengirim: "",
       };
+      state.identitasPPJK = {
+        jenisIdentitasPPJK: "",
+        nomorIdentitasPPJK: "",
+        namaPPJK: "",
+        alamatPPJK: "",
+      };
       state.identitasPenerima = {
-        jenisIdentitasPenerima: "5 - NPWP - 15 Digits",
-        nomorIdentitasPenerima: "",
-        namaPenerima: "",
-        alamatPenerima: "",
+        caraAngkutPenerima: "",
+        namaPengangkutPenerima: "",
+        benderaPenerima: "",
+        nomorVoyFlightPolPenerima: "",
       };
       state.transaksiPerdagangan = {
         transaksi: "",
@@ -558,7 +564,7 @@ const report = {
   },
   actions: {
     async createReport(context, payload) {
-      // context.commit("SET_LOADING_CREATE", true);
+      context.commit("SET_LOADING_CREATE", true);
       try {
         let result = await axios({
           url: baseUrl + "/report/?type=" + payload,
@@ -582,7 +588,7 @@ const report = {
         const response = error.response.data;
         Swal.fire("Gagal!", response.message, "error");
       } finally {
-        // context.commit("SET_LOADING_CREATE", false);
+        context.commit("SET_LOADING_CREATE", false);
       }
     },
 
@@ -728,6 +734,7 @@ const report = {
         }
       } catch (error) {
         console.log(error);
+        Swal.fire("Gagal!", "Gagal untuk menduplikat report", "error");
       } finally {
         context.commit("SET_LOADING", {
           key: "loadingCopyReport",
@@ -737,7 +744,6 @@ const report = {
     },
 
     async fetchAllTotalReport(context) {
-      // /report/get/getTotalReport
       let result = await axios({
         url: `${baseUrl + "/report/get/getTotalReport"}`,
         method: "GET",

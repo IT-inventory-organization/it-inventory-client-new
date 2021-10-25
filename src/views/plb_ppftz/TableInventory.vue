@@ -222,13 +222,26 @@ export default {
       }
     },
     handleCopyReport(id) {
-      console.log(id);
-      // this.$store.commit("SET_REPORT_ID", id);
-      this.$store.dispatch("copyReport", id);
+      this.$swal({
+        title: `Konfirmasi`,
+        text: `Apakah anda yakin ingin menggunakan data ini ?`,
+        type: "warning",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#5682ff",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Tidak",
+      }).then((result) => {
+        if (result.value) {
+          this.$store.dispatch("copyReport", id);
+        }
+      });
     },
     handleDelete(id) {
       this.$swal({
-        title: `Apakah data anda yakin untuk menghapus data dengan nomor ajuan ${id} ?`,
+        title: `Konfirmasi`,
+        text: `Apakah anda yakin untuk menghapus data ini ?`,
         type: "warning",
         icon: "question",
         showCancelButton: true,

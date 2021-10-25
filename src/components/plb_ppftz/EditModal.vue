@@ -162,7 +162,7 @@ export default {
         .dispatch("editReport")
         .then((result) => {
           if (result.data.success) {
-            this.$swal("Success edit data", "");
+            this.$swal("Success", "Success edit data", "success");
           }
         })
         .catch((err) => {
