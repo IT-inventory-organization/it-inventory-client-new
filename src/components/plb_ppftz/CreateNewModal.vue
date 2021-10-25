@@ -22,9 +22,8 @@
             ]"
             outlined
           ></v-select>
-          <v-select
+          <v-text-field
             label="Diajukan Dikantor"
-            :items="['Kantor 1', 'Kantor 2']"
             v-model="kantorPengajuan"
             :rules="[
               (value) => {
@@ -32,7 +31,7 @@
               },
             ]"
             outlined
-          ></v-select>
+          ></v-text-field>
           <v-select
             label="Jenis Pemberitahuan"
             :items="['Import', 'Export']"
@@ -153,8 +152,17 @@ export default {
         "BC 2.7",
         "BC 2.6.1",
       ];
+
+      this.$store.commit("SET_DATA_REPORT", {
+        key: "kantorPengajuan",
+        value: "Tanjungpinang",
+      });
     } else {
       this.dokumenBC = ["BC 01", "BC 02", "BC 03"];
+      this.$store.commit("SET_DATA_REPORT", {
+        key: "kantorPengajuan",
+        value: "Batam",
+      });
     }
   },
 };

@@ -35,9 +35,8 @@
             ]"
             outlined
           ></v-select>
-          <v-select
+          <v-text-field
             label="Diajukan Dikantor"
-            :items="['Kantor 1', 'Kantor 2']"
             v-model="kantorPengajuan"
             :rules="[
               (value) => {
@@ -45,7 +44,7 @@
               },
             ]"
             outlined
-          ></v-select>
+          ></v-text-field>
           <v-select
             label="Jenis Pemberitahuan"
             :items="['Import', 'Export']"
