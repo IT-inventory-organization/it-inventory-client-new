@@ -631,7 +631,6 @@ const report = {
             jenisPemberitahuan: decrypt.jenisPemberitahuan,
             BCDocumentType: decrypt.BCDocumentType,
           };
-          console.log(decrypt);
           context.commit("SET_REPORT", tempReport);
           const {
             DataPengajuan,
