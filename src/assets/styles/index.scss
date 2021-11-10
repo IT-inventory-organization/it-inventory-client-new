@@ -38,7 +38,7 @@ body {
   border: none;
   background-color: transparent;
   font-size: 1rem;
-  padding: 5px 10px;
+  padding: 10px 15px;
   font-weight: normal;
   border-radius: 5px;
   &__fw {
@@ -55,6 +55,10 @@ body {
   }
   &__green {
     background-color: #2ed477;
+    color: white;
+  }
+  &__blue {
+    background-color: #0c66cf;
     color: white;
   }
 }
@@ -86,14 +90,39 @@ body {
   }
 }
 
-.table_menu_actions {
-  & .v-btn__content {
-    font-size: 0.8rem;
-    text-transform: capitalize;
-    font-weight: 400;
+.it-inventory-actions {
+  &-btn {
+    border: 1px solid #0c66cf !important;
+    & .v-ripple__container {
+      background-color: rgba(12, 103, 207, 0.1);
+    }
+    & .v-btn__content {
+      font-size: 0.8rem;
+      text-transform: capitalize;
+      font-weight: 400;
+      color: #0c66cf;
+    }
+    &:active {
+      background-color: none;
+    }
   }
-  &:active {
-    background-color: none;
+  &-list {
+    .v-list-item {
+      cursor: pointer;
+      min-height: 40px;
+      & .v-list-item__title {
+        color: #0c66cf !important;
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        .it-inventory-actions-list__icon {
+          font-size: 1.2rem;
+        }
+      }
+      &:hover {
+        background-color: rgba($color: #000000, $alpha: 0.1);
+      }
+    }
   }
 }
 // End Table
@@ -187,6 +216,7 @@ body {
 .it-inven-stepper {
   & .v-stepper__header {
     margin-bottom: 48px;
+    box-shadow: none !important;
     & .v-stepper__step {
       flex-direction: column !important;
       gap: 10px;
@@ -228,6 +258,12 @@ body {
     & .v-divider {
       border-width: 4px 0 0 0;
     }
+  }
+
+  & .v-stepper__content {
+    box-shadow: none !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
   }
 }
 // End Stepper

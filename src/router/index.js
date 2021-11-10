@@ -2,6 +2,9 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Dashboard from "@/views/Dashboard";
 import MasterData from "@/views/MasterData";
+import PLB from "@/views/PLB/PLB";
+import TablePLB from "@/views/PLB/TablePLB";
+import FormDocument from "@/views/PLB/FormDocument";
 
 Vue.use(VueRouter);
 
@@ -22,6 +25,22 @@ const routes = [
     path: "/master-data",
     name: "MasterData",
     component: MasterData,
+  },
+  {
+    path: "/plb",
+    component: PLB,
+    children: [
+      {
+        path: "",
+        name: "PLB",
+        component: TablePLB,
+      },
+      {
+        path: "add",
+        name: "PLBFormDocument",
+        component: FormDocument,
+      },
+    ],
   },
   {
     path: "/login",
