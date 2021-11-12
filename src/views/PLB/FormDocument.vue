@@ -42,7 +42,7 @@
         <v-col cols="10">
           <v-stepper-items>
             <v-stepper-content step="1">
-              hhhh
+              <data-dokumen />
             </v-stepper-content>
           </v-stepper-items>
         </v-col>
@@ -54,6 +54,9 @@
 <script>
 export default {
   name: "FormDocument",
+  components: {
+    DataDokumen: () => import("@/views/PLB/DataDokumen/index"),
+  },
   data() {
     return {
       step: 1,
