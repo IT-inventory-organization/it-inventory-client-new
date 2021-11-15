@@ -13,17 +13,37 @@
         <v-container>
           <v-row no-gutters>
             <v-col cols="4">
+              <div class="mt-2">Diajukan Di Kantor</div>
+            </v-col>
+            <v-col cols="8">
+              <v-text-field
+                outlined
+                dense
+                v-model="diAjukanDiKantor"
+                placeholder="value"
+                :rules="[
+                  (value) => {
+                    return genericRequiredRule(value, 'Diajukan Di Kantor');
+                  },
+                ]"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row no-gutters>
+            <v-col cols="4">
               <div class="mt-2">Jenis Pemberitahuan</div>
             </v-col>
             <v-col cols="8">
               <v-select
                 placeholder="value"
                 dense
+                v-model="jenisPemberitahuan"
                 :rules="[
                   (value) => {
                     return genericRequiredRule(value, 'Jenis Pemberitahuan');
                   },
                 ]"
+                :items="itemJenisPemberitahuan"
                 outlined
               ></v-select>
             </v-col>
@@ -36,11 +56,13 @@
               <v-select
                 placeholder="value"
                 dense
+                v-model="jenisDokumenBC"
                 :rules="[
                   (value) => {
                     return genericRequiredRule(value, 'Jenis Dokumen BC');
                   },
                 ]"
+                :items="itemJenisDokumenBC"
                 outlined
               ></v-select>
             </v-col>
@@ -63,13 +85,58 @@ import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "FormReport",
   mixins: [FieldRequired],
+  computed: {
+    diAjukanDiKantor: {
+      get() {
+        return this.$store.state.plb.report.diAjukanDiKantor;
+      },
+      set(value) {
+        this.$store.commit("SET_REPORT", {
+          key: "diAjukanDiKantor",
+          value,
+        });
+      },
+    },
+    jenisPemberitahuan: {
+      get() {
+        return this.$store.state.plb.report.jenisPemberitahuan;
+      },
+      set(value) {
+        this.$store.commit("SET_REPORT", {
+          key: "jenisPemberitahuan",
+          value,
+        });
+      },
+    },
+    jenisDokumenBC: {
+      get() {
+        return this.$store.state.plb.report.jenisDokumenBC;
+      },
+      set(value) {
+        this.$store.commit("SET_REPORT", {
+          key: "jenisDokumenBC",
+          value,
+        });
+      },
+    },
+    itemJenisPemberitahuan() {
+      return this.$store.state.plb.itemJenisPemberitahuan;
+    },
+    itemJenisDokumenBC() {
+      return this.$store.state.plb.itemJenisDokumenBC;
+    },
+  },
   methods: {
     handleCloseDialog() {
       this.$emit("handleCloseBuatBaru");
     },
-
     handleSubmit() {
-      this.$router.push("/plb/add");
+      const getRef = this.$refs.initialReport.handleValidate();
+      if (getRef) {
+        this.$router.push("/plb/add");
+      } else {
+        return false;
+      }
     },
   },
 };

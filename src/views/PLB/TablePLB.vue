@@ -168,11 +168,11 @@ export default {
   },
   computed: {
     reports() {
-      return this.$store.state.report.reports;
+      return this.$store.state.plb.reports;
     },
     optionsTableReports: {
       get() {
-        return this.$store.state.report.optionsTableReports;
+        return this.$store.state.plb.optionsTableReports;
       },
       set(val) {
         this.$store.commit("SET_OPTIONS_TABLE_REPORTS", val);
