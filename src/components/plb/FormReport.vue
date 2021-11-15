@@ -44,6 +44,7 @@
                   },
                 ]"
                 :items="itemJenisPemberitahuan"
+                append-icon="mdi-chevron-down"
                 outlined
               ></v-select>
             </v-col>
@@ -63,6 +64,7 @@
                   },
                 ]"
                 :items="itemJenisDokumenBC"
+                append-icon="mdi-chevron-down"
                 outlined
               ></v-select>
             </v-col>
@@ -85,6 +87,11 @@ import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "FormReport",
   mixins: [FieldRequired],
+  data() {
+    return {
+      itemJenisDokumenBC: [],
+    };
+  },
   computed: {
     diAjukanDiKantor: {
       get() {
@@ -122,20 +129,45 @@ export default {
     itemJenisPemberitahuan() {
       return this.$store.state.plb.itemJenisPemberitahuan;
     },
-    itemJenisDokumenBC() {
-      return this.$store.state.plb.itemJenisDokumenBC;
+    itemJenisDokumenBCPemasukan() {
+      return this.$store.state.plb.itemJenisDokumenBCPemasukan;
+    },
+    itemJenisDokumenBCPengeluaran() {
+      return this.$store.state.plb.itemJenisDokumenBCPengeluaran;
+    },
+    constantPemasukan() {
+      return this.$store.state.plb.constant.pemasukan;
+    },
+    constantPengeluaran() {
+      return this.$store.state.plb.constant.pengeluaran;
     },
   },
   methods: {
     handleCloseDialog() {
       this.$emit("handleCloseBuatBaru");
     },
+    handleNotificationType() {
+      return localStorage.getItem("NotificationType");
+    },
     handleSubmit() {
-      const getRef = this.$refs.initialReport.handleValidate();
+      const getRef = this.$refs.initialReport.validate();
       if (getRef) {
-        this.$router.push("/plb/add");
+        this.$store.dispatch("handleSubmitReport");
       } else {
         return false;
+      }
+    },
+  },
+  watch: {
+    jenisPemberitahuan(val) {
+      this.jenisDokumenBC = "";
+      if (val === this.constantPemasukan) {
+        this.itemJenisDokumenBC = this.itemJenisDokumenBCPemasukan;
+        return;
+      }
+      if (val === this.constantPengeluaran) {
+        this.itemJenisDokumenBC = this.itemJenisDokumenBCPengeluaran;
+        return;
       }
     },
   },

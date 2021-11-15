@@ -35,10 +35,14 @@ body {
 
 // Button
 .it-inventory-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   background-color: transparent;
   font-size: 1rem;
-  padding: 10px 15px;
+  min-height: 40px;
+  padding: 5px 10px;
   font-weight: normal;
   border-radius: 5px;
   width: fit-content;
@@ -274,7 +278,7 @@ body {
 // Data Perusahaan
 .it-inven-dataperusahaan {
   &__label {
-    color: #848484;
+    color: #848484 !important;
   }
   &__value {
     & .v-input__slot::before {
