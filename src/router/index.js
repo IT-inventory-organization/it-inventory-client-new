@@ -5,6 +5,7 @@ import MasterData from "@/views/MasterData";
 import PLB from "@/views/PLB/PLB";
 import TablePLB from "@/views/PLB/TablePLB";
 import FormDocument from "@/views/PLB/FormDocument";
+import PO from "@/views/PO/"
 
 Vue.use(VueRouter);
 
@@ -50,6 +51,16 @@ const routes = [
     path: "/register",
     name: "register",
   },
+  {
+    path: "/po",
+    children: [
+      {
+        path: "",
+        name: "Purchase Order",
+        component: PO
+      }
+    ]
+  }
 ];
 
 const router = new VueRouter({
