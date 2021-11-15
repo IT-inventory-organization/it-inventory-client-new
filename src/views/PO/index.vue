@@ -27,75 +27,84 @@
 
         <!-- Data Tables  -->
         <div class="it-inventory-box mt-2">
-      <v-data-table
-        :headers="headers"
-        :items="reports.data"
-        :options.sync="optionsTableReports"
-        :server-items-length="reports.data_size"
-        no-data-text="Data not available"
-        no-results-text="Data not available"
-        class="it-inventory-simple-table"
-      >
-        <template v-slot:[`item.no`]="props">
-          {{ props.index + 1 }}
-        </template>
-        <template v-slot:[`item.action`]>
-          <v-menu offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                class="it-inventory-actions-btn"
-                outlined
-                v-bind="attrs"
-                v-on="on"
-              >
-                Actions
-                <v-icon right>
-                  mdi-chevron-down
-                </v-icon>
-              </v-btn>
-            </template>
+            <v-data-table
+                :headers="headers"
+                :items="reports.data"
+                :options.sync="optionsTableReports"
+                :server-items-length="reports.data_size"
+                no-data-text="Data not available"
+                no-results-text="Data not available"
+                class="it-inventory-simple-table"
+            >
+                <template v-slot:[`item.no`]="props">
+                {{ props.index + 1 }}
+                </template>
+                <template v-slot:[`item.action`]>
+                <v-menu offset-y>
+                    <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        class="it-inventory-actions-btn"
+                        outlined
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        Actions
+                        <v-icon right>
+                        mdi-chevron-down
+                        </v-icon>
+                    </v-btn>
+                    </template>
 
-            <v-list class="it-inventory-actions-list">
-              <v-list-item>
-                <v-list-item-title>
-                  <Icon
-                    icon="fluent:apps-list-detail-20-regular"
-                    class="v-icon--left it-inventory-action-list__icon"
-                  />
-                  View
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>
-                  <Icon
-                    icon="ph:pencil-line-light"
-                    class="v-icon--left it-inventory-action-list__icon"
-                  />
-                  Edit
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>
-                  <Icon
-                    icon="octicon:trash-24"
-                    class="v-icon--left it-inventory-action-list__icon"
-                  />
-                  Delete
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </template>
-      </v-data-table>
-    </div>
+                    <v-list class="it-inventory-actions-list">
+                    <v-list-item>
+                        <v-list-item-title>
+                        <Icon
+                            icon="fluent:apps-list-detail-20-regular"
+                            class="v-icon--left it-inventory-action-list__icon"
+                        />
+                        View
+                        </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item>
+                        <v-list-item-title>
+                        <Icon
+                            icon="ph:pencil-line-light"
+                            class="v-icon--left it-inventory-action-list__icon"
+                        />
+                        Edit
+                        </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item>
+                        <v-list-item-title>
+                        <Icon
+                            icon="octicon:trash-24"
+                            class="v-icon--left it-inventory-action-list__icon"
+                        />
+                        Delete
+                        </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item>
+                        <v-list-item-title>
+                        <Icon
+                            icon="fluent:print-24-regular"
+                            class="v-icon--left it-inventory-action-list__icon"
+                        />
+                        Print
+                        </v-list-item-title>
+                    </v-list-item>
+                    </v-list>
+                </v-menu>
+                </template>
+            </v-data-table>
+            </div>
 
         <!-- Form Buat PO Baru Dialog -->
         <v-dialog
             v-model="dialogBuatBaruPO"
             persistent
-            width="50%"
-            max-width="1200px" >
-            <form-report @handleBuatBaru="handleBuatBaru" />
+            width="100%"
+            max-width="95%" >
+            <form-po @handleBuatBaru="handleBuatBaru" />
         </v-dialog>
     </div>
 </template>
@@ -106,7 +115,7 @@ import { Icon } from "@iconify/vue2";
         name: "TablePO",
         components: {
             Icon,
-            FormReport: () => import("@/components/po/FormReport")
+            FormPo: () => import("@/components/po/FormPO")
         },
         data() {
             return {
@@ -163,7 +172,6 @@ import { Icon } from "@iconify/vue2";
         methods: {
             handleBuatBaru() {
                 this.dialogBuatBaruPO = !this.dialogBuatBaruPO;
-                console.log(this.dialogBuatBaruPO)
             }
         }
     }
