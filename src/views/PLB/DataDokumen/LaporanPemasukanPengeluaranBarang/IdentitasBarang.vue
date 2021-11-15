@@ -65,7 +65,7 @@
 
 <script>
 export default {
-  name: "Identitas Barang",
+  name: "IdentitasBarang",
 };
 </script>
 

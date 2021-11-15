@@ -54,7 +54,7 @@
 
 <script>
 export default {
-  name: "Tempat Penimbunan",
+  name: "TempatPenimbunan",
   data() {
     return {
       datepicker_perkiraan_tgl_pengeluaran: false,

@@ -2,12 +2,20 @@
   <div class="mx-12">
     <v-row class="mb-3">
       <v-col lg="5" md="5" sm="12">
-        <div>
-          <label class="caption font-weight-medium">Pelabuhan Tujuan</label>
+        <div v-if="handleNotificationType() === constantPemasukan">
+          <label class="caption font-weight-medium">Pelabuhan Masuk</label>
           <v-text-field
             outlined
             dense
             placeholder="Pelabuhan Masuk"
+          ></v-text-field>
+        </div>
+        <div v-if="handleNotificationType() === constantPengeluaran">
+          <label class="caption font-weight-medium">Pelabuhan Tujuan</label>
+          <v-text-field
+            outlined
+            dense
+            placeholder="Pelabuhan Tujuan"
           ></v-text-field>
         </div>
       </v-col>
@@ -74,6 +82,19 @@ export default {
       import(
         "@/views/PLB/DataDokumen/LaporanPemasukanPengeluaranBarang/TempatPenimbunan"
       ),
+  },
+  computed: {
+    constantPemasukan() {
+      return this.$store.state.plb.constant.pemasukan;
+    },
+    constantPengeluaran() {
+      return this.$store.state.plb.constant.pengeluaran;
+    },
+  },
+  methods: {
+    handleNotificationType() {
+      return localStorage.getItem("NotificationType");
+    },
   },
 };
 </script>
