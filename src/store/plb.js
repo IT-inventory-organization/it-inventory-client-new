@@ -1,4 +1,4 @@
-const report = {
+const plb = {
   state: {
     reportId: "",
     loading: {
@@ -6,22 +6,27 @@ const report = {
       loadingEditInformasiPerusahaan: false,
       loadingInformasiPerusahaan: false,
     },
-    list_kapal: [],
-    jumlah_kapal: "",
+    listKapal: [],
+    jumlahKapal: "",
     optionsTableListKapal: {
       page: 1,
       itemsPerPage: 10,
       search: "",
     },
-    informasi_perusahaan: {
-      nama_perusahaan: "",
+    informasiPerusahaan: {
+      namaPerusahaan: "",
       npwp: "",
       alamat: "",
-      nomor_telepon: "",
+      nomorTelepon: "",
       fax: "",
-      bidang_usaha: "",
-      nama_pemilik: "",
-      alamat_pemilik: "",
+      bidangUsaha: "",
+      namaPemilik: "",
+      alamatPemilik: "",
+    },
+    report: {
+      jenisPemberitahuan: "",
+      diAjukanDiKantor: "Tanjungpinang",
+      jenisDokumenBC: "",
     },
     reports: {
       data: [
@@ -52,11 +57,14 @@ const report = {
       itemsPerPage: 10,
       search: "",
     },
-    report: {
-      diajukan_dikantor: "",
-      jenis_pemberitahuan: "",
-      jenis_dokumen_bc: "",
-    },
+    itemJenisPemberitahuan: ["Pemasukan", "Pengeluaran"],
+    itemJenisDokumenBC: [
+      "BC 1.6 (LDP)",
+      "BC 4.0 (TLDPP)",
+      "BC 2.7 (PLB, KB, TBB, TLB, TPPB, KDUB)",
+      "PPB PLB Lokasi Lain (Satu Izin)",
+      "PP-FTZ 02 (FTZ)",
+    ],
   },
   mutations: {
     SET_REPORT_ID(state, payload) {
@@ -74,6 +82,9 @@ const report = {
     SET_OPTIONS_TABLE_LIST_KAPAL(state, payload) {
       state.optionsTableListKapal = Object.assign({}, payload);
     },
+    SET_REPORT(state, payload) {
+      state.report[payload.key] = payload.value;
+    },
     SET_OPTIONS_TABLE_REPORTS(state, payload) {
       state.optionsTableReports = Object.assign({}, payload);
     },
@@ -81,4 +92,4 @@ const report = {
   actions: {},
 };
 
-export default report;
+export default plb;
