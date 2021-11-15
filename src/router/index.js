@@ -5,7 +5,7 @@ import MasterData from "@/views/MasterData";
 import PLB from "@/views/PLB/PLB";
 import TablePLB from "@/views/PLB/TablePLB";
 import FormDocument from "@/views/PLB/FormDocument";
-import PO from "@/views/PO/"
+import TablePO from "@/views/PO/"
 
 Vue.use(VueRouter);
 
@@ -53,13 +53,8 @@ const routes = [
   },
   {
     path: "/po",
-    children: [
-      {
-        path: "",
-        name: "Purchase Order",
-        component: PO
-      }
-    ]
+    name: "Purchase Order",
+    component: TablePO
   }
 ];
 
