@@ -41,8 +41,10 @@ body {
   padding: 10px 15px;
   font-weight: normal;
   border-radius: 5px;
+  width: fit-content;
+
   &__fw {
-    width: 100%;
+    width: 100% !important;
   }
   &__grey {
     border: 1px solid #d8dcf2;
