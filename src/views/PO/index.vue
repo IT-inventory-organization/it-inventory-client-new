@@ -113,36 +113,24 @@ import { Icon } from "@iconify/vue2";
                 dialogBuatBaruPO: false,
                 headers: [
                     {
-                    text: "No",
-                    value: "no",
+                    text: "No. PO",
+                    value: "nomor_po",
                     },
                     {
                     text: "Tanggal",
                     value: "tanggal",
                     },
                     {
-                    text: "Jenis Pemberitahuan",
-                    value: "jenis_pemberitahuan",
+                    text: "Item Deskripsi",
+                    value: "item_deskripsi",
                     },
                     {
-                    text: "Jenis Dokumen",
-                    value: "jenis_dokumen",
+                    text: "Quantity",
+                    value: "quantity",
                     },
                     {
-                    text: "Nomor Dokumen",
-                    value: "nomor_dokumen",
-                    },
-                    {
-                    text: "Voyage Kapal",
-                    value: "voyage_kapal",
-                    },
-                    {
-                    text: "Nama Kapal",
-                    value: "nama_kapal",
-                    },
-                    {
-                    text: "Bendera",
-                    value: "bendera",
+                    text: "Jumlah",
+                    value: "jumlah",
                     },
                     {
                     text: "Actions",
@@ -161,11 +149,11 @@ import { Icon } from "@iconify/vue2";
         },
         computed: {
             reports() {
-            return this.$store.state.plb.reports;
+            return this.$store.state.po.reports;
             },
             optionsTableReports: {
             get() {
-                return this.$store.state.plb.optionsTableReports;
+                return this.$store.state.po.optionsTableReports;
             },
             set(val) {
                 this.$store.commit("SET_OPTIONS_TABLE_REPORTS", val);
