@@ -1,0 +1,291 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif !important;
+  box-sizing: border-box !important;
+  scrollbar-color: #d8dcf2 #eaecf7;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.5em;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d8dcf2;
+}
+
+html,
+body {
+  color: #1a1a1a !important;
+  font-family: "Poppins", sans-serif !important;
+  background-color: #ffffff;
+}
+
+#app {
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Button
+.it-inventory-btn {
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  padding: 10px 15px;
+  font-weight: normal;
+  border-radius: 5px;
+  width: fit-content;
+
+  &__fw {
+    width: 100% !important;
+  }
+  &__grey {
+    border: 1px solid #d8dcf2;
+    color: #d8dcf2;
+    transition: background-color ease-in-out 0.3s, color ease-in-out 0.3s;
+    &:hover {
+      background-color: #d8dcf2;
+      color: #1a1a1a;
+    }
+  }
+  &__green {
+    background-color: #2ed477;
+    color: white;
+  }
+  &__blue {
+    background-color: #0c66cf;
+    color: white;
+  }
+}
+// End Button
+
+// container
+.it-inventory-container {
+  margin: 16px 0;
+  padding: 12px 30px !important;
+}
+// End container
+
+// Box
+.it-inventory-box {
+  border-radius: 10px;
+  border: 1px solid #d8dcf2;
+  padding: 1.2rem;
+}
+// End Box
+
+// Table
+.it-inventory-simple-table {
+  & th,
+  & td {
+    font-size: 0.9rem !important;
+  }
+  & th {
+    color: #1a1a1a !important;
+  }
+}
+
+.it-inventory-actions {
+  &-btn {
+    border: 1px solid #0c66cf !important;
+    & .v-ripple__container {
+      background-color: rgba(12, 103, 207, 0.1);
+    }
+    & .v-btn__content {
+      font-size: 0.8rem;
+      text-transform: capitalize;
+      font-weight: 400;
+      color: #0c66cf;
+    }
+    &:active {
+      background-color: none;
+    }
+  }
+  &-list {
+    .v-list-item {
+      cursor: pointer;
+      min-height: 40px;
+      & .v-list-item__title {
+        color: #0c66cf !important;
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        .it-inventory-actions-list__icon {
+          font-size: 1.2rem;
+        }
+      }
+      &:hover {
+        background-color: rgba($color: #000000, $alpha: 0.1);
+      }
+    }
+  }
+}
+// End Table
+
+// Btn
+.it_inven_create_btn {
+  background-color: #312e68 !important;
+  border-radius: 10px !important;
+  width: max-content;
+  & .v-btn__content {
+    color: #ffffff;
+    font-weight: normal;
+    text-transform: capitalize;
+  }
+}
+
+.btn_save {
+  background-color: transparent;
+  width: max-content;
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  user-select: none;
+  span {
+    font-size: 1rem;
+    color: #9ba1bc;
+  }
+}
+// End Btn
+
+// Card
+.it-inventory-card {
+  box-shadow: none !important;
+  border-radius: 20px !important;
+  padding: 40px 50px;
+  background-color: #ffffff;
+  &-title {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    &__sub {
+      font-size: 1.1rem !important;
+    }
+  }
+}
+
+// Accordion
+
+.it-accordion-panel {
+  background-color: #f8f8f8 !important;
+  margin-bottom: 15px;
+  border-radius: 10px !important;
+  &::before {
+    box-shadow: none !important;
+    border: 1px solid #d8dcf2 !important;
+    border-radius: inherit;
+  }
+  &::after {
+    border-top: none !important;
+  }
+  .v-expansion-panel-header {
+    font-size: 1rem;
+    color: #006eff;
+  }
+  .v-expansion-panel-content {
+    background-color: #ffffff;
+  }
+  .v-expansion-panel-content__wrap {
+    font-size: 1rem;
+    padding: 24px 16px !important;
+  }
+}
+
+.it-accordion-panel.it-accordion-panel__error {
+  background-color: rgba(242, 124, 97, 0.2) !important;
+  &::before {
+    border: 1px solid #f27b61 !important;
+  }
+}
+
+// .it-accordion-panel.it-accordion-panel__success {
+//   background-color: rgb(12, 102, 207, 0.2) !important;
+//   &::before {
+//     border: 1px solid #0c66cf !important;
+//   }
+// }
+// End Accordion
+
+// Stepper
+.it-inven-stepper {
+  & .v-stepper__header {
+    margin-bottom: 48px;
+    box-shadow: none !important;
+    & .v-stepper__step {
+      flex-direction: column !important;
+      gap: 10px;
+      & .v-stepper__step__step {
+        border: 4px solid #d8dcf2 !important;
+        background-color: #ffffff !important;
+        color: #d8dcf2 !important;
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+    }
+
+    & .v-stepper__step--complete {
+      & .v-stepper__step__step {
+        border-color: #5682ff !important;
+        color: #5682ff !important;
+        i {
+          color: #5682ff !important;
+        }
+      }
+      & .v-stepper__label {
+        color: #5682ff !important;
+      }
+    }
+
+    & .v-stepper__step--active {
+      & .v-stepper__step__step {
+        border-color: #5682ff !important;
+        color: #5682ff !important;
+      }
+      & .v-stepper__label {
+        color: #5682ff !important;
+      }
+    }
+
+    & .v-divider {
+      border-width: 4px 0 0 0;
+    }
+  }
+
+  & .v-stepper__content {
+    box-shadow: none !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+}
+// End Stepper
+
+// Data Perusahaan
+.it-inven-dataperusahaan {
+  &__label {
+    color: #848484;
+  }
+  &__value {
+    & .v-input__slot::before {
+      border-image: none !important;
+    }
+    & .v-input__slot::after {
+      width: 0 !important;
+    }
+    & input,
+    & textarea {
+      color: #1a1a1a !important;
+    }
+  }
+}
