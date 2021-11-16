@@ -64,6 +64,7 @@ const plb = {
       "FAS",
       "CIF",
     ],
+    itemJenisIdentitasPenjual: ["NPWP", "KTP"],
     dokumenPemasukan: {
       nomorDokumenPemasukan: "",
       tanggalDokumenPemasukan: "",
@@ -89,12 +90,12 @@ const plb = {
     },
     identitasBarang: {
       negaraAsal: "",
-      jenisBarang: "",
-      nilaiBarang: "",
+      jenisBarang: 0,
+      nilaiBarang: 0,
       caraPembayaran: "",
       asalBarang: "",
-      jumlahBarang: "",
-      jumlahKemasan: "",
+      jumlahBarang: 0,
+      jumlahKemasan: 0,
     },
     penjualBarang: {
       jenisIdentitasPenjual: "",
@@ -128,9 +129,9 @@ const plb = {
     },
     mataUang: {
       valuta: "",
-      freight: "",
-      NDPBMKurs: "",
-      cif: "",
+      freight: 0,
+      NDPBMKurs: 0,
+      cif: 0,
       transaksiLainnya: "",
       hargaPenyerahan: "",
     },
@@ -141,9 +142,9 @@ const plb = {
       nomorVoyFlightPol: "",
     },
     beratDanVolume: {
-      beratMuatan: "",
-      beratKapalDanMuatan: "",
-      volume: "",
+      beratMuatan: 0,
+      beratKapalDanMuatan: 0,
+      volume: 0,
     },
     tempatPenimbunan: {
       tempatPenimbunan: "",
@@ -181,6 +182,48 @@ const plb = {
     SET_STEPPER(state, payload) {
       state.stepper = payload;
       localStorage.setItem("stepper", payload);
+    },
+    SET_DOKUMEN_PEMASUKAN(state, payload) {
+      state.dokumenPemasukan[payload.key] = payload.value;
+    },
+    SET_DOKUMEN_TAMBAHAN(state, payload) {
+      state.dokumenTambahan[payload.key] = payload.value;
+    },
+    SET_DATA_PELABUHAN(state, payload) {
+      state.dataPelabuhan[payload.key] = payload.value;
+    },
+    SET_DATA_KAPAL(state, payload) {
+      state.dataKapal[payload.key] = payload.value;
+    },
+    SET_IDENTITAS_BARANG(state, payload) {
+      state.identitasBarang[payload.key] = payload.value;
+    },
+    SET_PENJUAL_BARANG(state, payload) {
+      state.penjualBarang[payload.key] = payload.value;
+    },
+    SET_PENGIRIM_BARANG(state, payload) {
+      state.pengirimBarang[payload.key] = payload.value;
+    },
+    SET_PENGUSAHA_PLB(state, payload) {
+      state.pengusahaPLB[payload.key] = payload.value;
+    },
+    SET_PEMBELI_BARANG(state, payload) {
+      state.pembeliBarang[payload.key] = payload.value;
+    },
+    SET_PPJK(state, payload) {
+      state.ppjk[payload.key] = payload.value;
+    },
+    SET_MATA_UANG(state, payload) {
+      state.dokumenTambahan[payload.key] = payload.value;
+    },
+    SET_DATA_PENGANGKUTAN(state, payload) {
+      state.dataPengangkutan[payload.key] = payload.value;
+    },
+    SET_BERAT_DAN_VOLUME(state, payload) {
+      state.beratDanVolume[payload.key] = payload.value;
+    },
+    SET_TEMPAT_PENIMBUNAN(state, payload) {
+      state.tempatPenimbunan[payload.key] = payload.value;
     },
   },
   actions: {
