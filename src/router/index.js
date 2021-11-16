@@ -8,6 +8,11 @@ import FormDocument from "@/views/PLB/FormDocument";
 
 Vue.use(VueRouter);
 
+/**
+ * requiresAuth: true, berfungsi untuk hanya user yang sudah login yang bisa akses
+ * reportId: true, berfungsi untuk hanya user yang sudah membuat report yang boleh mengakses halaman selanjutnya
+ */
+
 const routes = [
   {
     path: "/",
@@ -18,17 +23,23 @@ const routes = [
     name: "Dashboard",
     component: Dashboard,
     meta: {
-      requiresAuth: true,
+      requiresAuth: false,
     },
   },
   {
     path: "/master-data",
     name: "MasterData",
     component: MasterData,
+    meta: {
+      requiresAuth: false,
+    },
   },
   {
     path: "/plb",
     component: PLB,
+    meta: {
+      requiresAuth: false,
+    },
     children: [
       {
         path: "",
@@ -39,6 +50,9 @@ const routes = [
         path: "add",
         name: "PLBFormDocument",
         component: FormDocument,
+        meta: {
+          reportId: false,
+        },
       },
     ],
   },
@@ -56,6 +70,34 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token-it-inventory");
+  const reportId = localStorage.getItem("reportId");
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!token) {
+      next({
+        path: "/login",
+        query: { redirect: to.fullPath },
+      });
+    } else {
+      next();
+    }
+
+    if (to.matched.some((record) => record.meta.reportId)) {
+      if (!reportId) {
+        next({
+          path: "/plb",
+          query: { redirect: to.fullPath },
+        });
+      } else {
+        next();
+      }
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
