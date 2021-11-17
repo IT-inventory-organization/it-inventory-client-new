@@ -65,6 +65,10 @@ const plb = {
       "CIF",
     ],
     itemJenisIdentitasPenjual: ["NPWP", "KTP"],
+    itemJenisIdentitasPengirim: ["NPWP", "KTP"],
+    itemJenisIdentitasPengusahaPLB: ["NPWP", "KTP"],
+    itemJenisIdentitasPembeli: ["NPWP", "KTP"],
+    itemJenisIdentitasPPJK: ["NPWP", "KTP"],
     dokumenPemasukan: {
       nomorDokumenPemasukan: "",
       tanggalDokumenPemasukan: "",
