@@ -135,6 +135,22 @@
             placeholder="Jumlah Kemasan"
           ></v-text-field>
         </div>
+
+        <div>
+          <label class="caption font-weight-medium">Nomor PO</label>
+          <v-select
+            outlined
+            dense
+            v-model="nomorPO"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Nomor PO');
+              },
+            ]"
+            placeholder="Pilih Nomor PO"
+            append-icon="mdi-chevron-down"
+          ></v-select>
+        </div>
       </v-col>
     </v-row>
   </div>
@@ -222,6 +238,17 @@ export default {
       set(value) {
         this.$store.commit("SET_IDENTITAS_BARANG", {
           key: "jumlahKemasan",
+          value,
+        });
+      },
+    },
+    nomorPO: {
+      get() {
+        return this.$store.state.plb.identitasBarang.nomorPO;
+      },
+      set(value) {
+        this.$store.commit("SET_IDENTITAS_BARANG", {
+          key: "nomorPO",
           value,
         });
       },

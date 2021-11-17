@@ -96,6 +96,7 @@ const plb = {
       asalBarang: "",
       jumlahBarang: 0,
       jumlahKemasan: 0,
+      nomorPO: "",
     },
     penjualBarang: {
       jenisIdentitasPenjual: "",
