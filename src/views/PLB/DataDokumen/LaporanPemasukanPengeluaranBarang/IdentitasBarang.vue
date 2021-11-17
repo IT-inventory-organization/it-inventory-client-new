@@ -22,7 +22,6 @@
         <div>
           <label class="caption font-weight-medium">Jenis Barang</label>
           <v-text-field
-            type="number"
             outlined
             dense
             v-model="jenisBarang"
@@ -43,7 +42,6 @@
         <div>
           <label class="caption font-weight-medium">Nilai Barang</label>
           <v-text-field
-            type="number"
             outlined
             dense
             v-model="nilaiBarang"
@@ -96,7 +94,6 @@
         <div>
           <label class="caption font-weight-medium">Jumlah Barang</label>
           <v-text-field
-            type="number"
             outlined
             dense
             v-model="jumlahBarang"
@@ -117,7 +114,6 @@
         <div>
           <label class="caption font-weight-medium">Jumlah Kemasan</label>
           <v-text-field
-            type="number"
             outlined
             dense
             v-model="jumlahKemasan"
@@ -142,11 +138,6 @@
             outlined
             dense
             v-model="nomorPO"
-            :rules="[
-              (value) => {
-                return genericRequiredRule(value, 'Nomor PO');
-              },
-            ]"
             placeholder="Pilih Nomor PO"
             append-icon="mdi-chevron-down"
           ></v-select>

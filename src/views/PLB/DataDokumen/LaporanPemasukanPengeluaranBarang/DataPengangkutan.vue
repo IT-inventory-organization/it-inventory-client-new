@@ -10,6 +10,13 @@
           <v-select
             outlined
             dense
+            v-model="caraAngkut"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Cara Angkut');
+              },
+            ]"
+            :items="itemCaraAngkut"
             placeholder="Pilih Cara Angkut"
             append-icon="mdi-chevron-down"
           ></v-select>
@@ -19,6 +26,13 @@
           <v-select
             outlined
             dense
+            v-model="bendera"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Bendera');
+              },
+            ]"
+            :items="itemBendera"
             placeholder="Pilih Bendera"
             append-icon="mdi-chevron-down"
           ></v-select>
@@ -30,6 +44,12 @@
           <v-text-field
             outlined
             dense
+            v-model="namaPengangkut"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Nama Pengangkut');
+              },
+            ]"
             placeholder="Nama Pengangkut"
           ></v-text-field>
         </div>
@@ -38,6 +58,12 @@
           <v-text-field
             outlined
             dense
+            v-model="nomorVoyFlightPol"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Nomor Voy Flight Pol');
+              },
+            ]"
             placeholder="Input Nomor Voy Flight Pol"
           ></v-text-field>
         </div>
@@ -47,8 +73,62 @@
 </template>
 
 <script>
+import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "DataPengangkutan",
+  mixins: [FieldRequired],
+  computed: {
+    itemCaraAngkut() {
+      return this.$store.state.plb.itemCaraAngkut;
+    },
+    itemBendera() {
+      return this.$store.state.plb.itemBendera;
+    },
+    caraAngkut: {
+      get() {
+        return this.$store.state.plb.dataPengangkutan.caraAngkut;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PENGANGKUTAN", {
+          key: "caraAngkut",
+          value,
+        });
+      },
+    },
+    bendera: {
+      get() {
+        return this.$store.state.plb.dataPengangkutan.bendera;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PENGANGKUTAN", {
+          key: "bendera",
+          value,
+        });
+      },
+    },
+    namaPengangkut: {
+      get() {
+        return this.$store.state.plb.dataPengangkutan.namaPengangkut;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PENGANGKUTAN", {
+          key: "namaPengangkut",
+          value,
+        });
+      },
+    },
+    nomorVoyFlightPol: {
+      get() {
+        return this.$store.state.plb.dataPengangkutan.nomorVoyFlightPol;
+      },
+      set(value) {
+        this.$store.commit("SET_DATA_PENGANGKUTAN", {
+          key: "nomorVoyFlightPol",
+          value,
+        });
+      },
+    },
+  },
 };
 </script>
 

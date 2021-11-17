@@ -12,7 +12,7 @@
     <div class="it-inventory-box mt-8">
       <v-data-table
         :headers="headers"
-        :items="[]"
+        :items="listBarang"
         :items-per-page="10"
         class="it-inventory-simple-table"
       >
@@ -22,7 +22,7 @@
         <template v-slot:[`item.status`]="{ item }">
           <approval-badge :status="item.status"></approval-badge>
         </template>
-        <template v-slot:[`item.action`]>
+        <template v-slot:[`item.action`]="props">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -48,7 +48,7 @@
                   Edit
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click.prevent="handleDelete(props.item)">
                 <v-list-item-title>
                   <Icon
                     icon="octicon:trash-24"
@@ -83,9 +83,11 @@
 </template>
 
 <script>
+import { Icon } from "@iconify/vue2";
 export default {
   name: "DataBarang",
   components: {
+    Icon,
     FormDataBarang: () => import("@/views/PLB/DataBarang/FormDataBarang"),
   },
   data() {
@@ -108,8 +110,8 @@ export default {
           sortable: false,
         },
         {
-          text: "Neto, Bruto, Volume",
-          value: "nettoBrutoVolume",
+          text: "Neto, Brutto, Volume",
+          value: "nettoBruttoVolume",
           sortable: false,
         },
         { text: "Satuan Kemasan", value: "satuanKemasan", sortable: false },
@@ -126,6 +128,11 @@ export default {
       ],
     };
   },
+  computed: {
+    listBarang() {
+      return this.$store.state.plb.listBarang;
+    },
+  },
   methods: {
     handleOpenFormDataBarang() {
       this.formDataBarang = true;
@@ -133,13 +140,16 @@ export default {
     handleCloseFormDataBarang() {
       this.formDataBarang = false;
     },
+    handleDelete(item) {
+      this.$store.commit("DELETE_LIST_BARANG", item);
+    },
     handleSubmit() {
-      // if (this.$refs.formDataDokumen.validation()) {
-      this.$store.commit("SET_STEPPER", 3);
-      // return true;
-      // } else {
-      // return false;
-      // }
+      if (this.listBarang.length > 0) {
+        this.$store.commit("SET_STEPPER", 3);
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 };

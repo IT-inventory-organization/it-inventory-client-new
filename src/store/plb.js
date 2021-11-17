@@ -68,7 +68,11 @@ const plb = {
     itemJenisIdentitasPengirim: ["NPWP", "KTP"],
     itemJenisIdentitasPengusahaPLB: ["NPWP", "KTP"],
     itemJenisIdentitasPembeli: ["NPWP", "KTP"],
-    itemJenisIdentitasPPJK: ["NPWP", "KTP"],
+    itemJenisIdentitasPpjk: ["NPWP", "KTP"],
+    itemValuta: ["SGD", "USD", "IDR"],
+    itemCaraAngkut: ["Laut", "Udara", "Darat"],
+    itemBendera: ["IDN"],
+    itemTempatPenimbunan: [],
     dokumenPemasukan: {
       nomorDokumenPemasukan: "",
       tanggalDokumenPemasukan: "",
@@ -164,12 +168,13 @@ const plb = {
       satuanKemasan: "",
       stock: "",
       posTarif: "",
+      nilaiPabeanHargaPenyerahan: "",
       bm: "",
       ppn: "",
-      ppmbm: "",
+      ppnbm: "",
       cukai: "",
-      reportId: "",
     },
+    listBarang: [],
   },
   mutations: {
     SET_REPORT_ID(state, payload) {
@@ -219,7 +224,7 @@ const plb = {
       state.ppjk[payload.key] = payload.value;
     },
     SET_MATA_UANG(state, payload) {
-      state.dokumenTambahan[payload.key] = payload.value;
+      state.mataUang[payload.key] = payload.value;
     },
     SET_DATA_PENGANGKUTAN(state, payload) {
       state.dataPengangkutan[payload.key] = payload.value;
@@ -227,8 +232,43 @@ const plb = {
     SET_BERAT_DAN_VOLUME(state, payload) {
       state.beratDanVolume[payload.key] = payload.value;
     },
+    SET_ITEM_TEMPAT_PENIMBUNAN(state, payload) {
+      state.itemTempatPenimbunan.push(payload);
+    },
     SET_TEMPAT_PENIMBUNAN(state, payload) {
       state.tempatPenimbunan[payload.key] = payload.value;
+    },
+    SET_LIST_BARANG(state, payload) {
+      const temp = [...state.listBarang];
+      const index = state.listBarang.indexOf(payload);
+      state.listBarang = [];
+      const dataExist = temp.some((el) => el.kodeBarang === payload.kodeBarang);
+      if (dataExist) {
+        if (index != -1) {
+          state.listBarang.splice(index, 1);
+          state.listBarang.push(payload);
+        }
+      }
+      state.listBarang.push(payload);
+    },
+    DELETE_LIST_BARANG(state, payload) {
+      const index = state.listBarang.indexOf(payload);
+      if (index != -1) {
+        state.listBarang.splice(index, 1);
+      }
+    },
+    UPDATE_LIST_BARANG(state, payload) {
+      const temp = [...state.listBarang];
+      state.listBarang = [];
+      state.listBarang = temp.map((ele, ind) => {
+        if (ind === payload.index) {
+          ele = Object.assign({}, payload.payload);
+        }
+        return ele;
+      });
+    },
+    SET_DATA_BARANG(state, payload) {
+      state.dataBarang[payload.key] = payload.value;
     },
   },
   actions: {
