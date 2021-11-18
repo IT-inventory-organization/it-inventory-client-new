@@ -1,11 +1,30 @@
 <template>
   <v-card>
     <v-card-title>
-      <v-row no-gutters align-content="center" justify="space-between">
-        <span class="headline font-weight-bold">Purchase Order Baru</span>
-        <span style="cursor: pointer" @click.prevent="handleCloseDialog"
+      <v-row no-gutters align-content="center">
+        <v-col cols="10">
+          <span class="headline font-weight-bold">Purchase Order Baru</span>
+        </v-col>
+        <!-- <span style="cursor: pointer" @click.prevent="handleCloseDialog"
           ><v-icon>mdi-close</v-icon></span
-        >
+        > -->
+        <v-col cols="2">
+          <div class="d-flex">
+            <button
+              @click="handleCloseDialog"
+              class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__grey"
+            >
+              Batal
+            </button>
+            <button
+              class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
+            >
+              Simpan
+            </button>
+          </div>
+        </v-col>
+        
+          
       </v-row>
     </v-card-title>
     <v-spacer />
@@ -113,20 +132,132 @@
                         ></v-date-picker>
                     </v-menu>
                     </v-col>
-
-                    <!-- <v-col cols="2"></v-col> -->
                   </v-row>
-              </v-col>
 
+              </v-col>
           </v-row>
+          <v-spacer></v-spacer>
+
+          <v-row no-gutters justify="space-between">
+            <v-col cols="2" style="padding: 0 1em 0 0;">Kode Barang</v-col>
+            <v-col cols="4" style="padding: 0 1em;">Item Deskripsi</v-col>
+            <v-col cols="2" style="padding: 0 1em;">Quantity</v-col>
+            <v-col cols="2" style="padding: 0 1em;">Harga Satuan</v-col>
+            <v-col cols="2" style="padding: 0 0 0 1em;">Jumlah</v-col>
+          </v-row>
+          <div v-for="(input, k) in inputs" :key="k">
+            <v-row no-gutters justify="space-between">
+              <v-col cols="2" style="padding: 0 1em 0 0;">
+                <v-select
+                    outlined
+                    dense
+                    v-model="input.kode_barang"
+                    placeholder="Pilih Kode Barang"
+                    :rules="[
+                    (value) => {
+                        return genericRequiredRule(value, 'Kode Barang');
+                    },
+                    ]"
+                ></v-select>
+              </v-col>
+              <v-col cols="4" style="padding: 0 1em;">
+                <v-text-field
+                    outlined
+                    dense
+                    v-model="input.item_deskripsi"
+                    placeholder="Tulis Deskripsi"
+                    :rules="[
+                    (value) => {
+                        return genericRequiredRule(value, 'Item Deskripsi');
+                    },
+                    ]"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="2" style="padding: 0 1em;">
+                <v-text-field
+                    outlined
+                    dense
+                    v-model="inputs.quantity"
+                    placeholder="0"
+                    type="number"
+                    default=0
+                    :rules="[
+                    (value) => {
+                        return genericRequiredRule(value, 'Quantity');
+                    },
+                    ]"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="2" style="padding: 0 1em;">
+                <v-text-field
+                    outlined
+                    dense
+                    v-model="inputs.harga_satuan"
+                    placeholder="0"
+                    type="number"
+                    default=0
+                    :rules="[
+                    (value) => {
+                        return genericRequiredRule(value, 'Harga Satuan');
+                    },
+                    ]"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="2" style="padding: 0 0 0 1em;">
+                <v-text-field
+                    outlined
+                    dense
+                    v-model="inputs.jumlah"
+                    placeholder="0"
+                    type="number"
+                    :rules="[
+                    (value) => {
+                        return genericRequiredRule(value, 'Jumlah');
+                    },
+                    ]"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </div>
+
+          <v-spacer></v-spacer>
+          <v-row no-gutters justify="flex-start">
+              <button @click="add" style="background-color: #F8F8F8; border-radius: 1em; padding: 0.5em 1em 0.5em 0.8em; display: flex; align-items: center;" >
+                <img style="filter: brightness(4.8);" src="@/assets/icons/ic_plus.svg" />
+                <span style="padding: 0 0 0 0.5em;">
+                Tambah Item</span></button>
+          </v-row>
+
+
         </v-container>
         <v-card-actions>
+          <v-row no-gutters justify="space-between">
+            <v-col cols="3">
+              Remarks
+              <!-- <v-text-field
+                    outlined
+                    dense
+                    v-model="remarks"
+                    placeholder="value"
+                    :rules="[
+                    (value) => {
+                        return genericRequiredRule(value, 'Remarks');
+                    },
+                    ]"
+                ></v-text-field> -->
+            </v-col>
+            <v-col cols="3"  style="background: #F8F8F8;">
+              <strong>TOTAL</strong>
+            </v-col>
+          </v-row>
+        </v-card-actions>
+        <!-- <v-card-actions>
           <v-spacer></v-spacer>
           <button type="submit" class="btn_save">
             <span>Selanjutnya</span>
             <img src="@/assets/icons/ic_bulletnext.svg" />
           </button>
-        </v-card-actions>
+        </v-card-actions> -->
       </v-form>
     </v-card-text>
   </v-card>
@@ -137,6 +268,20 @@ import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "FormPO",
   mixins: [FieldRequired],
+  data() {
+    return {
+      inputs: [
+        {
+          kode_barang: "",
+          item_deskripsi: "",
+          quantity: "",
+          harga_satuan: "",
+          jumlah: ""
+        },
+      ],
+      remarks: ""
+    }
+  },
   computed: {
       kapalPemilik: {
         get() {
@@ -188,6 +333,15 @@ export default {
     
   },
   methods: {
+    add () {
+      this.inputs.push({
+        kode_barang: "",
+        item_deskripsi: "",
+        quantity: "",
+        harga_satuan: "",
+        jumlah: ""
+      })
+    },
     handleCloseDialog() {
       this.$emit("handleBuatBaru");
     },

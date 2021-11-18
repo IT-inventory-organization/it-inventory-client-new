@@ -65,7 +65,7 @@
                         View
                         </v-list-item-title>
                     </v-list-item>
-                    <v-list-item>
+                    <!-- <v-list-item>
                         <v-list-item-title>
                         <Icon
                             icon="ph:pencil-line-light"
@@ -82,7 +82,7 @@
                         />
                         Delete
                         </v-list-item-title>
-                    </v-list-item>
+                    </v-list-item> -->
                     <v-list-item>
                         <v-list-item-title>
                         <Icon
