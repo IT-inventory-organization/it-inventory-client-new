@@ -103,6 +103,7 @@
             v-model="dialogBuatBaruPO"
             persistent
             width="100%"
+            @click:outside="handleBuatBaru"
             max-width="95%" >
             <form-po @handleBuatBaru="handleBuatBaru" />
         </v-dialog>
@@ -111,8 +112,9 @@
             v-model="dialogPurchaseOrderView"
             persistent
             width="100%"
-            max-width="95%" >
-            <purchase-order-view @handleBuatBaru="handleBuatBaru" />
+            @click:outside="handleViewPurchaseOrder"
+            max-width="70%" >
+            <purchase-order-view @handleBuatBaru="handleViewPurchaseOrder" />
         </v-dialog>
     </div>
 </template>
