@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card height="85vh" >
     <v-card-title>
       <v-row no-gutters align-content="center">
         <v-col cols="10">
@@ -27,7 +27,6 @@
           
       </v-row>
     </v-card-title>
-    <v-spacer />
     <v-card-text>
       <v-form ref="initialReport" @submit.prevent="handleSubmit">
         <v-container fluid>
@@ -136,7 +135,6 @@
 
               </v-col>
           </v-row>
-          <v-spacer></v-spacer>
 
           <v-row no-gutters>
             <v-col cols="2" style="padding: 0 1em 0 0;">Kode Barang</v-col>
@@ -230,7 +228,7 @@
 
 
         </v-container>
-        <v-card-actions>
+        <v-card-actions height="100%">
           <v-row no-gutters justify="space-between">
             <v-col cols="3">
               Remarks
