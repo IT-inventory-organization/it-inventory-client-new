@@ -138,7 +138,7 @@
           </v-row>
           <v-spacer></v-spacer>
 
-          <v-row no-gutters justify="space-between">
+          <v-row no-gutters>
             <v-col cols="2" style="padding: 0 1em 0 0;">Kode Barang</v-col>
             <v-col cols="4" style="padding: 0 1em;">Item Deskripsi</v-col>
             <v-col cols="2" style="padding: 0 1em;">Quantity</v-col>
@@ -146,7 +146,7 @@
             <v-col cols="2" style="padding: 0 0 0 1em;">Jumlah</v-col>
           </v-row>
           <div v-for="(input, k) in inputs" :key="k">
-            <v-row no-gutters justify="space-between">
+            <v-row no-gutters>
               <v-col cols="2" style="padding: 0 1em 0 0;">
                 <v-select
                     outlined
@@ -221,7 +221,7 @@
           </div>
 
           <v-spacer></v-spacer>
-          <v-row no-gutters justify="flex-start">
+          <v-row no-gutters>
               <button @click="add" style="background-color: #F8F8F8; border-radius: 1em; padding: 0.5em 1em 0.5em 0.8em; display: flex; align-items: center;" >
                 <img style="filter: brightness(4.8);" src="@/assets/icons/ic_plus.svg" />
                 <span style="padding: 0 0 0 0.5em;">
@@ -234,20 +234,24 @@
           <v-row no-gutters justify="space-between">
             <v-col cols="3">
               Remarks
-              <!-- <v-text-field
+              <v-text-field
                     outlined
                     dense
                     v-model="remarks"
-                    placeholder="value"
+                    placeholder="Remarks"
                     :rules="[
                     (value) => {
                         return genericRequiredRule(value, 'Remarks');
                     },
                     ]"
-                ></v-text-field> -->
+                ></v-text-field>
             </v-col>
-            <v-col cols="3"  style="background: #F8F8F8;">
-              <strong>TOTAL</strong>
+            <v-col cols="3"  style="background: #F8F8F8; padding: 0.5em 0.3em;">
+              Jumlah Total
+              <div style="font-size: 1.25em; display: flex; justify-content: space-between; padding: 0.5em;">
+                <strong>TOTAL</strong>
+                <strong>325.00</strong>
+              </div>
             </v-col>
           </v-row>
         </v-card-actions>
@@ -279,7 +283,7 @@ export default {
           jumlah: ""
         },
       ],
-      remarks: ""
+    remarks: ""
     }
   },
   computed: {
