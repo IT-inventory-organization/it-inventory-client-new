@@ -4,7 +4,12 @@
       <v-card-title>
         <v-row no-gutters align="center">
           <v-col cols="8">
-            <span class="headline font-weight-bold">Informasi Perusahaan</span>
+            <span class="headline font-weight-bold" v-if="isEdit"
+              >Ubah Data Barang</span
+            >
+            <span class="headline font-weight-bold" v-else
+              >Tambah Data Barang</span
+            >
           </v-col>
           <v-col cols="4">
             <div class="d-flex">
@@ -274,6 +279,7 @@
 import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "FormDataBarang",
+  props: ["isEdit", "editedIndex"],
   mixins: [FieldRequired],
   computed: {
     kodeBarang: {
@@ -432,6 +438,14 @@ export default {
         cukai: this.cukai,
       };
       if (getRef) {
+        if (this.isEdit) {
+          this.$store.commit("UPDATE_LIST_BARANG", {
+            data,
+            index: this.editedIndex,
+          });
+          this.handleClose();
+          return;
+        }
         this.$store.commit("SET_LIST_BARANG", data);
         this.handleClose();
       }

@@ -39,7 +39,7 @@
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item>
+              <v-list-item @click.prevent="handleEdit(props.item, props.index)">
                 <v-list-item-title>
                   <Icon
                     icon="ph:pencil-line-light"
@@ -76,6 +76,8 @@
       max-width="1200px"
     >
       <form-data-barang
+        :isEdit="isEdit"
+        :editedIndex="editedIndex"
         @handleCloseFormDataBarang="handleCloseFormDataBarang"
       />
     </v-dialog>
@@ -92,7 +94,9 @@ export default {
   },
   data() {
     return {
+      isEdit: false,
       formDataBarang: false,
+      editedIndex: null,
       headers: [
         {
           text: "No",
@@ -136,12 +140,40 @@ export default {
   methods: {
     handleOpenFormDataBarang() {
       this.formDataBarang = true;
+      this.isEdit = false;
     },
     handleCloseFormDataBarang() {
       this.formDataBarang = false;
     },
     handleDelete(item) {
       this.$store.commit("DELETE_LIST_BARANG", item);
+    },
+    handleEdit(item, index) {
+      this.editedIndex = index;
+      this.handleSetDataBarang("kodeBarang", item.kodeBarang);
+      this.handleSetDataBarang("namaBarang", item.namaBarang);
+      this.handleSetDataBarang("uraian", item.uraian);
+      this.handleSetDataBarang("nettoBruttoVolume", item.nettoBruttoVolume);
+      this.handleSetDataBarang("satuanKemasan", item.satuanKemasan);
+      this.handleSetDataBarang("stock", item.stock);
+      this.handleSetDataBarang("posTarif", item.posTarif);
+      this.handleSetDataBarang(
+        "nilaiPabeanHargaPenyerahan",
+        item.nilaiPabeanHargaPenyerahan
+      );
+      this.handleSetDataBarang("bm", item.bm);
+      this.handleSetDataBarang("ppn", item.ppn);
+      this.handleSetDataBarang("ppnbm", item.ppnbm);
+      this.handleSetDataBarang("ppn", item.ppn);
+      this.handleSetDataBarang("cukai", item.cukai);
+      this.formDataBarang = true;
+      this.isEdit = true;
+    },
+    handleSetDataBarang(key, value) {
+      this.$store.commit("SET_DATA_BARANG", {
+        key,
+        value,
+      });
     },
     handleSubmit() {
       if (this.listBarang.length > 0) {
