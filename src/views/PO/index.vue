@@ -56,7 +56,7 @@
                     </template>
 
                     <v-list class="it-inventory-actions-list">
-                    <v-list-item>
+                    <v-list-item @click="handleViewPurchaseOrder">
                         <v-list-item-title>
                         <Icon
                             icon="fluent:apps-list-detail-20-regular"
@@ -106,6 +106,14 @@
             max-width="95%" >
             <form-po @handleBuatBaru="handleBuatBaru" />
         </v-dialog>
+
+        <v-dialog
+            v-model="dialogPurchaseOrderView"
+            persistent
+            width="100%"
+            max-width="95%" >
+            <purchase-order-view @handleBuatBaru="handleBuatBaru" />
+        </v-dialog>
     </div>
 </template>
 
@@ -115,11 +123,13 @@ import { Icon } from "@iconify/vue2";
         name: "TablePO",
         components: {
             Icon,
-            FormPo: () => import("@/components/po/FormPO")
+            FormPo: () => import("@/components/po/FormPO"),
+            PurchaseOrderView: () => import("@/components/po/PurchaseOrderView"),
         },
         data() {
             return {
                 dialogBuatBaruPO: false,
+                dialogPurchaseOrderView: false,
                 headers: [
                     {
                     text: "No. PO",
@@ -172,6 +182,9 @@ import { Icon } from "@iconify/vue2";
         methods: {
             handleBuatBaru() {
                 this.dialogBuatBaruPO = !this.dialogBuatBaruPO;
+            },
+            handleViewPurchaseOrder() {
+                this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
             }
         }
     }
