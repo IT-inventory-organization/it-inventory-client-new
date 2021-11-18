@@ -346,6 +346,16 @@ export default {
     },
     handleCloseDialog() {
       this.$emit("handleBuatBaru");
+      this.inputs = [
+        {
+          kode_barang: "",
+          item_deskripsi: "",
+          quantity: "",
+          harga_satuan: "",
+          jumlah: ""
+        },
+      ],
+      this.remarks= ""
     },
     handleSubmit() {
       const getRef = this.$refs.initialReport.handleValidate();
