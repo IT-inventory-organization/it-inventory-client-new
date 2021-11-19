@@ -1,4 +1,5 @@
 import router from "@/router/";
+import countries from "@/_mocks_/countries";
 
 const plb = {
   state: {
@@ -71,7 +72,7 @@ const plb = {
     itemJenisIdentitasPpjk: ["NPWP", "KTP"],
     itemValuta: ["SGD", "USD", "IDR"],
     itemCaraAngkut: ["Laut", "Udara", "Darat"],
-    itemBendera: ["IDN"],
+    itemBendera: countries,
     itemTempatPenimbunan: [],
     dokumenPemasukan: {
       nomorDokumenPemasukan: "",
