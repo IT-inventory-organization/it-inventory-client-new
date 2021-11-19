@@ -55,7 +55,7 @@
 
           <v-stepper-items>
             <v-stepper-content step="3">
-              Preview
+              <data-preview />
             </v-stepper-content>
           </v-stepper-items>
         </v-col>
@@ -70,6 +70,7 @@ export default {
   components: {
     DataDokumen: () => import("@/views/PLB/DataDokumen/index"),
     DataBarang: () => import("@/views/PLB/DataBarang/index"),
+    DataPreview: () => import("@/views/PLB/DataPreview/index"),
   },
   computed: {
     stepper() {
