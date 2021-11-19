@@ -1,5 +1,6 @@
 import router from "@/router/";
-import countries from "@/_mocks_/countries";
+import countriesMock from "@/_mocks_/countries";
+import currencyMock from "@/_mocks_/currency";
 
 const plb = {
   state: {
@@ -70,9 +71,9 @@ const plb = {
     itemJenisIdentitasPengusahaPLB: ["NPWP", "KTP"],
     itemJenisIdentitasPembeli: ["NPWP", "KTP"],
     itemJenisIdentitasPpjk: ["NPWP", "KTP"],
-    itemValuta: ["SGD", "USD", "IDR"],
+    itemValuta: currencyMock.codes,
     itemCaraAngkut: ["Laut", "Udara", "Darat"],
-    itemBendera: countries,
+    itemBendera: countriesMock,
     itemTempatPenimbunan: [],
     dokumenPemasukan: {
       nomorDokumenPemasukan: "",

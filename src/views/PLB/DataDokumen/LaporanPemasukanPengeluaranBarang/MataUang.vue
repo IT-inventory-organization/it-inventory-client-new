@@ -18,6 +18,7 @@
               },
             ]"
             :items="itemValuta"
+            item-text="name"
             append-icon="mdi-chevron-down"
           ></v-select>
         </div>
