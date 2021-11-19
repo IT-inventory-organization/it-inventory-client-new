@@ -33,6 +33,7 @@
               },
             ]"
             :items="itemBendera"
+            item-text="name"
             placeholder="Pilih Bendera"
             append-icon="mdi-chevron-down"
           ></v-select>
