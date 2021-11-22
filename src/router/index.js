@@ -6,6 +6,7 @@ import PLB from "@/views/PLB/PLB";
 import TablePLB from "@/views/PLB/TablePLB";
 import FormDocument from "@/views/PLB/FormDocument";
 import LaporanPemasukanBarang from "@/views/Laporan/LaporanPemasukanBarang";
+import Login from "@/views/Login";
 
 Vue.use(VueRouter);
 
@@ -24,7 +25,7 @@ const routes = [
     name: "Dashboard",
     component: Dashboard,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   {
@@ -32,14 +33,14 @@ const routes = [
     name: "MasterData",
     component: MasterData,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   {
     path: "/plb",
     component: PLB,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
     children: [
       {
@@ -52,7 +53,7 @@ const routes = [
         name: "PLBFormDocument",
         component: FormDocument,
         meta: {
-          reportId: false,
+          reportId: true,
         },
       },
     ],
@@ -62,12 +63,13 @@ const routes = [
     name: "LaporanPemasukanBarang",
     component: LaporanPemasukanBarang,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   {
     path: "/login",
     name: "login",
+    component: Login,
   },
   {
     path: "/register",
@@ -82,7 +84,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("token-it-inventory");
+  const token = localStorage.getItem("token_it_inventory");
   const reportId = localStorage.getItem("reportId");
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!token) {
