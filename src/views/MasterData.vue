@@ -16,8 +16,8 @@
       </v-col>
     </v-row>
     <v-row class="mt-5">
-      <data-perusahaan />
-      <data-pemilik />
+      <data-perusahaan :data="informasiPerusahaan" />
+      <data-pemilik :data="informasiPerusahaan" />
     </v-row>
     <v-dialog persistent v-model="formEdit" width="50%" max-width="1200px">
       <form-edit-info-perusahaan @handleCloseFormEdit="handleCloseFormEdit" />
@@ -39,6 +39,11 @@ export default {
       formEdit: false,
     };
   },
+  computed: {
+    informasiPerusahaan() {
+      return this.$store.state.MasterData.informasiPerusahaan;
+    },
+  },
   methods: {
     handleEdit() {
       this.formEdit = true;
@@ -46,6 +51,9 @@ export default {
     handleCloseFormEdit() {
       this.formEdit = false;
     },
+  },
+  created() {
+    this.$store.dispatch("getInformasiPerusahaan");
   },
 };
 </script>

@@ -20,6 +20,7 @@
           value="Fletcher Lindgren"
           class="it-inven-dataperusahaan__value"
           hide-details
+          v-model="data.namaPemilik"
           dense
           disabled
         />
@@ -34,6 +35,7 @@
           value="Menara Kadin Indonesia, Lt.28. Jl.H.R.Rasuna Said Blok X-5 Kav. 02/03 Jakarta 12950 PO BOX 5032 JKTM Jakarta 12700"
           hide-details
           class="it-inven-dataperusahaan__value"
+          v-model="data.alamatPemilik"
           dense
           disabled
           auto-grow
@@ -49,6 +51,7 @@
 import { Icon } from "@iconify/vue2";
 export default {
   name: "DataPemilik",
+  props: ["data"],
   components: {
     Icon,
   },

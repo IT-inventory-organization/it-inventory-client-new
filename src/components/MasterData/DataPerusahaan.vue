@@ -13,6 +13,7 @@
         <v-text-field
           value="Nama Perusahaan"
           class="it-inven-dataperusahaan__value"
+          v-model="data.namaPerusahaan"
           hide-details
           dense
           disabled
@@ -27,6 +28,7 @@
         <v-text-field
           value="0998282827377"
           class="it-inven-dataperusahaan__value"
+          v-model="data.npwp"
           hide-details
           dense
           disabled
@@ -43,6 +45,7 @@
           hide-details
           class="it-inven-dataperusahaan__value"
           dense
+          v-model="data.alamat"
           disabled
           auto-grow
           rows="1"
@@ -59,6 +62,7 @@
           value="021 527 4208"
           class="it-inven-dataperusahaan__value"
           hide-details
+          v-model="data.nomorTelepon"
           dense
           disabled
         />
@@ -73,6 +77,7 @@
           value="021 527 4208"
           class="it-inven-dataperusahaan__value"
           hide-details
+          v-model="data.fax"
           dense
           disabled
         />
@@ -86,6 +91,7 @@
         <v-text-field
           value="PERUSAHAAN MINYAK DAN GAS"
           hide-details
+          v-model="data.bidangUsaha"
           class="it-inven-dataperusahaan__value"
           dense
           disabled
@@ -99,6 +105,7 @@
 import { Icon } from "@iconify/vue2";
 export default {
   name: "DataPerusahaan",
+  props: ["data"],
   components: {
     Icon,
   },
