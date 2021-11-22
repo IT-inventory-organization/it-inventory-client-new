@@ -313,7 +313,6 @@ export default {
   methods: {
     handleClose() {
       this.$emit("handleCloseFormEdit");
-      this.$refs.formInformasiPerusahaan.reset();
     },
     handleSubmit() {
       const getRef = this.$refs.formInformasiPerusahaan.validate();
