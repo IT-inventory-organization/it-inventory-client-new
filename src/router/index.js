@@ -6,7 +6,6 @@ import PLB from "@/views/PLB/PLB";
 import TablePLB from "@/views/PLB/TablePLB";
 import FormDocument from "@/views/PLB/FormDocument";
 import LaporanPemasukanBarang from "@/views/Laporan/LaporanPemasukanBarang";
-import Login from "@/views/Login";
 
 Vue.use(VueRouter);
 
@@ -33,22 +32,14 @@ const routes = [
     name: "MasterData",
     component: MasterData,
     meta: {
-<<<<<<< HEAD
       requiresAuth: false,
-=======
-      requiresAuth: true,
->>>>>>> a272af705dd602180f41856ee99caf753a59aa03
     },
   },
   {
     path: "/plb",
     component: PLB,
     meta: {
-<<<<<<< HEAD
       requiresAuth: false,
-=======
-      requiresAuth: true,
->>>>>>> a272af705dd602180f41856ee99caf753a59aa03
     },
     children: [
       {
@@ -77,7 +68,6 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    component: Login,
   },
   {
     path: "/register",
@@ -92,12 +82,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-<<<<<<< HEAD
   const token = localStorage.getItem("token-it-inventory");
   const reportId = localStorage.getItem("reportId");
-=======
-  const token = localStorage.getItem("token_it_inventory");
->>>>>>> a272af705dd602180f41856ee99caf753a59aa03
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!token) {
       next({
@@ -107,7 +93,6 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
-<<<<<<< HEAD
 
     if (to.matched.some((record) => record.meta.reportId)) {
       if (!reportId) {
@@ -119,8 +104,6 @@ router.beforeEach((to, from, next) => {
         next();
       }
     }
-=======
->>>>>>> a272af705dd602180f41856ee99caf753a59aa03
   } else {
     next();
   }
