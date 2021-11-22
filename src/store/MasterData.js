@@ -20,7 +20,7 @@ const MasterData = {
       state.loading[payload.key] = payload.value;
     },
     SET_INFORMASI_PERUSAHAAN(state, payload) {
-      state.informasi_perusahaan[payload.key] = payload.value;
+      state.informasiPerusahaan[payload.key] = payload.value;
     },
   },
   actions: {},
