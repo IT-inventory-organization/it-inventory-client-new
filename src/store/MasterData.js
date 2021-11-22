@@ -9,6 +9,7 @@ const MasterData = {
       loadingEditInformasiPerusahaan: false,
       loadingInformasiPerusahaan: false,
     },
+    dataInformasiPerusahaan: {},
     informasiPerusahaan: {
       namaPerusahaan: "",
       npwp: "",
@@ -26,6 +27,9 @@ const MasterData = {
     },
     SET_INFORMASI_PERUSAHAAN(state, payload) {
       state.informasiPerusahaan[payload.key] = payload.value;
+    },
+    SET_DATA_INFORMASI_PERUSAHAAN(state, payload) {
+      state.dataInformasiPerusahaan = payload;
     },
   },
   actions: {
@@ -45,38 +49,7 @@ const MasterData = {
         });
         const data = AESDecrypt(result.data.data);
         if (result.data.success) {
-          context.commit("SET_INFORMASI_PERUSAHAAN", {
-            key: "namaPerusahaan",
-            value: data.namaPerusahaan,
-          });
-          context.commit("SET_INFORMASI_PERUSAHAAN", {
-            key: "npwp",
-            value: data.npwp,
-          });
-          context.commit("SET_INFORMASI_PERUSAHAAN", {
-            key: "alamat",
-            value: data.alamat,
-          });
-          context.commit("SET_INFORMASI_PERUSAHAAN", {
-            key: "nomorTelepon",
-            value: data.nomorTelepon,
-          });
-          context.commit("SET_INFORMASI_PERUSAHAAN", {
-            key: "fax",
-            value: data.fax,
-          });
-          context.commit("SET_INFORMASI_PERUSAHAAN", {
-            key: "bidangUsaha",
-            value: data.bidangUsaha,
-          });
-          context.commit("SET_INFORMASI_PERUSAHAAN", {
-            key: "namaPemilik",
-            value: data.namaPemilik,
-          });
-          context.commit("SET_INFORMASI_PERUSAHAAN", {
-            key: "alamatPemilik",
-            value: data.alamatPemilik,
-          });
+          context.commit("SET_DATA_INFORMASI_PERUSAHAAN", data);
         }
       } catch (error) {
         console.log(error);

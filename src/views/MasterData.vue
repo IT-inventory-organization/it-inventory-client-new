@@ -16,8 +16,8 @@
       </v-col>
     </v-row>
     <v-row class="mt-5">
-      <data-perusahaan :data="informasiPerusahaan" />
-      <data-pemilik :data="informasiPerusahaan" />
+      <data-perusahaan :data="dataInformasiPerusahaan" />
+      <data-pemilik :data="dataInformasiPerusahaan" />
     </v-row>
     <v-dialog persistent v-model="formEdit" width="50%" max-width="1200px">
       <form-edit-info-perusahaan @handleCloseFormEdit="handleCloseFormEdit" />
@@ -40,8 +40,8 @@ export default {
     };
   },
   computed: {
-    informasiPerusahaan() {
-      return this.$store.state.MasterData.informasiPerusahaan;
+    dataInformasiPerusahaan() {
+      return this.$store.state.MasterData.dataInformasiPerusahaan;
     },
   },
   methods: {
