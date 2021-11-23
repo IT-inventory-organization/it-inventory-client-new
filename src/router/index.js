@@ -5,7 +5,6 @@ import MasterData from "@/views/MasterData";
 import PLB from "@/views/PLB/PLB";
 import TablePLB from "@/views/PLB/TablePLB";
 import FormDocument from "@/views/PLB/FormDocument";
-import LaporanPemasukanBarang from "@/views/Laporan/LaporanPemasukanBarang";
 import Login from "@/views/Login";
 
 Vue.use(VueRouter);
@@ -57,14 +56,6 @@ const routes = [
         },
       },
     ],
-  },
-  {
-    path: "/laporan-pemasukan-barang",
-    name: "LaporanPemasukanBarang",
-    component: LaporanPemasukanBarang,
-    meta: {
-      requiresAuth: true,
-    },
   },
   {
     path: "/login",
