@@ -8,7 +8,7 @@
       </v-col>
       <v-col lg="1" md="1" sm="12" style="text-align: right">
         <button
-          v-if="stepper === 3"
+          v-if="stepper === 4"
           fill
           class="it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
           @click.prevent="handleFinish"
@@ -17,23 +17,34 @@
         </button>
       </v-col>
     </v-row>
-    <v-stepper class="it-inven-stepper" v-model="stepper" elevation="0">
+    <v-stepper
+      alt-labels
+      class="it-inven-stepper"
+      v-model="stepper"
+      elevation="0"
+    >
       <v-row justify="center">
         <v-col cols="6">
           <v-stepper-header>
             <v-stepper-step :complete="stepper > 1" step="1">
+              Dokumen PO
+            </v-stepper-step>
+
+            <v-divider :class="stepper > 1 && 'v-divider__active'"></v-divider>
+
+            <v-stepper-step :complete="stepper > 2" step="2">
               Data Dokumen
             </v-stepper-step>
 
-            <v-divider></v-divider>
+            <v-divider :class="stepper > 2 && 'v-divider__active'"></v-divider>
 
-            <v-stepper-step :complete="stepper > 2" step="2">
+            <v-stepper-step :complete="stepper > 3" step="3">
               Data Barang
             </v-stepper-step>
 
-            <v-divider></v-divider>
+            <v-divider :class="stepper > 3 && 'v-divider__active'"></v-divider>
 
-            <v-stepper-step step="3">
+            <v-stepper-step step="4">
               Preview
             </v-stepper-step>
           </v-stepper-header>
@@ -43,18 +54,23 @@
         <v-col cols="10">
           <v-stepper-items>
             <v-stepper-content step="1">
+              <dokumen-PO />
+            </v-stepper-content>
+          </v-stepper-items>
+          <v-stepper-items>
+            <v-stepper-content step="2">
               <data-dokumen />
             </v-stepper-content>
           </v-stepper-items>
 
           <v-stepper-items>
-            <v-stepper-content step="2">
+            <v-stepper-content step="3">
               <data-barang />
             </v-stepper-content>
           </v-stepper-items>
 
           <v-stepper-items>
-            <v-stepper-content step="3">
+            <v-stepper-content step="4">
               <data-preview />
             </v-stepper-content>
           </v-stepper-items>
@@ -68,6 +84,7 @@
 export default {
   name: "FormDocument",
   components: {
+    DokumenPO: () => import("@/views/PLB/DokumenPO/index"),
     DataDokumen: () => import("@/views/PLB/DataDokumen/index"),
     DataBarang: () => import("@/views/PLB/DataBarang/index"),
     DataPreview: () => import("@/views/PLB/DataPreview/index"),

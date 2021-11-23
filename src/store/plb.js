@@ -66,6 +66,11 @@ const plb = {
       "FAS",
       "CIF",
     ],
+    itemDokumenPO: [
+      { name: "PO-0001" },
+      { name: "PO-0002" },
+      { name: "PO-0003" },
+    ],
     itemJenisIdentitasPenjual: ["NPWP", "KTP"],
     itemJenisIdentitasPengirim: ["NPWP", "KTP"],
     itemJenisIdentitasPengusahaPLB: ["NPWP", "KTP"],
@@ -79,6 +84,7 @@ const plb = {
       nomorDokumenPemasukan: "",
       tanggalDokumenPemasukan: "",
     },
+    selectedDokumenPO: [],
     dokumenTambahan: {
       nomorBC10: "",
       nomorBC11: "",
@@ -195,6 +201,9 @@ const plb = {
       state.stepper = payload;
       localStorage.setItem("stepper", payload);
     },
+    SET_SELECTED_DOKUMEN_PO(state, payload) {
+      state.selectedDokumenPO = payload;
+    },
     SET_DOKUMEN_PEMASUKAN(state, payload) {
       state.dokumenPemasukan[payload.key] = payload.value;
     },
@@ -270,6 +279,7 @@ const plb = {
         "NotificationType",
         context.state.report.jenisPemberitahuan
       );
+      localStorage.setItem("reportId", 2);
 
       router.push("/plb/add");
     },
