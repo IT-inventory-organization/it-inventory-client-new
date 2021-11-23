@@ -1,5 +1,8 @@
 <template>
-  <v-card>
+  <v-card :loading="loadingEditInformasiPerusahaan">
+    <template slot="progress">
+      <progress-linear />
+    </template>
     <v-form ref="formInformasiPerusahaan" @submit.prevent="handleSubmit">
       <v-card-title>
         <v-row no-gutters align="center">
@@ -11,11 +14,13 @@
               <button
                 @click="handleClose"
                 class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__grey"
+                :disabled="loadingEditInformasiPerusahaan"
               >
                 Batal
               </button>
               <button
                 class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
+                :disabled="loadingEditInformasiPerusahaan"
               >
                 Simpan
               </button>
@@ -219,8 +224,13 @@ export default {
   mixins: [FieldRequired],
   components: {
     Icon,
+    ProgressLinear: () => import("@/components/ProgressLinear"),
   },
   computed: {
+    loadingEditInformasiPerusahaan() {
+      return this.$store.state.MasterData.loading
+        .loadingEditInformasiPerusahaan;
+    },
     namaPerusahaan: {
       get() {
         return this.$store.state.MasterData.informasiPerusahaan.namaPerusahaan;
@@ -317,13 +327,15 @@ export default {
     handleSubmit() {
       const getRef = this.$refs.formInformasiPerusahaan.validate();
       if (getRef) {
-        this.handleClose();
+        this.$store.dispatch("updateInformasiPerusahaan").then((result) => {
+          if (result) {
+            this.handleClose();
+          }
+        });
       }
     },
   },
-  created() {
-    console.log(this.$store.state.MasterData);
-  },
+  created() {},
 };
 </script>
 

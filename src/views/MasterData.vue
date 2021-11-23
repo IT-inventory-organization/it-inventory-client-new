@@ -47,9 +47,64 @@ export default {
   methods: {
     handleEdit() {
       this.formEdit = true;
+      this.handleSetStateInformasiPerusahan(
+        this.dataInformasiPerusahaan.namaPerusahaan,
+        this.dataInformasiPerusahaan.npwp,
+        this.dataInformasiPerusahaan.alamat,
+        this.dataInformasiPerusahaan.nomorTelepon,
+        this.dataInformasiPerusahaan.fax,
+        this.dataInformasiPerusahaan.bidangUsaha,
+        this.dataInformasiPerusahaan.namaPemilik,
+        this.dataInformasiPerusahaan.alamatPemilik
+      );
     },
     handleCloseFormEdit() {
       this.formEdit = false;
+      this.handleSetStateInformasiPerusahan("", "", "", "", "", "", "", "");
+    },
+
+    handleSetStateInformasiPerusahan(
+      namaPerusahaan,
+      npwp,
+      alamat,
+      nomorTelepon,
+      fax,
+      bidangUsaha,
+      namaPemilik,
+      alamatPemilik
+    ) {
+      this.$store.commit("SET_INFORMASI_PERUSAHAAN", {
+        key: "namaPerusahaan",
+        value: namaPerusahaan,
+      });
+      this.$store.commit("SET_INFORMASI_PERUSAHAAN", {
+        key: "npwp",
+        value: npwp,
+      });
+      this.$store.commit("SET_INFORMASI_PERUSAHAAN", {
+        key: "alamat",
+        value: alamat,
+      });
+      this.$store.commit("SET_INFORMASI_PERUSAHAAN", {
+        key: "nomorTelepon",
+        value: nomorTelepon,
+      });
+      this.$store.commit("SET_INFORMASI_PERUSAHAAN", {
+        key: "fax",
+        value: fax,
+      });
+      this.$store.commit("SET_INFORMASI_PERUSAHAAN", {
+        key: "bidangUsaha",
+        value: bidangUsaha,
+      });
+      this.$store.commit("SET_INFORMASI_PERUSAHAAN", {
+        key: "namaPemilik",
+        value: namaPemilik,
+      });
+      this.$store.commit("SET_INFORMASI_PERUSAHAAN", {
+        key: "alamatPemilik",
+        value: alamatPemilik,
+      });
     },
   },
   created() {
