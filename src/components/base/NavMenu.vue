@@ -57,20 +57,14 @@ export default {
         isDropdown: false,
       },
       {
-        name: "MASTER DATA",
-        path: "/master-data",
-        icon: "feather:database",
+        name: "PO",
+        path: "/po",
+        icon: "fluent:document-text-20-regular",
         isDropdown: false,
       },
       {
         name: "PLB",
         path: "/plb",
-        icon: "fluent:document-text-20-regular",
-        isDropdown: false,
-      },
-      {
-        name: "PO",
-        path: "/po",
         icon: "fluent:document-text-20-regular",
         isDropdown: false,
       },
@@ -81,23 +75,16 @@ export default {
         isDropdown: false,
       },
       {
+        name: "MASTER DATA",
+        path: "/master-data",
+        icon: "feather:database",
+        isDropdown: false,
+      },
+      {
         name: "LAPORAN",
         icon: "mdi:file-chart-outline",
         isDropdown: true,
-        children: [
-          {
-            name: "Pemasukan Barang",
-            path: "/laporan-pemasukan-barang",
-          },
-          {
-            name: "Pengeluaran Barang",
-            path: "/laporan-pengeluaran-barang",
-          },
-          {
-            name: "Stock Inventory",
-            path: "/laporan-stock-Iinventory",
-          },
-        ],
+        children: [],
       },
     ],
   }),
