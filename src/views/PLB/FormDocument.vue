@@ -1,19 +1,32 @@
 <template>
   <div>
     <v-row align="center">
-      <v-col lg="11" md="11" sm="12">
+      <v-col lg="9" md="11" sm="12">
         <div class="display-1 font-weight-bold">
           Informasi Perusahaan
         </div>
       </v-col>
-      <v-col lg="1" md="1" sm="12" style="text-align: right">
+      <v-col
+        v-if="stepper === 4"
+        lg="3"
+        md="1"
+        sm="12"
+        class="d-flex"
+        style="text-align: right"
+      >
         <button
-          v-if="stepper === 4"
           fill
-          class="it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
+          class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
+          @click.prevent="handleOpenDialogXML"
+        >
+          Lihat XML
+        </button>
+        <button
+          fill
+          class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__grey"
           @click.prevent="handleFinish"
         >
-          Selesai
+          Tutup
         </button>
       </v-col>
     </v-row>
@@ -77,6 +90,10 @@
         </v-col>
       </v-row>
     </v-stepper>
+
+    <v-dialog persistent width="50%" max-width="1200px" v-model="dialogXML">
+      <preview-XML @handleCloseDialogXML="handleCloseDialogXML" />
+    </v-dialog>
   </div>
 </template>
 
@@ -88,6 +105,12 @@ export default {
     DataDokumen: () => import("@/views/PLB/DataDokumen/index"),
     DataBarang: () => import("@/views/PLB/DataBarang/index"),
     DataPreview: () => import("@/views/PLB/DataPreview/index"),
+    PreviewXML: () => import("@/components/Document/PreviewXML/index"),
+  },
+  data() {
+    return {
+      dialogXML: false,
+    };
   },
   computed: {
     stepper() {
@@ -98,6 +121,12 @@ export default {
     handleFinish() {
       this.$router.push("/plb");
       this.$store.commit("SET_STEPPER", 1);
+    },
+    handleOpenDialogXML() {
+      this.dialogXML = true;
+    },
+    handleCloseDialogXML() {
+      this.dialogXML = false;
     },
   },
   created() {
