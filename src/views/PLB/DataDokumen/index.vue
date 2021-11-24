@@ -46,7 +46,7 @@ export default {
   methods: {
     handleSubmit() {
       if (this.$refs.formDataDokumen.validate()) {
-        this.$store.commit("SET_STEPPER", 2);
+        this.$store.commit("SET_STEPPER", 3);
       } else {
         return false;
       }

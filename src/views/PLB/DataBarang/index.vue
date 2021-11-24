@@ -177,7 +177,7 @@ export default {
     },
     handleSubmit() {
       if (this.listBarang.length > 0) {
-        this.$store.commit("SET_STEPPER", 3);
+        this.$store.commit("SET_STEPPER", 4);
         return true;
       } else {
         return false;
