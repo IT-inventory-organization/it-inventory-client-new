@@ -204,6 +204,12 @@ const plb = {
     SET_SELECTED_DOKUMEN_PO(state, payload) {
       state.selectedDokumenPO = payload;
     },
+    DELETE_SELECTED_DOKUMEN_PO(state, payload) {
+      const index = state.selectedDokumenPO.indexOf(payload);
+      if (index != -1) {
+        state.selectedDokumenPO.splice(index, 1);
+      }
+    },
     SET_DOKUMEN_PEMASUKAN(state, payload) {
       state.dokumenPemasukan[payload.key] = payload.value;
     },
