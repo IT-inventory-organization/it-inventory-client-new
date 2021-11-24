@@ -51,6 +51,9 @@ const routes = [
         path: "add",
         name: "PLBFormDocument",
         component: FormDocument,
+        meta: {
+          reportId: true,
+        },
       },
     ],
   },
@@ -73,6 +76,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("token_it_inventory");
+  const reportId = localStorage.getItem("reportId");
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!token) {
       next({
@@ -81,6 +85,17 @@ router.beforeEach((to, from, next) => {
       });
     } else {
       next();
+    }
+
+    if (to.matched.some((record) => record.meta.reportId)) {
+      if (!reportId) {
+        next({
+          path: "/plb",
+          query: { redirect: to.fullPath },
+        });
+      } else {
+        next();
+      }
     }
   } else {
     next();

@@ -64,7 +64,7 @@
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item>
+              <v-list-item @click.prevent="handleOpenView">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -104,6 +104,9 @@
     >
       <form-report @handleCloseBuatBaru="handleCloseBuatBaru" />
     </v-dialog>
+    <v-dialog v-model="dialogView" persistent width="100%" max-width="1200px">
+      <PLB-view @handleCloseView="handleCloseView" />
+    </v-dialog>
   </div>
 </template>
 
@@ -114,10 +117,13 @@ export default {
   components: {
     Icon,
     FormReport: () => import("@/components/plb/FormReport"),
+    PLBView: () => import("@/components/plb/PLBView"),
   },
   data() {
     return {
+      isEdit: false,
       dialogBuatBaruPLB: false,
+      dialogView: false,
       headers: [
         {
           text: "No",
@@ -129,23 +135,23 @@ export default {
         },
         {
           text: "Jenis Pemberitahuan",
-          value: "jenis_pemberitahuan",
+          value: "jenisPemberitahuan",
         },
         {
           text: "Jenis Dokumen",
-          value: "jenis_dokumen",
+          value: "jenisDokumen",
         },
         {
           text: "Nomor Dokumen",
-          value: "nomor_dokumen",
+          value: "nomorDokumen",
         },
         {
           text: "Voyage Kapal",
-          value: "voyage_kapal",
+          value: "voyageKapal",
         },
         {
           text: "Nama Kapal",
-          value: "nama_kapal",
+          value: "namaKapal",
         },
         {
           text: "Bendera",
@@ -182,9 +188,17 @@ export default {
   methods: {
     handleOpenBuatBaru() {
       this.dialogBuatBaruPLB = true;
+      this.isEdit = false;
     },
     handleCloseBuatBaru() {
       this.dialogBuatBaruPLB = false;
+      this.isEdit = false;
+    },
+    handleOpenView() {
+      this.dialogView = true;
+    },
+    handleCloseView() {
+      this.dialogView = false;
     },
   },
 };

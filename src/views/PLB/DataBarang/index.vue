@@ -12,7 +12,7 @@
     <div class="it-inventory-box mt-8">
       <v-data-table
         :headers="headers"
-        :items="[]"
+        :items="listBarang"
         :items-per-page="10"
         class="it-inventory-simple-table"
       >
@@ -22,7 +22,7 @@
         <template v-slot:[`item.status`]="{ item }">
           <approval-badge :status="item.status"></approval-badge>
         </template>
-        <template v-slot:[`item.action`]>
+        <template v-slot:[`item.action`]="props">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -39,7 +39,7 @@
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item>
+              <v-list-item @click.prevent="handleEdit(props.item, props.index)">
                 <v-list-item-title>
                   <Icon
                     icon="ph:pencil-line-light"
@@ -48,7 +48,7 @@
                   Edit
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click.prevent="handleDelete(props.item)">
                 <v-list-item-title>
                   <Icon
                     icon="octicon:trash-24"
@@ -76,6 +76,8 @@
       max-width="1200px"
     >
       <form-data-barang
+        :isEdit="isEdit"
+        :editedIndex="editedIndex"
         @handleCloseFormDataBarang="handleCloseFormDataBarang"
       />
     </v-dialog>
@@ -83,14 +85,18 @@
 </template>
 
 <script>
+import { Icon } from "@iconify/vue2";
 export default {
   name: "DataBarang",
   components: {
+    Icon,
     FormDataBarang: () => import("@/views/PLB/DataBarang/FormDataBarang"),
   },
   data() {
     return {
+      isEdit: false,
       formDataBarang: false,
+      editedIndex: null,
       headers: [
         {
           text: "No",
@@ -108,8 +114,8 @@ export default {
           sortable: false,
         },
         {
-          text: "Neto, Bruto, Volume",
-          value: "nettoBrutoVolume",
+          text: "Neto, Brutto, Volume",
+          value: "nettoBruttoVolume",
           sortable: false,
         },
         { text: "Satuan Kemasan", value: "satuanKemasan", sortable: false },
@@ -126,20 +132,56 @@ export default {
       ],
     };
   },
+  computed: {
+    listBarang() {
+      return this.$store.state.plb.listBarang;
+    },
+  },
   methods: {
     handleOpenFormDataBarang() {
       this.formDataBarang = true;
+      this.isEdit = false;
     },
     handleCloseFormDataBarang() {
       this.formDataBarang = false;
     },
+    handleDelete(item) {
+      this.$store.commit("DELETE_LIST_BARANG", item);
+    },
+    handleEdit(item, index) {
+      this.editedIndex = index;
+      this.handleSetDataBarang("kodeBarang", item.kodeBarang);
+      this.handleSetDataBarang("namaBarang", item.namaBarang);
+      this.handleSetDataBarang("uraian", item.uraian);
+      this.handleSetDataBarang("nettoBruttoVolume", item.nettoBruttoVolume);
+      this.handleSetDataBarang("satuanKemasan", item.satuanKemasan);
+      this.handleSetDataBarang("stock", item.stock);
+      this.handleSetDataBarang("posTarif", item.posTarif);
+      this.handleSetDataBarang(
+        "nilaiPabeanHargaPenyerahan",
+        item.nilaiPabeanHargaPenyerahan
+      );
+      this.handleSetDataBarang("bm", item.bm);
+      this.handleSetDataBarang("ppn", item.ppn);
+      this.handleSetDataBarang("ppnbm", item.ppnbm);
+      this.handleSetDataBarang("ppn", item.ppn);
+      this.handleSetDataBarang("cukai", item.cukai);
+      this.formDataBarang = true;
+      this.isEdit = true;
+    },
+    handleSetDataBarang(key, value) {
+      this.$store.commit("SET_DATA_BARANG", {
+        key,
+        value,
+      });
+    },
     handleSubmit() {
-      // if (this.$refs.formDataDokumen.validation()) {
-      this.$store.commit("SET_STEPPER", 3);
-      // return true;
-      // } else {
-      // return false;
-      // }
+      if (this.listBarang.length > 0) {
+        this.$store.commit("SET_STEPPER", 4);
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 };

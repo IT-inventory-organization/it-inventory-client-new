@@ -14,6 +14,12 @@
           <v-text-field
             outlined
             dense
+            v-model="nomorDokumenPemasukan"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Nomor Dokumen Pemasukan');
+              },
+            ]"
             placeholder="Nomor Dokumen Pemasukan"
           ></v-text-field>
         </div>
@@ -38,11 +44,21 @@
                 dense
                 outlined
                 clearable
+                v-model="tanggalDokumenPemasukan"
+                :rules="[
+                  (value) => {
+                    return genericRequiredRule(
+                      value,
+                      'Tanggal Dokumen Pemasukan'
+                    );
+                  },
+                ]"
                 v-bind="attrs"
                 v-on="on"
               ></v-text-field>
             </template>
             <v-date-picker
+              v-model="tanggalDokumenPemasukan"
               scrollable
               no-title
               @input="datepicker_dokumen_masuk = false"
@@ -52,6 +68,7 @@
       </v-col>
     </v-row>
 
+    <!-- Dokumen Pengeluaran -->
     <v-row
       justify="space-between"
       class="mb-3"
@@ -114,6 +131,7 @@
         </div>
       </v-col>
     </v-row>
+    <!-- End Dokumen Pengeluaran -->
 
     <div class="body-1 font-weight-bold mb-5">Dokumen Tambahan</div>
     <v-row justify="space-between" class="mb-3">
@@ -123,6 +141,12 @@
           <v-text-field
             outlined
             dense
+            v-model="nomorBC10"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Nomor BC 1.0');
+              },
+            ]"
             placeholder="Nomor BC 1.0"
           ></v-text-field>
         </div>
@@ -132,13 +156,29 @@
           <v-text-field
             outlined
             dense
+            v-model="nomorBC11"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Nomor BC 1.1');
+              },
+            ]"
             placeholder="Nomor BC 1.1"
           ></v-text-field>
         </div>
 
         <div>
           <label class="caption font-weight-medium">Nomor B/L</label>
-          <v-text-field outlined dense placeholder="Nomor B/L"></v-text-field>
+          <v-text-field
+            outlined
+            dense
+            v-model="nomorBL"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Nomor B/L');
+              },
+            ]"
+            placeholder="Nomor B/L"
+          ></v-text-field>
         </div>
       </v-col>
       <v-col lg="5" md="5" sm="12">
@@ -157,6 +197,12 @@
                 append-icon="mdi-chevron-down"
                 placeholder="Pilih Tanggal"
                 dense
+                v-model="tanggalBC10"
+                :rules="[
+                  (value) => {
+                    return genericRequiredRule(value, 'Tanggal BC 1.0');
+                  },
+                ]"
                 outlined
                 clearable
                 v-bind="attrs"
@@ -164,6 +210,7 @@
               ></v-text-field>
             </template>
             <v-date-picker
+              v-model="tanggalBC10"
               scrollable
               no-title
               @input="datepicker_tgl_bc10 = false"
@@ -186,6 +233,12 @@
                 append-icon="mdi-chevron-down"
                 placeholder="Pilih Tanggal"
                 dense
+                v-model="tanggalBC11"
+                :rules="[
+                  (value) => {
+                    return genericRequiredRule(value, 'Tanggal BC 1.1');
+                  },
+                ]"
                 outlined
                 clearable
                 v-bind="attrs"
@@ -193,6 +246,7 @@
               ></v-text-field>
             </template>
             <v-date-picker
+              v-model="tanggalBC11"
               scrollable
               no-title
               @input="datepicker_tgl_bc11 = false"
@@ -215,6 +269,12 @@
                 append-icon="mdi-chevron-down"
                 placeholder="Pilih Tanggal"
                 dense
+                v-model="tanggalBL"
+                :rules="[
+                  (value) => {
+                    return genericRequiredRule(value, 'Tanggal B/L');
+                  },
+                ]"
                 outlined
                 clearable
                 v-bind="attrs"
@@ -222,6 +282,7 @@
               ></v-text-field>
             </template>
             <v-date-picker
+              v-model="tanggalBL"
               scrollable
               no-title
               @input="datepicker_tgl_bl = false"
@@ -253,6 +314,94 @@ export default {
     },
     constantPengeluaran() {
       return this.$store.state.plb.constant.pengeluaran;
+    },
+    nomorDokumenPemasukan: {
+      get() {
+        return this.$store.state.plb.dokumenPemasukan.nomorDokumenPemasukan;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_PEMASUKAN", {
+          key: "nomorDokumenPemasukan",
+          value,
+        });
+      },
+    },
+    tanggalDokumenPemasukan: {
+      get() {
+        return this.$store.state.plb.dokumenPemasukan.tanggalDokumenPemasukan;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_PEMASUKAN", {
+          key: "tanggalDokumenPemasukan",
+          value,
+        });
+      },
+    },
+    nomorBC10: {
+      get() {
+        return this.$store.state.plb.dokumenTambahan.nomorBC10;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
+          key: "nomorBC10",
+          value,
+        });
+      },
+    },
+    nomorBC11: {
+      get() {
+        return this.$store.state.plb.dokumenTambahan.nomorBC11;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
+          key: "nomorBC11",
+          value,
+        });
+      },
+    },
+    nomorBL: {
+      get() {
+        return this.$store.state.plb.dokumenTambahan.nomorBL;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
+          key: "nomorBL",
+          value,
+        });
+      },
+    },
+    tanggalBC10: {
+      get() {
+        return this.$store.state.plb.dokumenTambahan.tanggalBC10;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
+          key: "tanggalBC10",
+          value,
+        });
+      },
+    },
+    tanggalBC11: {
+      get() {
+        return this.$store.state.plb.dokumenTambahan.tanggalBC11;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
+          key: "tanggalBC11",
+          value,
+        });
+      },
+    },
+    tanggalBL: {
+      get() {
+        return this.$store.state.plb.dokumenTambahan.tanggalBL;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
+          key: "tanggalBL",
+          value,
+        });
+      },
     },
   },
   methods: {

@@ -45,12 +45,11 @@ export default {
   },
   methods: {
     handleSubmit() {
-      // if (this.$refs.formDataDokumen.validation()) {
-      this.$store.commit("SET_STEPPER", 2);
-      // return true;
-      // } else {
-      // return false;
-      // }
+      if (this.$refs.formDataDokumen.validate()) {
+        this.$store.commit("SET_STEPPER", 3);
+      } else {
+        return false;
+      }
     },
   },
 };
