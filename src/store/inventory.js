@@ -14,7 +14,7 @@ const inventory = {
             nama_kapal: "Bechtelar and Sons",
             jenis_dokumen: "Pemasukan",
             bendera: "INA",
-            items: [
+            details: [
                 {
                     kode_barang: "41539",
                     nama_barang: "BARANG A",
@@ -41,21 +41,84 @@ const inventory = {
             voyage: "VOYAGE1",
             nama_kapal: "Bechtelar and Sons",
             jenis_dokumen: "Pemasukan",
-            bendera: "INA"
+            bendera: "INA",
+            details: [
+                {
+                    kode_barang: "41539",
+                    nama_barang: "BARANG A",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },{
+                    kode_barang: "98756",
+                    nama_barang: "BARANG B",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },{
+                    kode_barang: "87452",
+                    nama_barang: "BARANG C",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },
+            ]
           },
           {
             id: 3,
             voyage: "VOYAGE2",
             nama_kapal: "Bechtelar and Sons",
             jenis_dokumen: "Pemasukan",
-            bendera: "INA"
+            bendera: "INA",
+            details: [
+                {
+                    kode_barang: "41539",
+                    nama_barang: "BARANG A",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },{
+                    kode_barang: "98756",
+                    nama_barang: "BARANG B",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },{
+                    kode_barang: "87452",
+                    nama_barang: "BARANG C",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },
+            ]
           },
           {
             id: 4,
             voyage: "VOYAGE3",
             nama_kapal: "Bechtelar and Sons",
             jenis_dokumen: "Pemasukan",
-            bendera: "INA"
+            bendera: "INA",
+            details: [
+                {
+                    kode_barang: "41539",
+                    nama_barang: "BARANG A",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },{
+                    kode_barang: "98756",
+                    nama_barang: "BARANG B",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },{
+                    kode_barang: "87452",
+                    nama_barang: "BARANG C",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },
+            ]
           },
         ],
       },

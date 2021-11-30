@@ -41,7 +41,26 @@
             >
                 <template v-slot:expanded-item="{ headers, item}">
                     <td :colspan="headers.length">
-                    More info about {{ item.items}}
+                        <table border="1">
+                            <tr>
+                                <th>Kode Barang</th>
+                                <th>Nama Barang</th>
+                                <th>Item Deskripsi</th>
+                                <th>Satuan Kemasan</th>
+                                <th>Quantity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </table>
+                    <table v-for="(details, index) in item.details" :key="index">
+                        <tr>
+                            <td>{{details.kode_barang }}</td>
+                            <td>{{details.nama_barang }}</td>
+                            <td>{{details.item_deskripsi }}</td>
+                            <td>{{details.satuan_kemasan }}</td>
+                            <td>{{details.quantity }}</td>
+                            <td></td>
+                        </tr>
+                    </table>
                     </td>
                 </template>
 
