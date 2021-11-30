@@ -39,10 +39,9 @@
                 no-results-text="Data not available"
                 class="it-inventory-simple-table"
             >
-                <template v-slot:expanded-item="{ headers, item, i }">
+                <template v-slot:expanded-item="{ headers, item}">
                     <td :colspan="headers.length">
-                    More info about {{ item.tanggal }}
-                    next {{ i }}
+                    More info about {{ item.items}}
                     </td>
                 </template>
 

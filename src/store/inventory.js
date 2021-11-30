@@ -9,21 +9,49 @@ const inventory = {
       reports: {
         data: [
           {
+            id: 1,
             voyage: "VOYAGE",
             nama_kapal: "Bechtelar and Sons",
             jenis_dokumen: "Pemasukan",
-            bendera: "INA"
-          },{
+            bendera: "INA",
+            items: [
+                {
+                    kode_barang: "41539",
+                    nama_barang: "BARANG A",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },{
+                    kode_barang: "98756",
+                    nama_barang: "BARANG B",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },{
+                    kode_barang: "87452",
+                    nama_barang: "BARANG C",
+                    item_deskripsi: "Descriptions",
+                    satuan_kemasan: "PKG",          
+                    quantity: 123
+                },
+            ]
+        },
+          {
+            id: 2,
             voyage: "VOYAGE1",
             nama_kapal: "Bechtelar and Sons",
             jenis_dokumen: "Pemasukan",
             bendera: "INA"
-          },{
+          },
+          {
+            id: 3,
             voyage: "VOYAGE2",
             nama_kapal: "Bechtelar and Sons",
             jenis_dokumen: "Pemasukan",
             bendera: "INA"
-          },{
+          },
+          {
+            id: 4,
             voyage: "VOYAGE3",
             nama_kapal: "Bechtelar and Sons",
             jenis_dokumen: "Pemasukan",
