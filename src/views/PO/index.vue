@@ -142,16 +142,12 @@ import { Icon } from "@iconify/vue2";
                     value: "tanggal",
                     },
                     {
-                    text: "Item Deskripsi",
+                    text: "Kapal Pemilik",
                     value: "item_deskripsi",
                     },
                     {
-                    text: "Quantity",
+                    text: "Kapal Pembeli",
                     value: "quantity",
-                    },
-                    {
-                    text: "Jumlah",
-                    value: "jumlah",
                     },
                     {
                     text: "Actions",
