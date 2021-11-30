@@ -70,7 +70,7 @@
                 </table>
             </v-row>
         </v-container>
-        <v-card-actions height="100%">
+        <v-card-actions height="100%" class="card-subtitle">
           <v-row no-gutters justify="space-between">
             <v-col cols="8">
               Remarks
