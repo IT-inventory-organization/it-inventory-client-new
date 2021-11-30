@@ -70,7 +70,10 @@ const routes = [
   {
     path: "/po",
     name: "Purchase Order",
-    component: TablePO
+    component: TablePO,
+    meta: {
+      requiresAuth: true,
+    },
   }
 ];
 
