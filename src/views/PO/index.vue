@@ -143,11 +143,11 @@ import { Icon } from "@iconify/vue2";
                     },
                     {
                     text: "Kapal Pemilik",
-                    value: "item_deskripsi",
+                    value: "kapal_pemilik",
                     },
                     {
                     text: "Kapal Pembeli",
-                    value: "quantity",
+                    value: "kapal_pembeli",
                     },
                     {
                     text: "Actions",

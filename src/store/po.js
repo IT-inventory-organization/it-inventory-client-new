@@ -8,17 +8,13 @@ const po = {
         purchases: [
           {
             kode_barang: "",
-            item_deskripsi: "",
-            quantity: "",
-            harga_satuan: "",
-            jumlah: ""
+            kapal_pemilik: "",
+            kapal_pembeli: "",
           },
           {
             kode_barang: "",
-            item_deskripsi: "",
-            quantity: "",
-            harga_satuan: "",
-            jumlah: ""
+            kapal_pemilik: "",
+            kapal_pembeli: "",
           },
         ],
         remarks: "",
@@ -30,17 +26,15 @@ const po = {
             id: "1",
             nomor_po: "PO-00001",
             tanggal: "20-02-2020",
-            item_deskripsi: "pemasukan",
-            quantity: "17783",
-            jumlah: "456789",
+            kapal_pemilik: "MEDELIN WEST, GENERAL PURPOSE (BO)",
+            kapal_pembeli: "JOHN CHAINE 2, GENERAL PURPOSE (CO)",
           },
           {
             id: "2",
             nomor_po: "PO-00002",
             tanggal: "20-02-2020",
-            item_deskripsi: "pemasukan",
-            quantity: "17783",
-            jumlah: "54852",
+            kapal_pemilik: "MEDELIN WEST, GENERAL PURPOSE (BO)",
+            kapal_pembeli: "JOHN CHAINE 2, GENERAL PURPOSE (CO)",
           },
         ],
       },
