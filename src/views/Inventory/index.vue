@@ -32,10 +32,20 @@
                 :items="reports.data"
                 :options.sync="optionsTableReports"
                 :server-items-length="reports.data_size"
+                :single-expand="singleExpand"
+                :expanded.sync="expanded"
+                @click:row="(item, slot) => slot.expand(!slot.isExpanded)"
                 no-data-text="Data not available"
                 no-results-text="Data not available"
                 class="it-inventory-simple-table"
             >
+                <template v-slot:expanded-item="{ headers, item, i }">
+                    <td :colspan="headers.length">
+                    More info about {{ item.tanggal }}
+                    next {{ i }}
+                    </td>
+                </template>
+
                 <template v-slot:[`item.no`]="props">
                 {{ props.index + 1 }}
                 </template>
@@ -132,6 +142,9 @@ import { Icon } from "@iconify/vue2";
             return {
                 dialogBuatBaruPO: false,
                 dialogPurchaseOrderView: false,
+                expanded: [],
+                singleExpand: false,
+                isExpanded: false,
                 headers: [
                     {
                     text: "No. PO",
