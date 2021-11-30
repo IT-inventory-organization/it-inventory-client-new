@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form ref="FormDataDokumen" lazy-validation>
+    <v-form ref="formDataDokumen" @submit.prevent="handleSubmit">
       <v-expansion-panels>
         <v-expansion-panel class="it-accordion-panel">
           <v-expansion-panel-header class="title font-weight-bold">
@@ -24,13 +24,14 @@
           <!-- End Form -->
         </v-expansion-panel>
       </v-expansion-panels>
-    </v-form>
 
-    <v-row no-gutters style="justify-content: flex-end" class="my-4">
-      <button type="submit" class="btn_save">
-        <span>Selanjutnya</span> <img src="@/assets/icons/ic_bulletnext.svg" />
-      </button>
-    </v-row>
+      <v-row no-gutters style="justify-content: flex-end" class="my-4">
+        <button type="submit" class="btn_save">
+          <span>Selanjutnya</span>
+          <img src="@/assets/icons/ic_bulletnext.svg" />
+        </button>
+      </v-row>
+    </v-form>
   </div>
 </template>
 
@@ -41,6 +42,15 @@ export default {
     DataPengajuan: () => import("@/views/PLB/DataDokumen/DataPengajuan"),
     LaporanPemasukanPengeluaranBarang: () =>
       import("@/views/PLB/DataDokumen/LaporanPemasukanPengeluaranBarang/index"),
+  },
+  methods: {
+    handleSubmit() {
+      if (this.$refs.formDataDokumen.validate()) {
+        this.$store.commit("SET_STEPPER", 3);
+      } else {
+        return false;
+      }
+    },
   },
 };
 </script>

@@ -26,9 +26,11 @@
 }
 .btn-login {
   text-align: center;
-  background-color: #312e68;
+  background-color: #312e68 !important;
   width: 80%;
   color: #ffffff;
-  padding: 14px 10px;
+  padding: 14px 10px !important;
   border-radius: 10px;
+  text-transform: capitalize;
+  font-weight: normal;
 }

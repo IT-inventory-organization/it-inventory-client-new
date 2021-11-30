@@ -10,6 +10,13 @@
           <v-select
             outlined
             dense
+            v-model="jenisIdentitasPpjk"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Jenis Identitas PPJK');
+              },
+            ]"
+            :items="itemJenisIdentitasPpjk"
             placeholder="Pilih Jenis Identitas PPJK"
             append-icon="mdi-chevron-down"
           ></v-select>
@@ -19,6 +26,12 @@
           <v-text-field
             outlined
             dense
+            v-model="namaPpjk"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Nama PPJK');
+              },
+            ]"
             placeholder="Input Nama PPJK"
           ></v-text-field>
         </div>
@@ -29,6 +42,12 @@
           <v-text-field
             outlined
             dense
+            v-model="nomorIdentitasPpjk"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Nomor Identitas PPJK');
+              },
+            ]"
             placeholder="Input Nomor Identitas"
           ></v-text-field>
         </div>
@@ -37,6 +56,12 @@
           <v-text-field
             outlined
             dense
+            v-model="alamatPpjk"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Alamat PPJK');
+              },
+            ]"
             placeholder="Input Alamat Penjual"
           ></v-text-field>
         </div>
@@ -46,8 +71,59 @@
 </template>
 
 <script>
+import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "DataPPJK",
+  mixins: [FieldRequired],
+  computed: {
+    itemJenisIdentitasPpjk() {
+      return this.$store.state.plb.itemJenisIdentitasPpjk;
+    },
+    jenisIdentitasPpjk: {
+      get() {
+        return this.$store.state.plb.ppjk.jenisIdentitasPpjk;
+      },
+      set(value) {
+        this.$store.commit("SET_PPJK", {
+          key: "jenisIdentitasPpjk",
+          value,
+        });
+      },
+    },
+    namaPpjk: {
+      get() {
+        return this.$store.state.plb.ppjk.namaPpjk;
+      },
+      set(value) {
+        this.$store.commit("SET_PPJK", {
+          key: "namaPpjk",
+          value,
+        });
+      },
+    },
+    nomorIdentitasPpjk: {
+      get() {
+        return this.$store.state.plb.ppjk.nomorIdentitasPpjk;
+      },
+      set(value) {
+        this.$store.commit("SET_PPJK", {
+          key: "nomorIdentitasPpjk",
+          value,
+        });
+      },
+    },
+    alamatPpjk: {
+      get() {
+        return this.$store.state.plb.ppjk.alamatPpjk;
+      },
+      set(value) {
+        this.$store.commit("SET_PPJK", {
+          key: "alamatPpjk",
+          value,
+        });
+      },
+    },
+  },
 };
 </script>
 
