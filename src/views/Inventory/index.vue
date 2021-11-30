@@ -143,23 +143,23 @@ import { Icon } from "@iconify/vue2";
                 dialogBuatBaruPO: false,
                 dialogPurchaseOrderView: false,
                 expanded: [],
-                singleExpand: false,
+                singleExpand: true,
                 isExpanded: false,
                 headers: [
                     {
-                    text: "No. PO",
-                    value: "nomor_po",
+                    text: "Voyage Kapal",
+                    value: "voyage",
                     },
                     {
-                    text: "Tanggal",
+                    text: "Nama Kapal",
                     value: "tanggal",
                     },
                     {
-                    text: "Kapal Pemilik",
+                    text: "Jenis Dokumen",
                     value: "kapal_pemilik",
                     },
                     {
-                    text: "Kapal Pembeli",
+                    text: "Bendera",
                     value: "kapal_pembeli",
                     },
                     {
@@ -179,11 +179,11 @@ import { Icon } from "@iconify/vue2";
         },
         computed: {
             reports() {
-            return this.$store.state.po.reports;
+            return this.$store.state.inventory.reports;
             },
             optionsTableReports: {
             get() {
-                return this.$store.state.po.optionsTableReports;
+                return this.$store.state.inventory.optionsTableReports;
             },
             set(val) {
                 this.$store.commit("SET_OPTIONS_TABLE_REPORTS", val);
