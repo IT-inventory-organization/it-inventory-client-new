@@ -229,7 +229,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="1" style="padding: 0 0 0 1em;" class="delete-container">
-                <div @click.prevent="remove(k)" >
+                <div @click.prevent="remove(k)" v-show="k|| ( !k && inputs.length > 1)">
                 <Icon 
                     icon="octicon:trash-24"
                     class="delete-icon"
