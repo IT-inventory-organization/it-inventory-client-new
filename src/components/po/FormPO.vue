@@ -138,10 +138,11 @@
 
           <v-row no-gutters>
             <v-col cols="2" style="padding: 0 1em 0 0;">Kode Barang</v-col>
-            <v-col cols="4" style="padding: 0 1em;">Item Deskripsi</v-col>
-            <v-col cols="2" style="padding: 0 1em;">Quantity</v-col>
-            <v-col cols="2" style="padding: 0 1em;">Harga Satuan</v-col>
-            <v-col cols="2" style="padding: 0 0 0 1em;">Jumlah</v-col>
+            <v-col cols="5" style="padding: 0 1em;">Item Deskripsi</v-col>
+            <v-col cols="1" style="padding: 0 0 0 1em;">Satuan Kemasan</v-col>
+            <v-col cols="1" style="padding: 0 1em;">Quantity</v-col>
+            <v-col cols="1" style="padding: 0 1em;">Harga Satuan</v-col>
+            <v-col cols="1" style="padding: 0 0 0 1em;">Jumlah</v-col>
           </v-row>
           <div v-for="(input, k) in inputs" :key="k">
             <v-row no-gutters>
@@ -158,7 +159,7 @@
                     ]"
                 ></v-select>
               </v-col>
-              <v-col cols="4" style="padding: 0 1em;">
+              <v-col cols="5" style="padding: 0 1em;">
                 <v-text-field
                     outlined
                     dense
@@ -171,14 +172,12 @@
                     ]"
                 ></v-text-field>
               </v-col>
-              <v-col cols="2" style="padding: 0 1em;">
+              <v-col cols="1" style="padding: 0 1em;">
                 <v-text-field
                     outlined
                     dense
                     v-model="inputs.quantity"
-                    placeholder="0"
-                    type="number"
-                    default=0
+                    placeholder="Barel"
                     :rules="[
                     (value) => {
                         return genericRequiredRule(value, 'Quantity');
@@ -186,7 +185,7 @@
                     ]"
                 ></v-text-field>
               </v-col>
-              <v-col cols="2" style="padding: 0 1em;">
+              <v-col cols="1" style="padding: 0 1em;">
                 <v-text-field
                     outlined
                     dense
@@ -201,7 +200,7 @@
                     ]"
                 ></v-text-field>
               </v-col>
-              <v-col cols="2" style="padding: 0 0 0 1em;">
+              <v-col cols="1" style="padding: 0 0 0 1em;">
                 <v-text-field
                     outlined
                     dense
@@ -215,12 +214,34 @@
                     ]"
                 ></v-text-field>
               </v-col>
+              <v-col cols="1" style="padding: 0 0 0 1em;">
+                <v-text-field
+                    outlined
+                    dense
+                    v-model="inputs.jumlah"
+                    placeholder="0"
+                    type="number"
+                    :rules="[
+                    (value) => {
+                        return genericRequiredRule(value, 'Jumlah');
+                    },
+                    ]"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="1" style="padding: 0 0 0 1em;" class="delete-container">
+                <div @click.prevent="remove(k)" >
+                <Icon 
+                    icon="octicon:trash-24"
+                    class="delete-icon"
+                  />
+                </div>
+              </v-col>
             </v-row>
           </div>
 
           <v-spacer></v-spacer>
           <v-row no-gutters>
-              <button @click="add" style="background-color: #F8F8F8; border-radius: 1em; padding: 0.5em 1em 0.5em 0.8em; display: flex; align-items: center;" >
+              <button @click.prevent="add" style="background-color: #F8F8F8; border-radius: 1em; padding: 0.5em 1em 0.5em 0.8em; display: flex; align-items: center;" >
                 <img style="filter: brightness(4.8);" src="@/assets/icons/ic_plus.svg" />
                 <span style="padding: 0 0 0 0.5em;">
                 Tambah Item</span></button>
@@ -267,9 +288,13 @@
 
 <script>
 import { FieldRequired } from "@/mixins/ValidationRules";
+import { Icon } from "@iconify/vue2";
 export default {
   name: "FormPO",
   mixins: [FieldRequired],
+  components: {
+    Icon,
+  },
   data() {
     return {
       inputs: [
@@ -298,7 +323,6 @@ export default {
     },
     noPurchaseOrder: {
       get() {
-          console.log(this.$store.state.po.po_baru.no_purchase_order)
         return this.$store.state.po.po_baru.no_purchase_order;
       },
       set(value) {
@@ -310,7 +334,6 @@ export default {
     },
     kapalPembeli: {
       get() {
-          console.log(this.$store.state.po.po_baru.kapal_pembeli)
         return this.$store.state.po.po_baru.kapal_pembeli;
       },
       set(value) {
@@ -322,7 +345,6 @@ export default {
     },
     tanggal: {
       get() {
-          console.log(this.$store.state.po.po_baru.tanggal)
         return this.$store.state.po.po_baru.tanggal;
       },
       set(value) {
@@ -343,6 +365,10 @@ export default {
         harga_satuan: "",
         jumlah: ""
       })
+    },
+    remove (index) {
+      console.log(index)
+      this.inputs.splice(index, 1)
     },
     handleCloseDialog() {
       this.$emit("handleBuatBaru");
@@ -365,8 +391,23 @@ export default {
         return false;
       }
     },
+    
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .delete-icon {
+    font-size: 1.5em;
+    cursor: pointer;
+  }
+  .delete-icon:hover {
+    color: #000;
+  }
+  .delete-container {
+    padding: 0.5em !important;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+</style>
