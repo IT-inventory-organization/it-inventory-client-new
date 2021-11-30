@@ -367,7 +367,6 @@ export default {
       })
     },
     remove (index) {
-      console.log(index)
       this.inputs.splice(index, 1)
     },
     handleCloseDialog() {
