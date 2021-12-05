@@ -86,38 +86,8 @@
                     <v-list class="it-inventory-actions-list">
                     <v-list-item @click="handleViewPurchaseOrder">
                         <v-list-item-title>
-                        <Icon
-                            icon="fluent:apps-list-detail-20-regular"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        View
-                        </v-list-item-title>
-                    </v-list-item>
-                    <!-- <v-list-item>
-                        <v-list-item-title>
-                        <Icon
-                            icon="ph:pencil-line-light"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        Edit
-                        </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-title>
-                        <Icon
-                            icon="octicon:trash-24"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        Delete
-                        </v-list-item-title>
-                    </v-list-item> -->
-                    <v-list-item>
-                        <v-list-item-title>
-                        <Icon
-                            icon="fluent:print-24-regular"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        Print
+                            <img style="filter: brightness(4.8);" src="@/assets/icons/ic_produce.svg" />
+                        <span style="padding-left: 0.5em;" >Produksi Barang</span>
                         </v-list-item-title>
                     </v-list-item>
                     </v-list>
