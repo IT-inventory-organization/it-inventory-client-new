@@ -58,7 +58,40 @@
                             <td>{{details.item_deskripsi }}</td>
                             <td>{{details.satuan_kemasan }}</td>
                             <td>{{details.quantity }}</td>
-                            <td></td>
+                            <td>
+                                <template >
+                                    <v-menu offset-y>
+                                        <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                            class="it-inventory-actions-btn"
+                                            outlined
+                                            v-bind="attrs"
+                                            v-on="on"
+                                        >
+                                            Actions
+                                            <v-icon right>
+                                            mdi-chevron-down
+                                            </v-icon>
+                                        </v-btn>
+                                        </template>
+
+                                        <v-list class="it-inventory-actions-list">
+                                        <v-list-item @click="handleViewPurchaseOrder">
+                                            <v-list-item-title>
+                                                <img style="filter: brightness(4.8);" src="@/assets/icons/ic_produce.svg" />
+                                            <span style="padding-left: 0.5em;" >Adjustment</span>
+                                            </v-list-item-title>
+                                        </v-list-item>
+                                        <v-list-item @click="handleViewPurchaseOrder">
+                                            <v-list-item-title>
+                                                <img style="filter: brightness(4.8);" src="@/assets/icons/ic_produce.svg" />
+                                            <span style="padding-left: 0.5em;" >Inventory Card</span>
+                                            </v-list-item-title>
+                                        </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                    </template>
+                            </td>
                         </tr>
                     </table>
                     </td>
@@ -76,21 +109,11 @@
                         v-bind="attrs"
                         v-on="on"
                     >
-                        Actions
-                        <v-icon right>
-                        mdi-chevron-down
-                        </v-icon>
+                        <!-- Actions -->
+                        <img style="filter: brightness(4.8);" src="@/assets/icons/ic_produce.svg" />
+                        <span style="padding-left: 0.5em;" >Produksi Barang</span>
                     </v-btn>
                     </template>
-
-                    <v-list class="it-inventory-actions-list">
-                    <v-list-item @click="handleViewPurchaseOrder">
-                        <v-list-item-title>
-                            <img style="filter: brightness(4.8);" src="@/assets/icons/ic_produce.svg" />
-                        <span style="padding-left: 0.5em;" >Produksi Barang</span>
-                        </v-list-item-title>
-                    </v-list-item>
-                    </v-list>
                 </v-menu>
                 </template>
             </v-data-table>
@@ -201,7 +224,7 @@ import { Icon } from "@iconify/vue2";
         }
     td, th {
         border: 1px solid gray !important;
-        padding: 1em !important;
+        padding: 0.5em 1em !important;
         }
 
     th {
