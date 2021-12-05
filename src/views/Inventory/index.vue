@@ -40,8 +40,8 @@
                 class="it-inventory-simple-table"
             >
                 <template v-slot:expanded-item="{ headers, item}">
-                    <td :colspan="headers.length">
-                        <table border="1">
+                    <td :colspan="headers.length" class="collapsable">
+                        <table class="table-header">
                             <tr>
                                 <th>Kode Barang</th>
                                 <th>Nama Barang</th>
@@ -183,6 +183,7 @@ import { Icon } from "@iconify/vue2";
                     {
                     text: "Actions",
                     value: "action",
+                    width: "17.5%",
                     },
                 ],
             }
@@ -220,5 +221,25 @@ import { Icon } from "@iconify/vue2";
 </script>
 
 <style lang="scss" scoped>
+
+    table {
+            border-collapse: collapse;
+            border: 1px solid gray;
+            width: 100%;
+            table-layout: fixed;
+            text-align: left;
+        }
+    td, th {
+        border: 1px solid gray !important;
+        padding: 1em !important;
+        }
+
+    th {
+        color: #848484;
+        }
+
+    .collapsable {
+        padding: 1.5em 1em !important;
+    }
 
 </style>
