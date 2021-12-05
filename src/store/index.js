@@ -5,6 +5,7 @@ import MasterData from "@/store/MasterData";
 import plb from "@/store/plb";
 import user from "@/store/user";
 import po from "@/store/po";
+import inventory from "@/store/inventory";
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     MasterData,
     plb,
     user,
-    po
+    po,
+    inventory
   },
 });

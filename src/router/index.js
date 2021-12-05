@@ -5,7 +5,8 @@ import MasterData from "@/views/MasterData";
 import PLB from "@/views/PLB/PLB";
 import TablePLB from "@/views/PLB/TablePLB";
 import FormDocument from "@/views/PLB/FormDocument";
-import TablePO from "@/views/PO/"
+import TablePO from "@/views/PO/";
+import Inventory from "@/views/Inventory/";
 import Login from "@/views/Login";
 
 Vue.use(VueRouter);
@@ -71,6 +72,11 @@ const routes = [
     path: "/po",
     name: "Purchase Order",
     component: TablePO
+  },
+  {
+    path: "/inventory",
+    name: "Inventory",
+    component: Inventory
   }
 ];
 

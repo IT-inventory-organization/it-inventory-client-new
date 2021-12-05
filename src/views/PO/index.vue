@@ -184,9 +184,6 @@ import { Icon } from "@iconify/vue2";
             handleViewPurchaseOrder() {
                 this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
             },
-            handleViewClose() {
-                
-            }
         }
     }
 </script>
