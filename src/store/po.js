@@ -74,14 +74,17 @@ const po = {
     actions: {
       async getAllPoData (context) {
         try {
+          context.commit("SET_ISLOADING", true);
           const result = await axios({
             url: `${baseUrl}po/getAllPO`,
             method: "GET",
-            Authorization: `${token}`
+            headers: {
+              Authorization: `${token}`
+            }
           });
           
           const returns = AESDecrypt(result.data.data)
-          context.commit(returns)
+          context.commit("SET_REPORT", returns)
 
         } catch (err) {
           console.log("err", err)
