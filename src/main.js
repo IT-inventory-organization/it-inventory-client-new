@@ -7,10 +7,12 @@ import VueApexCharts from "vue-apexcharts";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import VueHtmlToPaper from "vue-html-to-paper";
+import CryptoJs from "vue-cryptojs"
 
 Vue.use(VueHtmlToPaper);
 Vue.use(VueSweetalert2);
 Vue.use(VueApexCharts);
+Vue.use(CryptoJs)
 
 Vue.component("apexchart", VueApexCharts);
 

@@ -4,7 +4,7 @@
         <v-row no-gutters align="center">
             <v-col cols="11">
                 <div class="display-1 font-weight-bold">
-                    Purchase Order
+                    Inventory
                 </div>
             </v-col>
             <v-col cols="1">
@@ -217,18 +217,18 @@ import { Icon } from "@iconify/vue2";
 
     table {
             border-collapse: collapse;
-            border: 1px solid gray;
             width: 100%;
             table-layout: fixed;
             text-align: left;
         }
     td, th {
-        border: 1px solid gray !important;
+        border: 1px solid #A6A6A6 !important;
         padding: 0.5em 1em !important;
         }
 
     th {
         color: #848484;
+        border-bottom: none !important;
         }
 
     .collapsable {

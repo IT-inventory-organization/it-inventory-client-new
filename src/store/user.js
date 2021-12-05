@@ -36,7 +36,7 @@ const user = {
       try {
         context.commit("SET_ISLOADING", true);
         const result = await axios({
-          url: `${baseUrl}/login`,
+          url: `${baseUrl}login`,
           method: "POST",
           data: {
             dataLogin: AESEncrypt(context.state.user),
