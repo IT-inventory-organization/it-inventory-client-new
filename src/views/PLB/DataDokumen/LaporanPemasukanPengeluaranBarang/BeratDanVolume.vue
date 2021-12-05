@@ -9,8 +9,13 @@
           <label class="caption font-weight-medium">Berat Muatan</label>
           <v-text-field
             outlined
+            v-model="beratMuatan"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Berat Muatan');
+              },
+            ]"
             dense
-            type="number"
             placeholder="0"
           ></v-text-field>
         </div>
@@ -18,8 +23,13 @@
           <label class="caption font-weight-medium">Volume (M3)</label>
           <v-text-field
             outlined
+            v-model="volume"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Volume');
+              },
+            ]"
             dense
-            type="number"
             placeholder="0"
           ></v-text-field>
         </div>
@@ -29,8 +39,13 @@
           <label class="caption font-weight-medium">Berat Kapat + Muatan</label>
           <v-text-field
             outlined
+            v-model="beratKapalDanMuatan"
+            :rules="[
+              (value) => {
+                return genericRequiredRule(value, 'Berat Kapat + Muatan');
+              },
+            ]"
             dense
-            type="number"
             placeholder="0"
           ></v-text-field>
         </div>
@@ -40,7 +55,46 @@
 </template>
 
 <script>
-export default {};
+import { FieldRequired } from "@/mixins/ValidationRules";
+export default {
+  name: "BeratDanVolume",
+  mixins: [FieldRequired],
+  computed: {
+    beratMuatan: {
+      get() {
+        return this.$store.state.plb.beratDanVolume.beratMuatan;
+      },
+      set(value) {
+        this.$store.commit("SET_BERAT_DAN_VOLUME", {
+          key: "beratMuatan",
+          value,
+        });
+      },
+    },
+    beratKapalDanMuatan: {
+      get() {
+        return this.$store.state.plb.beratDanVolume.beratKapalDanMuatan;
+      },
+      set(value) {
+        this.$store.commit("SET_BERAT_DAN_VOLUME", {
+          key: "beratKapalDanMuatan",
+          value,
+        });
+      },
+    },
+    volume: {
+      get() {
+        return this.$store.state.plb.beratDanVolume.volume;
+      },
+      set(value) {
+        this.$store.commit("SET_BERAT_DAN_VOLUME", {
+          key: "volume",
+          value,
+        });
+      },
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped></style>

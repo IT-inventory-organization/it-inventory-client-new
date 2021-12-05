@@ -1,7 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import router from "@/router/";
-import { AESDecrypt, AESEncrypt } from "@/helper/Encryption";
+import { AESEncrypt } from "@/helper/Encryption";
 
 const baseUrl = process.env.VUE_APP_BASE_URL;
 
@@ -13,11 +13,6 @@ const user = {
     },
     token: "",
     isLoading: false,
-    dataUser: {
-      name: "",
-      npwp: "",
-      address: "",
-    },
   },
   mutations: {
     SET_USER(state, payload) {
@@ -47,9 +42,16 @@ const user = {
             dataLogin: AESEncrypt(context.state.user),
           },
         });
-        context.commit("SET_ISLOADING", false);
         context.commit("SET_TOKEN", result.data.data);
         localStorage.setItem("token_it_inventory", result.data.data);
+        context.commit("SET_USER", {
+          key: "email",
+          value: "",
+        });
+        context.commit("SET_USER", {
+          key: "password",
+          value: "",
+        });
         router.push("/dashboard");
       } catch (error) {
         if (error.message === "Network Error") {
@@ -59,20 +61,8 @@ const user = {
         if (!response.success) {
           Swal.fire("Gagal!", response.message, "error");
         }
-      }
-    },
-
-    async getDataUser(context) {
-      const result = await axios({
-        url: baseUrl + "/report/get/user",
-        method: "GET",
-        headers: {
-          authorization: "Bearer " + localStorage.getItem("token_it_inventory"),
-        },
-      });
-
-      if (result.data.success) {
-        context.commit("SET_DATA_USER", AESDecrypt(result.data.data));
+      } finally {
+        context.commit("SET_ISLOADING", false);
       }
     },
   },
