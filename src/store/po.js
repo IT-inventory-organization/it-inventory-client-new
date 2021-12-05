@@ -1,3 +1,12 @@
+import axios from "axios";
+// import Swal from "sweetalert2";
+// import router from "@/router/";
+// import { AESEncrypt } from "@/helper/Encryption";
+import { AESDecrypt } from "../helper/Encryption";
+
+const baseUrl = process.env.VUE_APP_BASE_URL;
+const token = `Bearer ${localStorage.getItem('token_it_inventory')}`
+
 const po = {
     state: {
       po_baru: {
@@ -62,7 +71,24 @@ const po = {
         state.optionsTableReports = Object.assign({}, payload);
       },
     },
-    actions: {},
+    actions: {
+      async getAllPoData (context) {
+        try {
+          const result = await axios({
+            url: `${baseUrl}po/getAllPO`,
+            method: "GET",
+            Authorization: `${token}`
+          });
+          
+          const returns = AESDecrypt(result.data.data)
+          context.commit(returns)
+
+        } catch (err) {
+          console.log("err", err)
+          console.log(token)
+        }
+      }
+    },
   };
   
   export default po;
