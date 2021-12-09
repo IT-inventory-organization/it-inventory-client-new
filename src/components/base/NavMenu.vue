@@ -13,6 +13,7 @@
       >
         <Icon v-bind:icon="item.icon" class="nav_app_menu_item_icon" />
         {{ item.name }}
+        {{ item.children }}
       </router-link>
 
       <v-menu open-on-hover offset-y>
@@ -33,7 +34,7 @@
               :to="child.path"
               style="text-decoration:none; color: #1E1E1E"
             >
-              <v-list-item-title>{{ child.name }}</v-list-item-title>
+              <v-list-item-title style="color: black">{{ child.name }}</v-list-item-title>
             </router-link>
           </v-list-item>
         </v-list>
@@ -60,7 +61,17 @@ export default {
         name: "PO",
         path: "/po",
         icon: "fluent:document-text-20-regular",
-        isDropdown: false,
+        isDropdown: true,
+        children: [
+          {
+            name: "PO",
+            path: "/po"
+          },
+          {
+            name: "BCF 3.3.15",
+            path: "/bcf"
+          },
+        ]
       },
       {
         name: "PLB",
@@ -84,7 +95,20 @@ export default {
         name: "LAPORAN",
         icon: "mdi:file-chart-outline",
         isDropdown: true,
-        children: [],
+        children: [
+          {
+            name: "Pemasukan Barang",
+            path: "/income"
+          },
+          {
+            name: "Pengeluaran Barang",
+            path: "/expenditure"
+          },
+          {
+            name: "Stock Inventory",
+            path: "/stock"
+          },
+        ]
       },
     ],
   }),
