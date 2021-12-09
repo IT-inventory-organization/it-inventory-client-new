@@ -7,6 +7,7 @@ import TablePLB from "@/views/PLB/TablePLB";
 import FormDocument from "@/views/PLB/FormDocument";
 import TablePO from "@/views/PO/";
 import Inventory from "@/views/Inventory/";
+import ProduksiBarang from "@/views/Inventory/ProduksiBarang/";
 import Login from "@/views/Login";
 
 Vue.use(VueRouter);
@@ -77,6 +78,11 @@ const routes = [
     path: "/inventory",
     name: "Inventory",
     component: Inventory
+  },
+  {
+    path: "/produksi-barang/:id",
+    name: "ProduksiBarang",
+    component: ProduksiBarang
   }
 ];
 

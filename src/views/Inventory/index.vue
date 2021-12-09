@@ -4,13 +4,8 @@
         <v-row no-gutters align="center">
             <v-col cols="11">
                 <div class="display-1 font-weight-bold">
-                    Purchase Order
+                    Inventory
                 </div>
-            </v-col>
-            <v-col cols="1">
-                <button @click="handleBuatBaru" class="it-inventory-btn it-inventory-btn__fw it-inventory-btn__blue">
-                    Buat Baru
-                </button>
             </v-col>
         </v-row>
 
@@ -76,7 +71,7 @@
                                         </template>
 
                                         <v-list class="it-inventory-actions-list">
-                                        <v-list-item @click="handleViewPurchaseOrder">
+                                        <v-list-item @click="handleBuatBaru">
                                             <v-list-item-title>
                                                 <img style="filter: brightness(4.8);" src="@/assets/icons/ic_produce.svg" />
                                             <span style="padding-left: 0.5em;" >Adjustment</span>
@@ -108,6 +103,7 @@
                         outlined
                         v-bind="attrs"
                         v-on="on"
+                        @click="pilihProduksiBarang"
                     >
                         <!-- Actions -->
                         <img style="filter: brightness(4.8);" src="@/assets/icons/ic_produce.svg" />
@@ -125,7 +121,7 @@
             persistent
             width="100%"
             @click:outside="handleBuatBaru"
-            max-width="95%" >
+            max-width="45%" >
             <form-po @handleBuatBaru="handleBuatBaru" />
         </v-dialog>
 
@@ -146,7 +142,7 @@ import { Icon } from "@iconify/vue2";
         name: "TablePO",
         components: {
             Icon,
-            FormPo: () => import("@/components/po/FormPO"),
+            FormPo: () => import("@/components/inventory/FormAdjustment"),
             PurchaseOrderView: () => import("@/components/po/PurchaseOrderView"),
         },
         data() {
@@ -209,6 +205,9 @@ import { Icon } from "@iconify/vue2";
             handleViewPurchaseOrder() {
                 this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
             },
+            pilihProduksiBarang() {
+                this.$router.push({ name: 'ProduksiBarang', params: { id: 1 } })
+            }
         }
     }
 </script>
