@@ -6,6 +6,10 @@ import PLB from "@/views/PLB/PLB";
 import TablePLB from "@/views/PLB/TablePLB";
 import FormDocument from "@/views/PLB/FormDocument";
 import TablePO from "@/views/PO/";
+import TableBCF from "@/views/BCF/";
+import TableExpenditure from "@/views/Laporan/Expenditure.vue";
+import TableIncome from "@/views/Laporan/Income.vue";
+import TableStock from "@/views/Laporan/Stock.vue";
 import Inventory from "@/views/Inventory/";
 import ProduksiBarang from "@/views/Inventory/ProduksiBarang/";
 import Login from "@/views/Login";
@@ -83,7 +87,27 @@ const routes = [
     path: "/produksi-barang/:id",
     name: "ProduksiBarang",
     component: ProduksiBarang
-  }
+  },
+  {
+    path: "/bcf",
+    name: "Bcf",
+    component: TableBCF
+  },
+  {
+    path: "/expenditure",
+    name: "Expenditure",
+    component: TableExpenditure
+  },
+  {
+    path: "/income",
+    name: "Income",
+    component: TableIncome
+  },
+  {
+    path: "/stock",
+    name: "Stock",
+    component: TableStock
+  },
 ];
 
 const router = new VueRouter({
