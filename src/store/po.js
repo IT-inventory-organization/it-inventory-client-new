@@ -73,7 +73,6 @@ const po = {
     },
     actions: {
       async getAllPoData (context) {
-        try {
           context.commit("SET_ISLOADING", true);
           const result = await axios({
             url: `${baseUrl}po/getAllPO`,
