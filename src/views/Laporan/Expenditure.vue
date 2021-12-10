@@ -15,73 +15,77 @@
         </v-row>
 
         <!-- date button  -->
-        <row class="d-flex flex-row mt-4">
-          <v-col cols="1" class="pl-0">
-            <div class="mt-2">Periode</div>
-          </v-col>
-          <v-col cols="3">
-          <v-menu
-              v-model="tanggal"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              transition="scale-transition"
-              min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-                prepend-inner-icon="mdi-calendar-month-outline"
-                append-icon="mdi-chevron-down"
-                placeholder="Pilih Tanggal"
-                dense
-                outlined
-                clearable
-                v-bind="attrs"
-                v-on="on"
-            ></v-text-field>
-            </template>
-            <v-date-picker
-            scrollable
-            no-title
-            @input="tanggal = false"
-            ></v-date-picker>
-          </v-menu>
-          </v-col>
-          <v-icon right>
-          mdi-chevron-right
-          </v-icon>
-          <v-col cols="3">
-          <v-menu
-              v-model="tanggal"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              transition="scale-transition"
-              min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-                prepend-inner-icon="mdi-calendar-month-outline"
-                append-icon="mdi-chevron-down"
-                placeholder="Pilih Tanggal"
-                dense
-                outlined
-                clearable
-                v-bind="attrs"
-                v-on="on"
-            ></v-text-field>
-            </template>
-            <v-date-picker
-            scrollable
-            no-title
-            @input="tanggal = false"
-            ></v-date-picker>
-          </v-menu>
-          </v-col>
-          <v-col cols="1">
-            <button @click="handleBuatBaru" class="it-inventory-btn it-inventory-btn__fw it-inventory-btn__green">
-              Tampilkan
-            </button>
-          </v-col>
-        </row>
+        <div class="d-flex flex-row mt-4">
+            <v-col cols="1" class="pl-0">
+                <div class="mt-2">Periode</div>
+            </v-col>
+
+            <v-col cols="3">
+            <v-menu
+                v-model="tanggal"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                min-width="auto"
+            >
+                <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                    prepend-inner-icon="mdi-calendar-month-outline"
+                    append-icon="mdi-chevron-down"
+                    placeholder="Pilih Tanggal"
+                    dense
+                    outlined
+                    clearable
+                    v-bind="attrs"
+                    v-on="on"
+                ></v-text-field>
+                </template>
+                <v-date-picker
+                scrollable
+                no-title
+                @input="tanggal = false"
+                ></v-date-picker>
+            </v-menu>
+            </v-col>
+    
+            <!-- <v-icon right>
+                mdi-chevron-right
+            </v-icon> -->
+
+            <v-col cols="3">
+                <v-menu
+                    v-model="tanggal"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    min-width="auto"
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                        prepend-inner-icon="mdi-calendar-month-outline"
+                        append-icon="mdi-chevron-down"
+                        placeholder="Pilih Tanggal"
+                        dense
+                        outlined
+                        clearable
+                        v-bind="attrs"
+                        v-on="on"
+                    ></v-text-field>
+                    </template>
+                    <v-date-picker
+                    scrollable
+                    no-title
+                    @input="tanggal = false"
+                    ></v-date-picker>
+                </v-menu>
+            </v-col>
+
+            <v-col cols="1">
+                <button class="it-inventory-btn it-inventory-btn__fw it-inventory-btn__green">
+                    Tampilkan
+                </button>
+            </v-col>
+        </div>
         
 
         <!-- Data Tables  -->
@@ -95,102 +99,26 @@
                 no-results-text="Data not available"
                 class="it-inventory-simple-table"
             >
-                <template v-slot:[`item.no`]="props">
-                {{ props.index + 1 }}
-                </template>
-                <template v-slot:[`item.action`]>
-                <v-menu offset-y>
-                    <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        class="it-inventory-actions-btn"
-                        outlined
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        Actions
-                        <v-icon right>
-                        mdi-chevron-down
-                        </v-icon>
-                    </v-btn>
-                    </template>
-
-                    <v-list class="it-inventory-actions-list">
-                    <v-list-item @click="handleViewPurchaseOrder">
-                        <v-list-item-title>
-                        <Icon
-                            icon="fluent:apps-list-detail-20-regular"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        View
-                        </v-list-item-title>
-                    </v-list-item>
-                    <!-- <v-list-item>
-                        <v-list-item-title>
-                        <Icon
-                            icon="ph:pencil-line-light"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        Edit
-                        </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-title>
-                        <Icon
-                            icon="octicon:trash-24"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        Delete
-                        </v-list-item-title>
-                    </v-list-item> -->
-                    <v-list-item>
-                        <v-list-item-title>
-                        <Icon
-                            icon="fluent:print-24-regular"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        Print
-                        </v-list-item-title>
-                    </v-list-item>
-                    </v-list>
-                </v-menu>
-                </template>
             </v-data-table>
             </div>
 
-        <!-- Form Buat PO Baru Dialog -->
         <v-dialog
-            v-model="dialogBuatBaruPO"
             persistent
             width="100%"
-            @click:outside="handleBuatBaru"
-            max-width="95%" >
-            <form-po @handleBuatBaru="handleBuatBaru" />
-        </v-dialog>
-
-        <v-dialog
-            v-model="dialogPurchaseOrderView"
-            persistent
-            width="100%"
-            @click:outside="handleViewPurchaseOrder"
             max-width="70%" >
-            <purchase-order-view @handleBuatBaru="handleViewPurchaseOrder" />
+            <expenditure-table-view />
         </v-dialog>
     </div>
 </template>
 
 <script>
-import { Icon } from "@iconify/vue2";
     export default {
         name: "TableExpenditure",
         components: {
-            Icon,
-            // FormPo: () => import("@/components/po/FormPO"),
-            PurchaseOrderView: () => import("@/components/po/PurchaseOrderView"),
+            ExpenditureTableView: () => import("@/components/laporan/ExpenditureTableView"),
         },
         data() {
             return {
-                dialogBuatBaruPO: false,
-                dialogPurchaseOrderView: false,
                 headers: [
                     {
                     text: "No",
@@ -236,6 +164,17 @@ import { Icon } from "@iconify/vue2";
             },
         },
         computed: {
+            tanggal: {
+                get() {
+                    return this.$store.state.po.po_baru.tanggal;
+                },
+                set(value) {
+                    this.$store.commit("SET_PO_BARU", {
+                    key: "tanggal",
+                    value,
+                    });
+                },
+            },
             reports() {
             return this.$store.state.po.reports;
             },

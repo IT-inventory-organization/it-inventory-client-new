@@ -130,7 +130,7 @@
             width="100%"
             @click:outside="handleViewBCF"
             max-width="70%" >
-            <purchase-order-view @handleBuatBaru="handleViewBCF" />
+            <bcf-view @handleBuatBaru="handleViewBCF" />
         </v-dialog>
     </div>
 </template>
@@ -142,7 +142,7 @@ import { Icon } from "@iconify/vue2";
         components: {
             Icon,
             FormBcf: () => import("@/components/bcf/FormBCF"),
-            PurchaseOrderView: () => import("@/components/po/PurchaseOrderView"),
+            BcfView: () => import("@/components/bcf/BCFView"),
         },
         data() {
             return {
