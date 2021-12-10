@@ -5,9 +5,6 @@
         <v-col cols="10">
           <span class="headline font-weight-bold">BCF 3.3.15</span>
         </v-col>
-        <!-- <span style="cursor: pointer" @click.prevent="handleCloseDialog"
-          ><v-icon>mdi-close</v-icon></span
-        > -->
         <v-col cols="2">
           <div class="d-flex">
             <button
@@ -24,7 +21,6 @@
           </div>
         </v-col>
         
-          
       </v-row>
     </v-card-title>
     <v-card-text>
@@ -382,12 +378,6 @@
           </div>
 
           <v-spacer></v-spacer>
-          <!-- <v-row no-gutters>
-              <button @click.prevent="add" style="background-color: #F8F8F8; border-radius: 1em; padding: 0.5em 1em 0.5em 0.8em; display: flex; align-items: center;" >
-                <img style="filter: brightness(4.8);" src="@/assets/icons/ic_plus.svg" />
-                <span style="padding: 0 0 0 0.5em;">
-                Tambah Item</span></button>
-          </v-row> -->
 
           <v-row no-gutters width="100%">
               <v-col lg="6">
@@ -523,41 +513,7 @@
               </v-col>
 
           </v-row>
-
-
         </v-container>
-        <!-- <v-card-actions height="100%">
-          <v-row no-gutters justify="space-between">
-            <v-col cols="3">
-              Remarks
-              <v-text-field
-                    outlined
-                    dense
-                    v-model="remarks"
-                    placeholder="Remarks"
-                    :rules="[
-                    (value) => {
-                        return genericRequiredRule(value, 'Remarks');
-                    },
-                    ]"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="3"  style="background: #F8F8F8; padding: 0.5em 0.3em;">
-              Jumlah Total
-              <div style="font-size: 1.25em; display: flex; justify-content: space-between; padding: 0.5em;">
-                <strong>TOTAL</strong>
-                <strong>325.00</strong>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-actions> -->
-        <!-- <v-card-actions>
-          <v-spacer></v-spacer>
-          <button type="submit" class="btn_save">
-            <span>Selanjutnya</span>
-            <img src="@/assets/icons/ic_bulletnext.svg" />
-          </button>
-        </v-card-actions> -->
       </v-form>
     </v-card-text>
   </v-card>
@@ -685,7 +641,7 @@ export default {
     handleSubmit() {
       const getRef = this.$refs.initialReport.handleValidate();
       if (getRef) {
-        this.$router.push("/po/add");
+        this.$router.push("/bcf/add");
       } else {
         return false;
       }
