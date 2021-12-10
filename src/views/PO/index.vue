@@ -166,7 +166,7 @@ import { Icon } from "@iconify/vue2";
         },
         computed: {
             reports() {
-                this.$store.dispatch("getAllPoData");
+                this.$store.dispatch("getAllPoData")
             return this.$store.state.po.reports;
             },
             optionsTableReports: {
