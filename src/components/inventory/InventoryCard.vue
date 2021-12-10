@@ -1,5 +1,5 @@
 <template lang="">
-  <v-card height="95vh">
+  <v-card>
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
         <span class="headline font-weight-bold mt-2">Inventory Card</span>
@@ -60,20 +60,16 @@
             </v-col>
           </v-row>
           <v-row no-gutters width="100%">
-            <div
-              style="align-items: center;display: flex;flex-direction: column;height: 100%;justify-content: center;padding: 8px;"
-            >
-              <Progress-Vertical />
-            </div>
+            <Progress-Vertical :data="data" />
           </v-row>
         </v-container>
       </v-form>
     </v-card-text>
-    <v-card-actions height="100%" class="card-subtitle"> </v-card-actions>
   </v-card>
 </template>
 <script>
 export default {
+  props: ['data'],
   data() {
     return {};
   },

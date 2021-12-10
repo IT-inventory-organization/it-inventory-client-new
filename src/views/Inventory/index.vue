@@ -149,7 +149,10 @@
       @click:outside="handleViewPurchaseOrder"
       max-width="70%"
     >
-      <purchase-order-view @handleBuatBaru="handleViewPurchaseOrder" />
+      <purchase-order-view
+        :data="items"
+        @handleBuatBaru="handleViewPurchaseOrder"
+      />
     </v-dialog>
   </div>
 </template>
@@ -191,6 +194,32 @@ export default {
           text: 'Actions',
           value: 'action',
           width: '17.5%'
+        }
+      ],
+      items: [
+        {
+          id: 1,
+          inventoryType: 'Adjustment Stock',
+          tanggal: '01-01-2021',
+          nomorDokumen: '1009867848485757575',
+          quantity: '1.200',
+          balance: '48.360'
+        },
+        {
+          id: 2,
+          inventoryType: 'Dokumen PO',
+          tanggal: '01-01-2021',
+          nomorDokumen: '1009867848485757575',
+          quantity: '1.200',
+          balance: '48.360'
+        },
+        {
+          id: 3,
+          inventoryType: 'Dokumen Pemasukan',
+          tanggal: '01-01-2021',
+          nomorDokumen: '1009867848485757575',
+          quantity: '1.200',
+          balance: '48.360'
         }
       ]
     };
