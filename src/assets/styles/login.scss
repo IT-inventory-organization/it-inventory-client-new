@@ -1,0 +1,36 @@
+.layout-login {
+  background-color: #312e68 !important;
+  padding: 10px;
+}
+.login-wrapper {
+  width: 675px;
+  padding: 50px 75px;
+}
+.header-login {
+  text-align: center;
+  &__logo {
+    width: 200px;
+  }
+  &__title {
+    margin-top: 20px;
+    color: #312e68;
+    font-size: 32px;
+    font-weight: 600;
+  }
+}
+.content-login {
+  margin-top: 70px;
+}
+.input_login {
+  border-radius: 10px;
+}
+.btn-login {
+  text-align: center;
+  background-color: #312e68 !important;
+  width: 80%;
+  color: #ffffff;
+  padding: 14px 10px !important;
+  border-radius: 10px;
+  text-transform: capitalize;
+  font-weight: normal;
+}
