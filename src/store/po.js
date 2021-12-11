@@ -1,5 +1,10 @@
+import axios from "axios";
+import { AESDecrypt } from "@/helper/Encryption";
+const baseUrl = process.env.VUE_APP_BASE_URL;
+
 const po = {
     state: {
+      loading: false,
       po_baru: {
         kapal_pemilik: "",
         kapal_pembeli: "",
@@ -49,8 +54,8 @@ const po = {
       SET_REPORT_ID(state, payload) {
         state.reportId = payload;
       },
-      SET_LOADING(state, payload) {
-        state.loading[payload.key] = payload.value;
+      SET_LOADING_PO(state, payload) {
+        state.loading = payload;
       },
       SET_REPORT(state, payload) {
         state.report[payload.key] = payload.value;
@@ -62,7 +67,34 @@ const po = {
         state.optionsTableReports = Object.assign({}, payload);
       },
     },
-    actions: {},
+    actions: {
+      async getAllPo(context){
+        try{
+
+          context.commit("SET_LOADING_PO", true);
+          const result = await axios({
+            url: baseUrl + "/po",
+            method: "GET",
+            headers: {
+              authorization:
+                "Bearer " + localStorage.getItem("token_it_inventory"),
+            },
+          });
+          const data = AESDecrypt(result.data.data);
+          if (result.data.success) {
+            context.commit("SET_DATA_INFORMASI_PERUSAHAAN", {data: data});
+          }
+        }
+       catch (error) {
+        console.log(error);
+      } finally {
+        context.commit("SET_LOADING_PO", false);
+      }
+    },
+
+
+  
+  }// action end
   };
   
   export default po;
