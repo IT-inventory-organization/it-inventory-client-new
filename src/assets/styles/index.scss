@@ -131,6 +131,17 @@ body {
       }
     }
   }
+  &-status {
+    border: 1px solid #2ed477 !important;
+    padding: 2px 10px;
+    border-radius: 16px;
+    font-size: 0.8rem !important;
+    height: 25px;
+    width: 100px;
+    text-align: center;
+    font-weight: 400;
+    color: #2ed477;
+  }
 }
 // End Table
 

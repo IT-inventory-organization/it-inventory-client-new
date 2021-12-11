@@ -39,6 +39,13 @@
                 <template v-slot:[`item.no`]="props">
                 {{ props.index + 1 }}
                 </template>
+
+                <template v-slot:[`item.status`]>
+                    <div class="it-inventory-actions-status">
+                        <p>Disetujui</p>
+                    </div>
+                </template>
+                
                 <template v-slot:[`item.action`]>
                 <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
@@ -56,7 +63,7 @@
                     </template>
 
                     <v-list class="it-inventory-actions-list">
-                    <v-list-item @click="handleViewPurchaseOrder">
+                    <v-list-item @click="handleViewBCF">
                         <v-list-item-title>
                         <Icon
                             icon="fluent:apps-list-detail-20-regular"
@@ -65,7 +72,16 @@
                         View
                         </v-list-item-title>
                     </v-list-item>
-                    <!-- <v-list-item>
+                    <v-list-item>
+                        <v-list-item-title>
+                        <Icon
+                            icon="fluent:apps-list-detail-20-regular"
+                            class="v-icon--left it-inventory-action-list__icon"
+                        />
+                        View BCF 3.3.14
+                        </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item>
                         <v-list-item-title>
                         <Icon
                             icon="ph:pencil-line-light"
@@ -82,7 +98,7 @@
                         />
                         Delete
                         </v-list-item-title>
-                    </v-list-item> -->
+                    </v-list-item>
                     <v-list-item>
                         <v-list-item-title>
                         <Icon
@@ -98,23 +114,23 @@
             </v-data-table>
             </div>
 
-        <!-- Form Buat PO Baru Dialog -->
+        <!-- Form Buat BCF Baru Dialog -->
         <v-dialog
-            v-model="dialogBuatBaruPO"
+            v-model="dialogBuatBaruBCF"
             persistent
             width="100%"
             @click:outside="handleBuatBaru"
             max-width="95%" >
-            <form-po @handleBuatBaru="handleBuatBaru" />
+            <form-bcf @handleBuatBaru="handleBuatBaru" />
         </v-dialog>
 
         <v-dialog
-            v-model="dialogPurchaseOrderView"
+            v-model="dialogBCFView"
             persistent
             width="100%"
-            @click:outside="handleViewPurchaseOrder"
+            @click:outside="handleViewBCF"
             max-width="70%" >
-            <purchase-order-view @handleBuatBaru="handleViewPurchaseOrder" />
+            <bcf-view @handleBuatBaru="handleViewBCF" />
         </v-dialog>
     </div>
 </template>
@@ -125,17 +141,17 @@ import { Icon } from "@iconify/vue2";
         name: "TableBCF",
         components: {
             Icon,
-            FormPo: () => import("@/components/bcf/FormBCF"),
-            PurchaseOrderView: () => import("@/components/po/PurchaseOrderView"),
+            FormBcf: () => import("@/components/bcf/FormBCF"),
+            BcfView: () => import("@/components/bcf/BCFView"),
         },
         data() {
             return {
-                dialogBuatBaruPO: false,
-                dialogPurchaseOrderView: false,
+                dialogBuatBaruBCF: false,
+                dialogBCFView: false,
                 headers: [
                     {
                     text: "Exportir/Pengusaha PLB/PDPLB",
-                    value: "nomor_po",
+                    value: "exportir",
                     },
                     {
                     text: "Nomor PO",
@@ -183,10 +199,10 @@ import { Icon } from "@iconify/vue2";
         },
         methods: {
             handleBuatBaru() {
-                this.dialogBuatBaruPO = !this.dialogBuatBaruPO;
+                this.dialogBuatBaruBCF = !this.dialogBuatBaruBCF;
             },
-            handleViewPurchaseOrder() {
-                this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
+            handleViewBCF() {
+                this.dialogBCFView = !this.dialogBCFView;
             },
         }
     }
