@@ -8,6 +8,7 @@ const baseUrl = process.env.VUE_APP_BASE_URL;
 
 const plb = {
   state: {
+    dokumenSaveSucceded: false,
     reportId: "",
     stepper: 1,
     loading: {
@@ -192,6 +193,9 @@ const plb = {
     listBarang: [],
   },
   mutations: {
+    SET_DOCUMENT_SAVED(state, payload) {
+      state.dokumenSaveSucceded = payload;
+    },
     SET_REPORT_ID(state, payload) {
       state.reportId = payload;
     },
@@ -364,6 +368,8 @@ const plb = {
         const data = AESDecrypt(result.data.data);
         if (result.data.success) {
           context.commit("SET_PO_BARU", data);
+          // console.log("response",data)
+          context.commit("SET_DOCUMENT_SAVED", true);
         }
       }
      catch (error) {
