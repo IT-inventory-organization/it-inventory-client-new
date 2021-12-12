@@ -39,7 +39,7 @@
           <label class="caption font-weight-medium">Berat Kapat + Muatan</label>
           <v-text-field
             outlined
-            v-model="beratKapalDanMuatan"
+            v-model="beratKapalDenganMuatan"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Berat Kapat + Muatan');
@@ -71,13 +71,13 @@ export default {
         });
       },
     },
-    beratKapalDanMuatan: {
+    beratKapalDenganMuatan: {
       get() {
-        return this.$store.state.plb.beratDanVolume.beratKapalDanMuatan;
+        return this.$store.state.plb.beratDanVolume.beratKapalDenganMuatan;
       },
       set(value) {
         this.$store.commit("SET_BERAT_DAN_VOLUME", {
-          key: "beratKapalDanMuatan",
+          key: "beratKapalDenganMuatan",
           value,
         });
       },

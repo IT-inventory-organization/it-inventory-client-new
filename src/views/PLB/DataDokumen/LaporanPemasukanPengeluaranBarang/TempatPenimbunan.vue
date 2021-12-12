@@ -106,7 +106,6 @@ export default {
           .perkiraanTanggalPengeluaran;
       },
       set(value) {
-        value=this.formatDate(value);
         this.$store.commit("SET_TEMPAT_PENIMBUNAN", {
           key: "perkiraanTanggalPengeluaran",
           value,

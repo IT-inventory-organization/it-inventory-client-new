@@ -332,7 +332,7 @@ export default {
         return this.$store.state.plb.dokumenPemasukan.tanggalDokumenPemasukan;
       },
       set(value) {
-        value =this.formatDate(value)
+        
 
         this.$store.commit("SET_DOKUMEN_PEMASUKAN", {
           key: "tanggalDokumenPemasukan",
@@ -378,7 +378,7 @@ export default {
         return this.$store.state.plb.dokumenTambahan.tanggalBC10;
       },
       set(value) {
-        value =this.formatDate(value)
+        
 
 
         this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
@@ -392,7 +392,7 @@ export default {
         return this.$store.state.plb.dokumenTambahan.tanggalBC11;
       },
       set(value) {
-        value =this.formatDate(value)
+        
 
         this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
           key: "tanggalBC11",
@@ -405,7 +405,7 @@ export default {
         return this.$store.state.plb.dokumenTambahan.tanggalBL;
       },
       set(value) {
-        value =this.formatDate(value)
+        
 
         this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
           key: "tanggalBL",

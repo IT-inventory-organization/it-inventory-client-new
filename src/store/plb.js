@@ -153,7 +153,7 @@ const plb = {
     mataUang: {
       valuta: "",
       freight: 0,
-      NDPBMKurs: 0,
+      ndbpmKurs: 0,
       cif: 0,
       transaksiLainnya: "",
       hargaPenyerahan: "",
@@ -166,7 +166,7 @@ const plb = {
     },
     beratDanVolume: {
       beratMuatan: 0,
-      beratKapalDanMuatan: 0,
+      beratKapalDenganMuatan: 0,
       volume: 0,
     },
     tempatPenimbunan: {
