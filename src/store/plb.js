@@ -14,6 +14,7 @@ const plb = {
     loading: {
       loadingReports: false,
       loadingDokumen: false,
+      loadingBarang: false,
     },
     report: {
       jenisPemberitahuan: "",
@@ -291,6 +292,12 @@ const plb = {
     },
   },
   actions: {
+
+    // report
+
+
+
+
     async generateReportId(context,payload){
       try{
         context.commit("SET_LOADING_PLB", {key: "loadingReports", value: true});
@@ -325,6 +332,11 @@ const plb = {
 
       router.push("/plb/add");
     },
+
+// dokumen
+
+
+
     async saveDocument(context,payload) {
       let formatted_payload = {};
       let payload_requeired = new Set([
@@ -376,6 +388,39 @@ const plb = {
       console.log(error.response.data);
     } finally {
       context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: false});
+    }
+    },
+
+
+
+    // barang
+
+
+    async saveDataBarang(context,listBarang) {
+      try{
+        context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: true});
+        console.log(listBarang)
+        let formatted_payload={
+          listDataBarang:listBarang,
+          reportId:parseInt(localStorage.getItem("reportId"))
+        }
+        const result = await axios({
+          url: baseUrl + "/report/barang/save",
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },data: {dataBarang:AESEncrypt(formatted_payload)}
+        });
+        const data = AESDecrypt(result.data.data);
+        if (result.data.success) {
+          console.log(data)
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: false});
     }
     }
   },
