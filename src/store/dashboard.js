@@ -42,7 +42,7 @@ const dashboard = {
           },
         });
         const data = AESDecrypt(result.data.data);
-        console.log(data,"KAPAL KARAM")
+        // console.log(data,"KAPAL KARAM")
         if (result.data.success) {
           context.commit("SET_LIST_KAPAL", data);
           context.commit("SET_JUMLAH_KAPAL", data.length);

@@ -277,7 +277,7 @@ const plb = {
       }
     },
     UPDATE_LIST_BARANG(state, payload) {
-      console.log(payload);
+      // console.log(payload);
       const temp = [...state.listBarang];
       state.listBarang = [];
       state.listBarang = temp.map((ele, ind) => {
@@ -364,11 +364,11 @@ const plb = {
       formatted_payload.reportId=parseInt(localStorage.getItem("reportId"));
 
 
-      console.log(formatted_payload);
+      // console.log(formatted_payload);
       
       try{
         context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: true});
-        console.log(payload)
+        // console.log(payload)
         const result = await axios({
           url: baseUrl + "/report/dokumen/save/pemasukan",
           method: "POST",
@@ -399,7 +399,7 @@ const plb = {
     async saveDataBarang(context,listBarang) {
       try{
         context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: true});
-        console.log(listBarang)
+        // console.log(listBarang)
         let formatted_payload={
           listDataBarang:listBarang,
           reportId:parseInt(localStorage.getItem("reportId"))
@@ -414,6 +414,7 @@ const plb = {
         });
         const data = AESDecrypt(result.data.data);
         if (result.data.success) {
+          // ga tau nyimpen nya di mana, masih di console
           console.log(data)
         }
       }

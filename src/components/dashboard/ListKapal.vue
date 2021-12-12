@@ -115,9 +115,6 @@ export default {
       return this.$store.state.dashboard.listKapal;
     },
 },
-created() {
-  console.log(this.ListDataKapal,"KAPAL TANKER");
-}
 };
 </script>
 
