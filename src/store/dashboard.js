@@ -20,7 +20,10 @@ const dashboard = {
       state.loading[payload.key] = payload.value;
     },
     SET_LIST_KAPAL(state, payload) {
-      state.list_kapal = payload;
+      state.listKapal = payload;
+    },
+    SET_JUMLAH_KAPAL(state, payload) {
+      state.jumlahKapal = payload;
     },
     SET_OPTIONS_TABLE_LIST_KAPAL(state, payload) {
       state.optionsTableListKapal = Object.assign({}, payload);
@@ -39,9 +42,10 @@ const dashboard = {
           },
         });
         const data = AESDecrypt(result.data.data);
-        // console.log(data)
+        console.log(data,"KAPAL KARAM")
         if (result.data.success) {
           context.commit("SET_LIST_KAPAL", data);
+          context.commit("SET_JUMLAH_KAPAL", data.length);
         }
       }
      catch (error) {
