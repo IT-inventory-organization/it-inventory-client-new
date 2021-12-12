@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AESDecrypt } from "@/helper/Encryption";
+import { AESDecrypt, AESEncrypt} from "@/helper/Encryption";
 const baseUrl = process.env.VUE_APP_BASE_URL;
 
 const po = {
@@ -11,16 +11,16 @@ const po = {
         no_purchase_order: "",
         tanggal: "",
         purchases: [
-          {
-            kode_barang: "",
-            kapal_pemilik: "",
-            kapal_pembeli: "",
-          },
-          {
-            kode_barang: "",
-            kapal_pemilik: "",
-            kapal_pembeli: "",
-          },
+          // {
+          //   kode_barang: "",
+          //   kapal_pemilik: "",
+          //   kapal_pembeli: "",
+          // },
+          // {
+          //   kode_barang: "",
+          //   kapal_pemilik: "",
+          //   kapal_pembeli: "",
+          // },
         ],
         remarks: "",
         jumlah_total: ""
@@ -73,7 +73,7 @@ const po = {
 
           context.commit("SET_LOADING_PO", true);
           const result = await axios({
-            url: baseUrl + "/po",
+            url: baseUrl + "/po/getallpo",
             method: "GET",
             headers: {
               authorization:
@@ -82,7 +82,10 @@ const po = {
           });
           const data = AESDecrypt(result.data.data);
           if (result.data.success) {
-            context.commit("SET_DATA_INFORMASI_PERUSAHAAN", {data: data});
+            context.commit("SET_REPORT", {
+              key: "data",
+              value: data,
+            });
           }
         }
        catch (error) {
@@ -91,6 +94,34 @@ const po = {
         context.commit("SET_LOADING_PO", false);
       }
     },
+
+    async addPo(context,payload){
+      try{
+        context.commit("SET_LOADING_PO", true);
+        let eData=AESEncrypt(payload);
+        const result = await axios({
+          url: baseUrl + "/po/createpo/createpo",
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+          data: {
+            dataPO: eData
+          }
+        });
+        const data = AESDecrypt(result.data.data);
+        if (result.data.success) {
+          context.commit("SET_PO_BARU", data);
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      context.commit("SET_LOADING_PO", false);
+    }
+  },
+    
 
 
   

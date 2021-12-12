@@ -44,9 +44,13 @@ export default {
       import("@/views/PLB/DataDokumen/LaporanPemasukanPengeluaranBarang/index"),
   },
   methods: {
+    submitDocument() {
+      this.$store.dispatch("saveDocument", this.$store.state.plb);
+    },
     handleSubmit() {
+      this.submitDocument();
       if (this.$refs.formDataDokumen.validate()) {
-        this.$store.commit("SET_STEPPER", 3);
+          // this.$store.commit("SET_STEPPER", 3);
       } else {
         return false;
       }

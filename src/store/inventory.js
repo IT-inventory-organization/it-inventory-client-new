@@ -139,7 +139,7 @@ const inventory = {
       SET_REPORT(state, payload) {
         state.report[payload.key] = payload.value;
       },
-      SET_PO_BARU(state, payload) {
+      SET_PO_BARU_INVENTORY(state, payload) {
         state.po_baru[payload.key] = payload.value;
       },
       SET_OPTIONS_TABLE_REPORTS(state, payload) {

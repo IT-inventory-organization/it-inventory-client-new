@@ -13,6 +13,9 @@ export default {
     DisplayCount: () => import("@/components/dashboard/DisplayCount"),
     ListKapal: () => import("@/components/dashboard/ListKapal"),
   },
+  created() {
+    this.$store.dispatch("getAllReport");
+  },
 };
 </script>
 

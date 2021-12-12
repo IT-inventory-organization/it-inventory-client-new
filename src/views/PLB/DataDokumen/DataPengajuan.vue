@@ -309,6 +309,7 @@ export default {
     };
   },
   computed: {
+   
     constantPemasukan() {
       return this.$store.state.plb.constant.pemasukan;
     },
@@ -331,9 +332,10 @@ export default {
         return this.$store.state.plb.dokumenPemasukan.tanggalDokumenPemasukan;
       },
       set(value) {
+        let date =this.formatDate(value)
         this.$store.commit("SET_DOKUMEN_PEMASUKAN", {
           key: "tanggalDokumenPemasukan",
-          value,
+          date,
         });
       },
     },
@@ -375,9 +377,11 @@ export default {
         return this.$store.state.plb.dokumenTambahan.tanggalBC10;
       },
       set(value) {
+        let date =this.formatDate(value)
+
         this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
           key: "tanggalBC10",
-          value,
+          date,
         });
       },
     },
@@ -386,9 +390,11 @@ export default {
         return this.$store.state.plb.dokumenTambahan.tanggalBC11;
       },
       set(value) {
+        let date =this.formatDate(value)
+
         this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
           key: "tanggalBC11",
-          value,
+          date,
         });
       },
     },
@@ -397,6 +403,8 @@ export default {
         return this.$store.state.plb.dokumenTambahan.tanggalBL;
       },
       set(value) {
+        let date =this.formatDate(value)
+        console.log(date)
         this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
           key: "tanggalBL",
           value,
@@ -408,6 +416,11 @@ export default {
     handleNotificationType() {
       return localStorage.getItem("NotificationType");
     },
+     formatDate (date) {
+        if (!date) return null
+        const [year, month, day] = date.toString().split('-')
+        return `${day}-${month}-${year}`
+      },
   },
 };
 </script>
