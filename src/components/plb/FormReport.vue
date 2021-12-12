@@ -153,6 +153,7 @@ export default {
       const getRef = this.$refs.initialReport.validate();
       if (getRef) {
         this.$store.dispatch("handleSubmitReport");
+        this.$store.dispatch("generateReportId",this.$store.state.plb.report);
       } else {
         return false;
       }

@@ -142,6 +142,7 @@ export default {
         return this.$store.state.plb.mataUang.freight;
       },
       set(value) {
+        value = parseInt(value)
         this.$store.commit("SET_MATA_UANG", {
           key: "freight",
           value,
