@@ -332,10 +332,11 @@ export default {
         return this.$store.state.plb.dokumenPemasukan.tanggalDokumenPemasukan;
       },
       set(value) {
-        let date =this.formatDate(value)
+        value =this.formatDate(value)
+
         this.$store.commit("SET_DOKUMEN_PEMASUKAN", {
           key: "tanggalDokumenPemasukan",
-          date,
+          value,
         });
       },
     },
@@ -377,11 +378,12 @@ export default {
         return this.$store.state.plb.dokumenTambahan.tanggalBC10;
       },
       set(value) {
-        let date =this.formatDate(value)
+        value =this.formatDate(value)
+
 
         this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
           key: "tanggalBC10",
-          date,
+          value,
         });
       },
     },
@@ -390,11 +392,11 @@ export default {
         return this.$store.state.plb.dokumenTambahan.tanggalBC11;
       },
       set(value) {
-        let date =this.formatDate(value)
+        value =this.formatDate(value)
 
         this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
           key: "tanggalBC11",
-          date,
+          value,
         });
       },
     },
@@ -403,8 +405,8 @@ export default {
         return this.$store.state.plb.dokumenTambahan.tanggalBL;
       },
       set(value) {
-        let date =this.formatDate(value)
-        console.log(date)
+        value =this.formatDate(value)
+
         this.$store.commit("SET_DOKUMEN_TAMBAHAN", {
           key: "tanggalBL",
           value,
@@ -418,6 +420,7 @@ export default {
     },
      formatDate (date) {
         if (!date) return null
+
         const [year, month, day] = date.toString().split('-')
         return `${day}-${month}-${year}`
       },

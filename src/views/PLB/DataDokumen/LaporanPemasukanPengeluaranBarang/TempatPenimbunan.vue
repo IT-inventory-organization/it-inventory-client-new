@@ -106,6 +106,7 @@ export default {
           .perkiraanTanggalPengeluaran;
       },
       set(value) {
+        value=this.formatDate(value);
         this.$store.commit("SET_TEMPAT_PENIMBUNAN", {
           key: "perkiraanTanggalPengeluaran",
           value,
@@ -145,6 +146,14 @@ export default {
       }
     },
   },
+  methods: {
+    formatDate (date) {
+        if (!date) return null
+
+        const [year, month, day] = date.toString().split('-')
+        return `${day}-${month}-${year}`
+      },
+  }
 };
 </script>
 

@@ -182,6 +182,7 @@ export default {
         return this.$store.state.plb.dataKapal.tanggalKedatangan;
       },
       set(value) {
+        value=this.formatDate(value);
         this.$store.commit("SET_DATA_KAPAL", {
           key: "tanggalKedatangan",
           value,
@@ -193,13 +194,24 @@ export default {
         return this.$store.state.plb.dataKapal.tanggalKeberangkatan;
       },
       set(value) {
+        value=this.formatDate(value);
+
         this.$store.commit("SET_DATA_KAPAL", {
           key: "tanggalKeberangkatan",
           value,
         });
       },
     },
+    
   },
+  methods: {
+      formatDate (date) {
+        if (!date) return null
+
+        const [year, month, day] = date.toString().split('-')
+        return `${day}-${month}-${year}`
+      },
+    }
 };
 </script>
 
