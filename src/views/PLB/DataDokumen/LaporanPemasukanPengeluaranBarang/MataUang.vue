@@ -47,7 +47,7 @@
           <v-text-field
             outlined
             dense
-            v-model="NDPBMKurs"
+            v-model="ndbpmKurs"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'NDPBM Kurs');
@@ -142,19 +142,20 @@ export default {
         return this.$store.state.plb.mataUang.freight;
       },
       set(value) {
+        value = parseInt(value)
         this.$store.commit("SET_MATA_UANG", {
           key: "freight",
           value,
         });
       },
     },
-    NDPBMKurs: {
+    ndbpmKurs: {
       get() {
-        return this.$store.state.plb.mataUang.NDPBMKurs;
+        return this.$store.state.plb.mataUang.ndbpmKurs;
       },
       set(value) {
         this.$store.commit("SET_MATA_UANG", {
-          key: "NDPBMKurs",
+          key: "ndbpmKurs",
           value,
         });
       },

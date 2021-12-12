@@ -216,6 +216,7 @@ export default {
         return this.$store.state.plb.identitasBarang.jumlahBarang;
       },
       set(value) {
+        value = parseInt(value)
         this.$store.commit("SET_IDENTITAS_BARANG", {
           key: "jumlahBarang",
           value,
@@ -227,6 +228,8 @@ export default {
         return this.$store.state.plb.identitasBarang.jumlahKemasan;
       },
       set(value) {
+        value = parseInt(value)
+
         this.$store.commit("SET_IDENTITAS_BARANG", {
           key: "jumlahKemasan",
           value,
