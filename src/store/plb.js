@@ -78,6 +78,8 @@ const plb = {
       { name: "PO-0002" },
       { name: "PO-0003" },
     ],
+    XMLdocument:'',
+    itemDokumenPemasukan:[],
     itemJenisIdentitasPenjual: ["NPWP", "KTP"],
     itemJenisIdentitasPengirim: ["NPWP", "KTP"],
     itemJenisIdentitasPengusahaPLB: ["NPWP", "KTP"],
@@ -89,6 +91,12 @@ const plb = {
     itemTempatPenimbunan: [],
     selectedDokumenPO: [],
     // payload save
+    dokumenPengeluaran: {
+      reportId: '',
+      nomorDokumen: "",
+      tanggalDokumen: "",
+      dokumenPemasukanId: ''
+  },
     dokumenPemasukan: {
       nomorDokumenPemasukan: "",
       tanggalDokumenPemasukan: "",
@@ -194,6 +202,12 @@ const plb = {
     listBarang: [],
   },
   mutations: {
+    SET_XML_DOCUMENT(state, payload) {
+      state.XMLdocument = payload;
+    },
+    SET_DOCUMENT_PEMASUKAN_ITEM(state, payload) {
+      state.itemDokumenPemasukan = payload;
+    },
     SET_DOCUMENT_SAVED(state, payload) {
       state.dokumenSaveSucceded = payload;
     },
@@ -224,6 +238,9 @@ const plb = {
     },
     SET_DOKUMEN_PEMASUKAN(state, payload) {
       state.dokumenPemasukan[payload.key] = payload.value;
+    },
+    SET_DOKUMEN_PENGELUARAN(state, payload) {
+      state.dokumenPengeluaran[payload.key] = payload.value;
     },
     SET_DOKUMEN_TAMBAHAN(state, payload) {
       state.dokumenTambahan[payload.key] = payload.value;
@@ -336,8 +353,8 @@ const plb = {
 // dokumen
 
 
-
-    async saveDocument(context,payload) {
+    // DOKUMEN PEMASUKAN ACTION
+    async saveDocumentPemasukan(context,payload) {
       let formatted_payload = {};
       let payload_requeired = new Set([
         "dokumenPemasukan",
@@ -391,6 +408,63 @@ const plb = {
     }
     },
 
+    //DOKUMEN PENGELUARAN ACTION
+    async saveDocumentPengeluaran(context,payload) {
+      let formatted_payload = {};
+      let payload_requeired = new Set([
+        "dokumenPengeluaran",
+        "dokumenTambahan",
+        "dataPelabuhan",
+        "dataKapal",
+        "identitasBarang",
+        "penjualBarang",
+        "pengirimBarang",
+        "pengusahaPLB",
+        "pembeliBarang",
+        "ppjk",
+        "mataUang",
+        "dataPengangkutan",
+        "beratDanVolume",
+        "tempatPenimbunan",
+      ])
+      Object.keys(payload).forEach(function(key) {
+        if(payload_requeired.has(key)){
+          formatted_payload[key] = payload[key];
+          formatted_payload[key].reportId= +localStorage.getItem("reportId");
+
+        }
+      });
+      formatted_payload.reportId=parseInt(localStorage.getItem("reportId"));
+      // formatted_payload.dokumenPengeluaran.reportId=parseInt(localStorage.getItem("reportId"));
+
+
+      console.log(formatted_payload);
+      
+      try{
+        context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: true});
+        // console.log(payload)
+        const result = await axios({
+          url: baseUrl + "/report/dokumen/save/pengeluaran",
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },data: {ref:formatted_payload}
+        });
+        // const data = AESDecrypt(result.data.data);
+        if (result.data.success) {
+          // context.commit("SET_PO_BARU", data);
+          // console.log("response",data)
+          context.commit("SET_DOCUMENT_SAVED", true);
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: false});
+    }
+    },
+
 
 
     // barang
@@ -423,7 +497,92 @@ const plb = {
     } finally {
       context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: false});
     }
+    },
+
+
+    async getPemasukanByuser(context){
+      try{
+        const result = await axios({
+          url: baseUrl + "/report/dokumen/list/pemasukan",
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          }
+        });
+        // const data = AESDecrypt(result.data.data);
+        if (result.data.success) {
+          // ga tau nyimpen nya di mana, masih di console
+          console.log(result.data.data)
+          context.commit("SET_DOCUMENT_PEMASUKAN_ITEM", result.data.data);
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      // context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: false});
+      console.log("final");
+
+
     }
+    },
+  
+    async previewPengeluaran(context){
+      let reportId=+localStorage.getItem("reportId");
+      try{
+        const result = await axios({
+          url: baseUrl + `/report/dokumen/preview/pengeluaran/${reportId}`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          }
+        });
+
+        if (result.data) {
+          console.log(result.data)
+          context.commit("SET_XML_DOCUMENT", result.data);
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      console.log("final");
+
+
+    }
+
+    },
+    async previewPemasukan(context){
+      let reportId=+localStorage.getItem("reportId");
+      try{
+        const result = await axios({
+          url: baseUrl + `/report/dokumen/preview/pemasukan/${reportId}`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          }
+        });
+
+        if (result.data) {
+          console.log(result.data)
+          context.commit("SET_XML_DOCUMENT", result.data);
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      console.log("final");
+
+
+    }
+
+    },
+
+
+
+
   },
 };
 

@@ -8,7 +8,7 @@ const dashboard = {
       loadingListKapal: false,
     },
     listKapal: [],
-    jumlahKapal: "",
+    jumlahKapal: "-",
     optionsTableListKapal: {
       page: 1,
       itemsPerPage: 10,

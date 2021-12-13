@@ -19,7 +19,7 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <code>asdasbajsjda asdbas sadsadas sadas asdsadad</code>
+      <code>{{XMLdocument}}</code>
     </v-card-text>
   </v-card>
 </template>
@@ -32,6 +32,11 @@ export default {
       this.$emit("handleCloseDialogXML");
     },
   },
+  computed: {
+    XMLdocument() {
+      return this.$store.state.plb.XMLdocument;
+    },
+  }
 };
 </script>
 
