@@ -145,6 +145,14 @@ export default {
       }
     },
   },
+  methods: {
+    formatDate (date) {
+        if (!date) return null
+
+        const [year, month, day] = date.toString().split('-')
+        return `${day}-${month}-${year}`
+      },
+  }
 };
 </script>
 

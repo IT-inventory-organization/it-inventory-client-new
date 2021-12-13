@@ -98,7 +98,7 @@ export default {
         return this.$store.state.plb.report.diAjukanDiKantor;
       },
       set(value) {
-        this.$store.commit("SET_REPORT", {
+        this.$store.commit("SET_REPORT_PLB", {
           key: "diAjukanDiKantor",
           value,
         });
@@ -109,7 +109,7 @@ export default {
         return this.$store.state.plb.report.jenisPemberitahuan;
       },
       set(value) {
-        this.$store.commit("SET_REPORT", {
+        this.$store.commit("SET_REPORT_PLB", {
           key: "jenisPemberitahuan",
           value,
         });
@@ -120,7 +120,7 @@ export default {
         return this.$store.state.plb.report.jenisDokumenBC;
       },
       set(value) {
-        this.$store.commit("SET_REPORT", {
+        this.$store.commit("SET_REPORT_PLB", {
           key: "jenisDokumenBC",
           value,
         });
@@ -153,6 +153,7 @@ export default {
       const getRef = this.$refs.initialReport.validate();
       if (getRef) {
         this.$store.dispatch("handleSubmitReport");
+        this.$store.dispatch("generateReportId",this.$store.state.plb.report);
       } else {
         return false;
       }

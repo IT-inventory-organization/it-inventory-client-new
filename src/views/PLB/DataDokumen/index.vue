@@ -43,10 +43,26 @@ export default {
     LaporanPemasukanPengeluaranBarang: () =>
       import("@/views/PLB/DataDokumen/LaporanPemasukanPengeluaranBarang/index"),
   },
+  computed: {
+    dokumenSaveSucceded: {
+      get() {
+        return this.$store.state.plb.dokumenSaveSucceded;
+      }
+  }
+  },
   methods: {
-    handleSubmit() {
+    async submitDocument() {
+      await this.$store.dispatch("saveDocument", this.$store.state.plb);
+      if(this.dokumenSaveSucceded){
+         this.$store.commit("SET_STEPPER", 3);
+      }
+      // TODO: create error handle here if data is not saved succesfully
+    },
+   async handleSubmit() {
+      
       if (this.$refs.formDataDokumen.validate()) {
-        this.$store.commit("SET_STEPPER", 3);
+        await this.submitDocument();
+         
       } else {
         return false;
       }

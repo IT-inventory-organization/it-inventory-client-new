@@ -24,8 +24,8 @@ const MasterData = {
     },
   },
   mutations: {
-    SET_LOADING(state, payload) {
-      state.loading[payload.key] = payload.value;
+    SET_LOADING_INFO(state, payload) {
+    state.loading[payload.key] = payload.value;
     },
     SET_INFORMASI_PERUSAHAAN(state, payload) {
       state.informasiPerusahaan[payload.key] = payload.value;
@@ -37,10 +37,12 @@ const MasterData = {
   actions: {
     async getInformasiPerusahaan(context) {
       try {
-        context.commit("SET_LOADING", {
+        context.commit("SET_LOADING_INFO", {
           key: "loadingInformasiPerusahaan",
           value: true,
         });
+        // #BUGS: BUG same mutation name with po.js
+        // change mutation name to SET_LOADING_INFO
         const result = await axios({
           url: baseUrl + "/user/getInfoPengguna",
           method: "GET",
@@ -56,7 +58,7 @@ const MasterData = {
       } catch (error) {
         console.log(error);
       } finally {
-        context.commit("SET_LOADING", {
+        context.commit("SET_LOADING_INFO", {
           key: "loadingInformasiPerusahaan",
           value: false,
         });

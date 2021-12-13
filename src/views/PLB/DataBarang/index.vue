@@ -177,6 +177,8 @@ export default {
     },
     handleSubmit() {
       if (this.listBarang.length > 0) {
+        this.$store.dispatch("saveDataBarang", this.$store.state.plb.listBarang);
+        // TODO: please add error handle for input data barang if error
         this.$store.commit("SET_STEPPER", 4);
         return true;
       } else {

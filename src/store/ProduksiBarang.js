@@ -175,7 +175,7 @@ const ProduksiBarang = {
       SET_REPORT(state, payload) {
         state.report[payload.key] = payload.value;
       },
-      SET_PO_BARU(state, payload) {
+      SET_PO_BARU_(state, payload) {
         state.barang_produksi_baru[payload.key] = payload.value;
       },
       SET_OPTIONS_TABLE_REPORTS(state, payload) {

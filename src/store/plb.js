@@ -1,13 +1,20 @@
 import router from "@/router/";
 import countriesMock from "@/_mocks_/countries";
 import currencyMock from "@/_mocks_/currency";
+import axios from "axios";
+import { AESDecrypt, AESEncrypt} from "@/helper/Encryption";
+const baseUrl = process.env.VUE_APP_BASE_URL;
+
 
 const plb = {
   state: {
+    dokumenSaveSucceded: false,
     reportId: "",
     stepper: 1,
     loading: {
       loadingReports: false,
+      loadingDokumen: false,
+      loadingBarang: false,
     },
     report: {
       jenisPemberitahuan: "",
@@ -80,11 +87,12 @@ const plb = {
     itemCaraAngkut: ["Laut", "Udara", "Darat"],
     itemBendera: countriesMock,
     itemTempatPenimbunan: [],
+    selectedDokumenPO: [],
+    // payload save
     dokumenPemasukan: {
       nomorDokumenPemasukan: "",
       tanggalDokumenPemasukan: "",
     },
-    selectedDokumenPO: [],
     dokumenTambahan: {
       nomorBC10: "",
       nomorBC11: "",
@@ -147,7 +155,7 @@ const plb = {
     mataUang: {
       valuta: "",
       freight: 0,
-      NDPBMKurs: 0,
+      ndbpmKurs: 0,
       cif: 0,
       transaksiLainnya: "",
       hargaPenyerahan: "",
@@ -160,7 +168,7 @@ const plb = {
     },
     beratDanVolume: {
       beratMuatan: 0,
-      beratKapalDanMuatan: 0,
+      beratKapalDenganMuatan: 0,
       volume: 0,
     },
     tempatPenimbunan: {
@@ -168,6 +176,7 @@ const plb = {
       perkiraanTanggalPengeluaran: "",
       isTempatPenimbunan: false,
     },
+    // end payload
     dataBarang: {
       kodeBarang: "",
       namaBarang: "",
@@ -185,13 +194,16 @@ const plb = {
     listBarang: [],
   },
   mutations: {
+    SET_DOCUMENT_SAVED(state, payload) {
+      state.dokumenSaveSucceded = payload;
+    },
     SET_REPORT_ID(state, payload) {
       state.reportId = payload;
     },
-    SET_LOADING(state, payload) {
+    SET_LOADING_PLB(state, payload) {
       state.loading[payload.key] = payload.value;
     },
-    SET_REPORT(state, payload) {
+    SET_REPORT_PLB(state, payload) {
       state.report[payload.key] = payload.value;
     },
     SET_OPTIONS_TABLE_REPORTS(state, payload) {
@@ -265,7 +277,7 @@ const plb = {
       }
     },
     UPDATE_LIST_BARANG(state, payload) {
-      console.log(payload);
+      // console.log(payload);
       const temp = [...state.listBarang];
       state.listBarang = [];
       state.listBarang = temp.map((ele, ind) => {
@@ -280,15 +292,138 @@ const plb = {
     },
   },
   actions: {
+
+    // report
+
+
+
+
+    async generateReportId(context,payload){
+      try{
+        context.commit("SET_LOADING_PLB", {key: "loadingReports", value: true});
+
+        const result = await axios({
+          url: baseUrl + "/report/save",
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },data: {dataReport:AESEncrypt(payload)}
+        });
+        const data = result.data.message
+        if (result.data.success) {
+          context.commit("SET_REPORT_ID", data.id);
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      context.commit("SET_LOADING_PLB", {key: "loadingReports", value: false});
+    }
+
+    },
+
     handleSubmitReport(context) {
       localStorage.setItem(
         "NotificationType",
         context.state.report.jenisPemberitahuan
       );
-      localStorage.setItem("reportId", 2);
+      localStorage.setItem("reportId", context.state.reportId);
 
       router.push("/plb/add");
     },
+
+// dokumen
+
+
+
+    async saveDocument(context,payload) {
+      let formatted_payload = {};
+      let payload_requeired = new Set([
+        "dokumenPemasukan",
+        "dokumenTambahan",
+        "dataPelabuhan",
+        "dataKapal",
+        "identitasBarang",
+        "penjualBarang",
+        "pengirimBarang",
+        "pengusahaPLB",
+        "pembeliBarang",
+        "ppjk",
+        "mataUang",
+        "dataPengangkutan",
+        "beratDanVolume",
+        "tempatPenimbunan",
+      ])
+      Object.keys(payload).forEach(function(key) {
+        if(payload_requeired.has(key)){
+          formatted_payload[key] = payload[key];
+          // formatted_payload[key].reportId=localStorage.getItem("reportId");
+        }
+      });
+      formatted_payload.reportId=parseInt(localStorage.getItem("reportId"));
+
+
+      // console.log(formatted_payload);
+      
+      try{
+        context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: true});
+        // console.log(payload)
+        const result = await axios({
+          url: baseUrl + "/report/dokumen/save/pemasukan",
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },data: {dataDokumen:AESEncrypt(formatted_payload)}
+        });
+        const data = AESDecrypt(result.data.data);
+        if (result.data.success) {
+          context.commit("SET_PO_BARU", data);
+          // console.log("response",data)
+          context.commit("SET_DOCUMENT_SAVED", true);
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: false});
+    }
+    },
+
+
+
+    // barang
+
+
+    async saveDataBarang(context,listBarang) {
+      try{
+        context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: true});
+        // console.log(listBarang)
+        let formatted_payload={
+          listDataBarang:listBarang,
+          reportId:parseInt(localStorage.getItem("reportId"))
+        }
+        const result = await axios({
+          url: baseUrl + "/report/barang/save",
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },data: {dataBarang:AESEncrypt(formatted_payload)}
+        });
+        const data = AESDecrypt(result.data.data);
+        if (result.data.success) {
+          // ga tau nyimpen nya di mana, masih di console
+          console.log(data)
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: false});
+    }
+    }
   },
 };
 

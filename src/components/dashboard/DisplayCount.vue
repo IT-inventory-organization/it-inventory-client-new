@@ -6,7 +6,7 @@
       </v-col>
       <v-col lg="2 text-right">
         <div class="display-2 font-weight-bold" style="color: #2ED477">
-          100
+          {{jumlahKapal}}
         </div>
       </v-col>
     </v-row>
@@ -16,6 +16,12 @@
 <script>
 export default {
   name: "DislayCount",
+  computed: {
+    jumlahKapal(){
+    return this.$store.state.dashboard.jumlahKapal;
+
+    }
+  }
 };
 </script>
 

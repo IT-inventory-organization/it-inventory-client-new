@@ -19,7 +19,7 @@
         <div class="it-inventory-box">
           <v-data-table
             :headers="headers"
-            :items="data"
+            :items="ListDataKapal"
             :items-per-page="5"
             no-data-text="Data not available"
             no-results-text="Data not available"
@@ -41,10 +41,10 @@ export default {
   data() {
     return {
       headers: [
-        { text: "Voyage Kapal", value: "voyageKapal" },
-        { text: "Nama Kapal", value: "namaKapal" },
-        { text: "Jenis Dokumen", value: "jenisDokumen" },
-        { text: "Bendera", value: "bendera" },
+        { text: "Voyage Kapal", value: "dataKapal.voyageKapal" },
+        { text: "Nama Kapal", value: "dataKapal.namaKapal" },
+        { text: "Jenis Dokumen", value: "jenisDokumenBC" },
+        { text: "Bendera", value: "dataKapal.benderaKapal" },
       ],
       data: [
         {
@@ -110,6 +110,11 @@ export default {
       ],
     };
   },
+  computed: {
+    ListDataKapal() {
+      return this.$store.state.dashboard.listKapal;
+    },
+},
 };
 </script>
 

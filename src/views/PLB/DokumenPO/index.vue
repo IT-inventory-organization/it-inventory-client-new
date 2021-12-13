@@ -101,12 +101,8 @@ export default {
       alert("View");
     },
     handleSubmit() {
-      if (this.selectedDokumenPO.length > 0) {
         this.$store.commit("SET_STEPPER", 2);
-        return true;
-      } else {
-        return false;
-      }
+        return true
     },
   },
 };

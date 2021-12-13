@@ -18,6 +18,7 @@
             </button>
             <button
               class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
+              @click="submitPo"
             >
               Simpan
             </button>
@@ -106,7 +107,7 @@
                     </v-col>
                     <v-col cols="7">
                     <v-menu
-                        v-model="tanggal"
+                        v-model="tanggalpicker"
                         :close-on-content-click="false"
                         :nudge-right="40"
                         transition="scale-transition"
@@ -122,12 +123,14 @@
                             clearable
                             v-bind="attrs"
                             v-on="on"
+                            v-model="tanggal"
                         ></v-text-field>
                         </template>
                         <v-date-picker
+                        v-model="tanggal"
                         scrollable
                         no-title
-                        @input="tanggal = false"
+                        @input="tanggalpicker = false"
                         ></v-date-picker>
                     </v-menu>
                     </v-col>
@@ -297,6 +300,7 @@ export default {
   },
   data() {
     return {
+      tanggalpicker:false,
       inputs: [
         {
           kode_barang: "",
@@ -381,6 +385,9 @@ export default {
         },
       ],
       this.remarks= ""
+    },
+    submitPo(){
+      this.$store.dispatch("addPo",this.$store.state.po.po_baru)
     },
     handleSubmit() {
       const getRef = this.$refs.initialReport.handleValidate();
