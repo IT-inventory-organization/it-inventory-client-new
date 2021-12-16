@@ -83,6 +83,8 @@
             outlined
             dense
             placeholder="Nomor Dokumen Pengeluaran"
+            v-model="nomorDokumenPengeluaran"
+
           ></v-text-field>
         </div>
 
@@ -91,7 +93,7 @@
             >Tanggal Dokumen Pengeluaran</label
           >
           <v-menu
-            v-model="datepicker_dokumen_masuk"
+            v-model="datepicker_dokumen_keluar"
             :close-on-content-click="false"
             :nudge-right="40"
             transition="scale-transition"
@@ -107,12 +109,16 @@
                 clearable
                 v-bind="attrs"
                 v-on="on"
+                v-model="tanggalDokumenPengeluaran"
+
               ></v-text-field>
             </template>
             <v-date-picker
               scrollable
               no-title
-              @input="datepicker_dokumen_masuk = false"
+              @input="datepicker_dokumen_keluar = false"
+              v-model="tanggalDokumenPengeluaran"
+
             ></v-date-picker>
           </v-menu>
         </div>
@@ -125,8 +131,13 @@
           <v-select
             outlined
             dense
+            :items="itemDokumenPemasukan"
+            :item-text="'nomorDokumenPemasukan'"
+            v-model="docs"
+            @change="select_dokumen_pemasukan"
             placeholder="Nomor Dokumen Pemasukan"
             append-icon="mdi-chevron-down"
+            return-object
           ></v-select>
         </div>
       </v-col>
@@ -306,10 +317,47 @@ export default {
       datepicker_tgl_bc10: "",
       datepicker_tgl_bc11: "",
       datepicker_tgl_bl: "",
+      datepicker_dokumen_keluar:'',
+      docs:null
     };
   },
   computed: {
-   
+    nomorDokumenPengeluaran: {
+       get() {
+        return this.$store.state.plb.dokumenPengeluaran.nomorDokumen;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_PENGELUARAN", {
+          key: "nomorDokumen",
+          value,
+        });
+      },
+    },
+    tanggalDokumenPengeluaran: {
+       get() {
+        return this.$store.state.plb.dokumenPengeluaran.tanggalDokumen;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_PENGELUARAN", {
+          key: "tanggalDokumen",
+          value,
+        });
+      },
+    },
+    dokumenPemasukanId: {
+       get() {
+        return this.$store.state.plb.dokumenPengeluaran.dokumenPemasukanId;
+      },
+      set(value) {
+        this.$store.commit("SET_DOKUMEN_PENGELUARAN", {
+          key: "dokumenPemasukanId",
+          value,
+        });
+      },
+    },
+    itemDokumenPemasukan() {
+      return this.$store.state.plb.itemDokumenPemasukan;
+    },
     constantPemasukan() {
       return this.$store.state.plb.constant.pemasukan;
     },
@@ -418,13 +466,15 @@ export default {
     handleNotificationType() {
       return localStorage.getItem("NotificationType");
     },
-     formatDate (date) {
-        if (!date) return null
-
-        const [year, month, day] = date.toString().split('-')
-        return `${day}-${month}-${year}`
-      },
+      select_dokumen_pemasukan(){
+        this.dokumenPemasukanId = this.docs.id;
+      }
   },
+  async created() {
+    if(this.handleNotificationType()===this.constantPengeluaran){
+      await this.$store.dispatch("getPemasukanByuser");
+    }
+  }
 };
 </script>
 

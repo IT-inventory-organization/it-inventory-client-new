@@ -116,14 +116,28 @@ export default {
     stepper() {
       return this.$store.state.plb.stepper;
     },
+    constantPengeluaran() {
+      return this.$store.state.plb.constant.pengeluaran;
+    },
   },
   methods: {
+    handleNotificationType() {
+      return localStorage.getItem("NotificationType");
+    },
     handleFinish() {
       this.$router.push("/plb");
       this.$store.commit("SET_STEPPER", 1);
     },
     handleOpenDialogXML() {
       this.dialogXML = true;
+      if(this.handleNotificationType()===this.constantPengeluaran){
+
+        this.$store.dispatch("previewPengeluaran");
+      }else{
+
+        this.$store.dispatch("previewPemasukan");
+
+      }
     },
     handleCloseDialogXML() {
       this.dialogXML = false;

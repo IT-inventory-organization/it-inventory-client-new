@@ -48,11 +48,23 @@ export default {
       get() {
         return this.$store.state.plb.dokumenSaveSucceded;
       }
-  }
+  },
+  constantPengeluaran() {
+      return this.$store.state.plb.constant.pengeluaran;
+    },
   },
   methods: {
+    handleNotificationType() {
+      return localStorage.getItem("NotificationType");
+    },
     async submitDocument() {
-      await this.$store.dispatch("saveDocument", this.$store.state.plb);
+      console.log(this.handleNotificationType()===this.constantPengeluaran)
+      if(this.handleNotificationType()===this.constantPengeluaran){
+        
+        await this.$store.dispatch("saveDocumentPengeluaran", this.$store.state.plb);
+      }else{
+        await this.$store.dispatch("saveDocumentPemasukan", this.$store.state.plb);
+      }
       if(this.dokumenSaveSucceded){
          this.$store.commit("SET_STEPPER", 3);
       }

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "^6.2.95",
+    "@vue/composition-api": "^1.4.1",
     "apexcharts": "^3.28.3",
     "axios": "^0.22.0",
     "core-js": "^3.6.5",
@@ -20,6 +21,7 @@
     "vue-html-to-paper": "^1.4.3",
     "vue-router": "^3.5.2",
     "vue-sweetalert2": "^5.0.2",
+    "vue-xml-viewer": "^0.1.4",
     "vuetify": "^2.5.9",
     "vuex": "^3.6.2"
   },
