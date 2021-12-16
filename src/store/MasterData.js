@@ -25,7 +25,7 @@ const MasterData = {
   },
   mutations: {
     SET_LOADING_INFO(state, payload) {
-    state.loading[payload.key] = payload.value;
+      state.loading[payload.key] = payload.value;
     },
     SET_INFORMASI_PERUSAHAAN(state, payload) {
       state.informasiPerusahaan[payload.key] = payload.value;
