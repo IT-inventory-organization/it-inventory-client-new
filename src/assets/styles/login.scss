@@ -9,7 +9,7 @@
 .header-login {
   text-align: center;
   &__logo {
-    width: 200px;
+    width: 100px;
   }
   &__title {
     margin-top: 20px;
@@ -17,6 +17,10 @@
     font-size: 32px;
     font-weight: 600;
   }
+}
+.kuadran-logo {
+  display: block;
+  margin: auto;
 }
 .content-login {
   margin-top: 70px;

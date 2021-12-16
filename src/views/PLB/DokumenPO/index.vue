@@ -3,13 +3,13 @@
     <v-row>
       <v-col cols="12" class="text-center">
         <div class="headline font-weight-medium">
-          Pilih Dokumen PO
+          Pilih Dokumen BCF 3.3.14
         </div>
       </v-col>
     </v-row>
     <v-row justify="center" class="mt-5">
       <v-col cols="4" style="position:relative">
-        <label class="it-inventory-select-po__label">-Pilih Dokumen PO-</label>
+        <label class="it-inventory-select-po__label">-Pilih Dokumen-</label>
         <v-select
           outlined
           :rules="[
@@ -101,8 +101,8 @@ export default {
       alert("View");
     },
     handleSubmit() {
-        this.$store.commit("SET_STEPPER", 2);
-        return true
+      this.$store.commit("SET_STEPPER", 2);
+      return true;
     },
   },
 };

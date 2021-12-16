@@ -1,11 +1,7 @@
 <template>
   <div>
     <header class="header_app">
-      <img
-        class="header_app_img"
-        src="@/assets/img/logo_kuadran.png"
-        alt="logo_kuadran"
-      />
+      <img class="header_app_img" src="@/assets/img/logo.png" alt="Logo" />
       <div class="header_app_title">IT Inventory</div>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">

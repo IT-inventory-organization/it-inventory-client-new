@@ -40,7 +40,7 @@
         <v-col cols="6">
           <v-stepper-header>
             <v-stepper-step :complete="stepper > 1" step="1">
-              Dokumen PO
+              Dokumen BCF
             </v-stepper-step>
 
             <v-divider :class="stepper > 1 && 'v-divider__active'"></v-divider>
@@ -130,13 +130,10 @@ export default {
     },
     handleOpenDialogXML() {
       this.dialogXML = true;
-      if(this.handleNotificationType()===this.constantPengeluaran){
-
+      if (this.handleNotificationType() === this.constantPengeluaran) {
         this.$store.dispatch("previewPengeluaran");
-      }else{
-
+      } else {
         this.$store.dispatch("previewPemasukan");
-
       }
     },
     handleCloseDialogXML() {

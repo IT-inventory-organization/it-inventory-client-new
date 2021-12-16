@@ -4,7 +4,7 @@
       <div class="header-login">
         <img
           class="header-login__logo"
-          src="@/assets/img/logo_kuadran.png"
+          src="@/assets/img/logo.png"
           alt="logo kuadran"
         />
         <div class="header-login__title">IT Inventory</div>
@@ -53,6 +53,15 @@
               >
                 Login
               </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <img
+                class="header-login__logo kuadran-logo"
+                src="@/assets/img/kuadran.png"
+                alt="logo kuadran"
+              />
             </v-col>
           </v-row>
         </v-form>

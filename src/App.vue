@@ -8,6 +8,8 @@
           <router-view />
         </v-container>
       </v-main>
+
+      <footer-bar></footer-bar>
     </v-app>
 
     <v-app v-if="!token">
@@ -23,6 +25,7 @@ export default {
   name: "App",
   components: {
     CoreAppBar: () => import("@/components/base/AppBar"),
+    FooterBar: () => import("@/components/base/Footer"),
   },
   computed: {
     token() {

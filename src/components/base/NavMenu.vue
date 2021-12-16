@@ -34,14 +34,9 @@
             :key="index"
             :to="child.path"
           >
-            <router-link
-              :to="child.path"
-              style="text-decoration:none; color: #1E1E1E"
-            >
-              <v-list-item-title style="color: black">{{
-                child.name
-              }}</v-list-item-title>
-            </router-link>
+            <v-list-item-title style="color: black">{{
+              child.name
+            }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
