@@ -86,7 +86,7 @@ const routes = [
   {
     path: "/produksi-barang/:id",
     name: "ProduksiBarang",
-    component: ProduksiBarang
+    component: ProduksiBarang,
   },
   {
     path: "/bcf",
