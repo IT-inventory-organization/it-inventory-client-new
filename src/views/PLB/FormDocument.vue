@@ -3,7 +3,7 @@
     <v-row align="center">
       <v-col lg="9" md="11" sm="12">
         <div class="display-1 font-weight-bold">
-          Informasi Perusahaan
+          Dokumen Baru PLB
         </div>
       </v-col>
       <v-col

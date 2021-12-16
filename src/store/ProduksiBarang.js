@@ -169,13 +169,13 @@ const ProduksiBarang = {
       state.reportId = payload;
     },
     SET_LOADING(state, payload) {
-      state.loading[payload.key] = payload.value;
+      state.loading = payload;
     },
     SET_REPORT(state, payload) {
-      state.report[payload.key] = payload.value;
+      state.report = payload;
     },
     SET_PO_BARU_(state, payload) {
-      state.barang_produksi_baru[payload.key] = payload.value;
+      state.barang_produksi_baru = payload;
     },
     SET_OPTIONS_TABLE_REPORTS(state, payload) {
       state.optionsTableReports = Object.assign({}, payload);

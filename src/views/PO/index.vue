@@ -36,9 +36,9 @@
     <div class="it-inventory-box mt-2">
       <v-data-table
         :headers="headers"
-        :items="reports.data"
+        :items="reports"
         :options.sync="optionsTableReports"
-        :server-items-length="reports.data_size"
+        :server-items-length="reports.length"
         no-data-text="Data not available"
         no-results-text="Data not available"
         class="it-inventory-simple-table"
@@ -72,24 +72,15 @@
                   View
                 </v-list-item-title>
               </v-list-item>
-              <!-- <v-list-item>
-                        <v-list-item-title>
-                        <Icon
-                            icon="ph:pencil-line-light"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        Edit
-                        </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-title>
-                        <Icon
-                            icon="octicon:trash-24"
-                            class="v-icon--left it-inventory-action-list__icon"
-                        />
-                        Delete
-                        </v-list-item-title>
-                    </v-list-item> -->
+              <v-list-item>
+                <v-list-item-title>
+                  <Icon
+                    icon="octicon:trash-24"
+                    class="v-icon--left it-inventory-action-list__icon"
+                  />
+                  Delete
+                </v-list-item-title>
+              </v-list-item>
               <v-list-item>
                 <v-list-item-title>
                   <Icon
@@ -144,19 +135,15 @@ export default {
       headers: [
         {
           text: "No. PO",
-          value: "nomor_po",
+          value: "nomorPO",
         },
         {
           text: "Tanggal",
-          value: "tanggal",
+          value: "tanggalPurchaseOrder",
         },
         {
-          text: "Kapal Pemilik",
-          value: "kapal_pemilik",
-        },
-        {
-          text: "Kapal Pembeli",
-          value: "kapal_pembeli",
+          text: "Kapal Penjual",
+          value: "kapalPenjual",
         },
         {
           text: "Actions",

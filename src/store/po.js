@@ -25,24 +25,7 @@ const po = {
       remarks: "",
       jumlah_total: "",
     },
-    reports: {
-      data: [
-        {
-          id: "1",
-          nomor_po: "PO-00001",
-          tanggal: "20-02-2020",
-          kapal_pemilik: "MEDELIN WEST, GENERAL PURPOSE (BO)",
-          kapal_pembeli: "JOHN CHAINE 2, GENERAL PURPOSE (CO)",
-        },
-        {
-          id: "2",
-          nomor_po: "PO-00002",
-          tanggal: "20-02-2020",
-          kapal_pemilik: "MEDELIN WEST, GENERAL PURPOSE (BO)",
-          kapal_pembeli: "JOHN CHAINE 2, GENERAL PURPOSE (CO)",
-        },
-      ],
-    },
+    reports: [],
     optionsTableReports: {
       page: 1,
       itemsPerPage: 10,
@@ -57,7 +40,7 @@ const po = {
       state.loading = payload;
     },
     SET_REPORT(state, payload) {
-      state.report[payload.key] = payload.value;
+      state.reports = payload;
     },
     SET_PO_BARU(state, payload) {
       state.po_baru[payload.key] = payload.value;
@@ -71,7 +54,7 @@ const po = {
       try {
         context.commit("SET_LOADING_PO", true);
         const result = await axios({
-          url: baseUrl + "/po/getallpo",
+          url: baseUrl + "/po/getAllPO",
           method: "GET",
           headers: {
             authorization:
@@ -80,10 +63,7 @@ const po = {
         });
         const data = AESDecrypt(result.data.data);
         if (result.data.success) {
-          context.commit("SET_REPORT", {
-            key: "data",
-            value: data,
-          });
+          context.commit("SET_REPORT", data);
         }
       } catch (error) {
         console.log(error);
