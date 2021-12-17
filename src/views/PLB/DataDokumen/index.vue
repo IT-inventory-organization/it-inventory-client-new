@@ -58,7 +58,6 @@ export default {
       return localStorage.getItem("NotificationType");
     },
     async submitDocument() {
-      console.log(this.handleNotificationType()===this.constantPengeluaran)
       if(this.handleNotificationType()===this.constantPengeluaran){
         
         await this.$store.dispatch("saveDocumentPengeluaran", this.$store.state.plb);

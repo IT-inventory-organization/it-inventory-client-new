@@ -14,7 +14,7 @@ export default {
     ListKapal: () => import("@/components/dashboard/ListKapal"),
   },
   created() {
-    this.$store.dispatch("getAllReport");
+    this.$store.dispatch("getDashboardData");
   },
 };
 </script>

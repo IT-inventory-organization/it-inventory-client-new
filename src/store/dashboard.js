@@ -30,11 +30,11 @@ const dashboard = {
     },
   },
   actions: {
-    async getAllReport(context){
+    async getDashboardData(context){
       try{
         context.commit("SET_LOADING_DASHBOARD", {key:"loadingListKapal", value:true});
         const result = await axios({
-          url: baseUrl + "/report/getall",
+          url: baseUrl + "/report/dashboard/",
           method: "GET",
           headers: {
             authorization:
@@ -42,7 +42,7 @@ const dashboard = {
           },
         });
         const data = AESDecrypt(result.data.data);
-        // console.log(data,"KAPAL KARAM")
+        console.log(data,"KAPAL KARAM")
         if (result.data.success) {
           context.commit("SET_LIST_KAPAL", data);
           context.commit("SET_JUMLAH_KAPAL", data.length);

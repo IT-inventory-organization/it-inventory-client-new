@@ -51,13 +51,13 @@
               </tr>
             </table>
 
-            <table v-for="(details, index) in item.details" :key="index">
+            <table v-for="(details, index) in item.dataBarangs" :key="index">
               <tr>
-                <td>{{ details.kode_barang }}</td>
-                <td>{{ details.nama_barang }}</td>
-                <td>{{ details.item_deskripsi }}</td>
-                <td>{{ details.satuan_kemasan }}</td>
-                <td>{{ details.quantity }}</td>
+                <td>{{ details.kodeBarang }}</td>
+                <td>{{ details.namaBarang }}</td>
+                <td>{{ details.uraian }}</td>
+                <td>{{ details.satuanKemasan }}</td>
+                <td>{{ details.stock }}</td>
                 <td>
                   <template>
                     <v-menu offset-y>
@@ -176,19 +176,19 @@ export default {
       headers: [
         {
           text: 'Voyage Kapal',
-          value: 'voyage'
+          value: 'dataKapal.voyageKapal'
         },
         {
           text: 'Nama Kapal',
-          value: 'tanggal'
+          value: 'dataKapal.namaKapal'
         },
         {
           text: 'Jenis Dokumen',
-          value: 'kapal_pemilik'
+          value: 'jenisPemberitahuan'
         },
         {
           text: 'Bendera',
-          value: 'kapal_pembeli'
+          value: 'dataKapal.benderaKapal'
         },
         {
           text: 'Actions',
@@ -255,6 +255,9 @@ export default {
     pilihProduksiBarang() {
       this.$router.push({ name: 'ProduksiBarang', params: { id: 1 } });
     }
+  },
+  async created() {
+    await this.$store.dispatch('getAllReport');
   }
 };
 </script>

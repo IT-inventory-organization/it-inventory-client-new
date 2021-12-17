@@ -7,6 +7,19 @@ const baseUrl = process.env.VUE_APP_BASE_URL;
 
 const user = {
   state: {
+    registerData:{
+      
+        namaPerusahaan:'',
+        npwp:'',
+        alamat:'',
+        nomorTelepon:'',
+        bidangUsaha:'',
+        namaPemilik:'',
+        email:'',
+        password:'',
+        confirmPassword:''
+        
+    },
     user: {
       email: "",
       password: "",
@@ -24,7 +37,7 @@ const user = {
     SET_TOKEN(state, payload) {
       state.token = payload;
     },
-    SET_ISLOADING(state, payload) {
+    SET_ISLOADING_USER(state, payload) {
       state.isLoading = payload;
     },
     SET_DATA_USER(state, payload) {
@@ -32,9 +45,33 @@ const user = {
     },
   },
   actions: {
+    async registerActionUser(context){
+      try {
+        context.commit("SET_ISLOADING_USER", true);
+        const result = await axios({
+          url: `${baseUrl}/register`,
+          method: "POST",
+          data: {
+            dataRegister: AESEncrypt(context.state.registerData),
+          },
+        });
+        console.log(result)
+      } catch (error) {
+        if (error.message === "Network Error") {
+          Swal.fire("Tidak ada jaringan!", "", "error");
+        }
+        const response = error.response.data;
+        if (!response.success) {
+          Swal.fire("Gagal!", response.message, "error");
+        }
+      } finally {
+        context.commit("SET_ISLOADING_USER", false);
+      }
+
+    },
     async loginActionUser(context) {
       try {
-        context.commit("SET_ISLOADING", true);
+        context.commit("SET_ISLOADING_USER", true);
         const result = await axios({
           url: `${baseUrl}/login`,
           method: "POST",
@@ -62,7 +99,7 @@ const user = {
           Swal.fire("Gagal!", response.message, "error");
         }
       } finally {
-        context.commit("SET_ISLOADING", false);
+        context.commit("SET_ISLOADING_USER", false);
       }
     },
   },
