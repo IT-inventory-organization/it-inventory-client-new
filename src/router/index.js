@@ -75,38 +75,38 @@ const routes = [
   },
   {
     path: "/po",
-    name: "Purchase Order",
-    component: TablePO
+    name: "PurchaseOrder",
+    component: TablePO,
   },
   {
     path: "/inventory",
     name: "Inventory",
-    component: Inventory
+    component: Inventory,
   },
   {
     path: "/produksi-barang/:id",
     name: "ProduksiBarang",
-    component: ProduksiBarang
+    component: ProduksiBarang,
   },
   {
     path: "/bcf",
     name: "Bcf",
-    component: TableBCF
+    component: TableBCF,
   },
   {
     path: "/expenditure",
     name: "Expenditure",
-    component: TableExpenditure
+    component: TableExpenditure,
   },
   {
     path: "/income",
     name: "Income",
-    component: TableIncome
+    component: TableIncome,
   },
   {
     path: "/stock",
     name: "Stock",
-    component: TableStock
+    component: TableStock,
   },
 ];
 

@@ -1,5 +1,5 @@
 <template>
-  <v-card height="85vh" >
+  <v-card>
     <v-card-title>
       <v-row no-gutters align-content="center">
         <v-col cols="10">
@@ -24,122 +24,97 @@
             </button>
           </div>
         </v-col>
-        
-          
       </v-row>
     </v-card-title>
-    <v-card-text>
+    <v-card-text class="mt-10">
       <v-form ref="initialReport" @submit.prevent="handleSubmit">
         <v-container fluid>
           <v-row no-gutters width="100%">
-              <v-col lg="5">
-                  <v-row no-gutters>
-                    <v-col cols="4">
-                    <div class="mt-2">Kapal Pemilik</div>
-                    </v-col>
-                    <v-col cols="7">
-                    <v-text-field
-                        outlined
+            <v-col lg="5">
+              <v-row no-gutters>
+                <v-col cols="4">
+                  <div class="mt-2">Kapal Pemilik</div>
+                </v-col>
+                <v-col cols="7">
+                  <v-select
+                    outlined
+                    dense
+                    placeholder="Value"
+                    :rules="[
+                      (value) => {
+                        return genericRequiredRule(value, 'Kapal Penjual');
+                      },
+                    ]"
+                  ></v-select>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col cols="5">
+              <v-row no-gutters>
+                <v-col cols="4">
+                  <div class="mt-2">Tanggal</div>
+                </v-col>
+                <v-col cols="7">
+                  <v-menu
+                    v-model="tanggalpicker"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    min-width="auto"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        prepend-inner-icon="mdi-calendar-month-outline"
+                        append-icon="mdi-chevron-down"
+                        placeholder="Pilih Tanggal"
                         dense
-                        v-model="kapalPemilik"
-                        placeholder="value"
-                        :rules="[
-                        (value) => {
-                            return genericRequiredRule(value, 'Kapal Pemilik');
-                        },
-                        ]"
-                    ></v-text-field>
-                    </v-col>
-                  </v-row>
-              </v-col>
-
-              <v-col cols="5">
-                  <v-row no-gutters>
-                    <v-col cols="4">
-                    <div class="mt-2">No. Purchase Order</div>
-                    </v-col>
-                    <v-col cols="7">
-                    <v-text-field
                         outlined
-                        dense
-                        v-model="noPurchaseOrder"
-                        placeholder="value"
-                        :rules="[
-                        (value) => {
-                            return genericRequiredRule(value, 'Nomor Purchase Order');
-                        },
-                        ]"
-                    ></v-text-field>
-                    </v-col>
-
-                    <!-- <v-col cols="2"></v-col> -->
-                  </v-row>
-              </v-col>
-
+                        clearable
+                        v-bind="attrs"
+                        v-on="on"
+                        v-model="tanggal"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="tanggal"
+                      scrollable
+                      no-title
+                      @input="tanggalpicker = false"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+              </v-row>
+            </v-col>
           </v-row>
 
           <v-row no-gutters width="100%">
-              <v-col lg="5">
-                  <v-row no-gutters>
-                    <v-col cols="4">
-                    <div class="mt-2">Kapal Pembeli</div>
-                    </v-col>
-                    <v-col cols="7">
-                    <v-text-field
-                        outlined
-                        dense
-                        v-model="kapalPembeli"
-                        placeholder="value"
-                        :rules="[
-                        (value) => {
-                            return genericRequiredRule(value, 'Kapal Pembeli');
-                        },
-                        ]"
-                    ></v-text-field>
-                    </v-col>
-                  </v-row>
-              </v-col>
-
-              <v-col cols="5">
-                  <v-row no-gutters>
-                    <v-col cols="4">
-                    <div class="mt-2">Tanggal</div>
-                    </v-col>
-                    <v-col cols="7">
-                    <v-menu
-                        v-model="tanggalpicker"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        transition="scale-transition"
-                        min-width="auto"
-                    >
-                        <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                            prepend-inner-icon="mdi-calendar-month-outline"
-                            append-icon="mdi-chevron-down"
-                            placeholder="Pilih Tanggal"
-                            dense
-                            outlined
-                            clearable
-                            v-bind="attrs"
-                            v-on="on"
-                            v-model="tanggal"
-                        ></v-text-field>
-                        </template>
-                        <v-date-picker
-                        v-model="tanggal"
-                        scrollable
-                        no-title
-                        @input="tanggalpicker = false"
-                        ></v-date-picker>
-                    </v-menu>
-                    </v-col>
-                  </v-row>
-
-              </v-col>
+            <v-col lg="5">
+              <v-row no-gutters>
+                <v-col cols="4">
+                  <div class="mt-2">No. Purchase Order</div>
+                </v-col>
+                <v-col cols="7">
+                  <v-text-field
+                    outlined
+                    dense
+                    v-model="noPurchaseOrder"
+                    placeholder="value"
+                    :rules="[
+                      (value) => {
+                        return genericRequiredRule(
+                          value,
+                          'Nomor Purchase Order'
+                        );
+                      },
+                    ]"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
           </v-row>
 
-          <v-row no-gutters>
+          <v-row no-gutters class="mt-5">
             <v-col cols="2" style="padding: 0 1em 0 0;">Kode Barang</v-col>
             <v-col cols="5" style="padding: 0 1em;">Item Deskripsi</v-col>
             <v-col cols="1" style="padding: 0 0 0 1em;">Satuan Kemasan</v-col>
@@ -147,96 +122,101 @@
             <v-col cols="1" style="padding: 0 1em;">Harga Satuan</v-col>
             <v-col cols="1" style="padding: 0 0 0 1em;">Jumlah</v-col>
           </v-row>
+          <div class="mt-5"></div>
           <div v-for="(input, k) in inputs" :key="k">
             <v-row no-gutters>
               <v-col cols="2" style="padding: 0 1em 0 0;">
                 <v-select
-                    outlined
-                    dense
-                    v-model="input.kode_barang"
-                    placeholder="Pilih Kode Barang"
-                    :rules="[
+                  outlined
+                  dense
+                  v-model="input.kode_barang"
+                  placeholder="Pilih Kode Barang"
+                  :rules="[
                     (value) => {
-                        return genericRequiredRule(value, 'Kode Barang');
+                      return genericRequiredRule(value, 'Kode Barang');
                     },
-                    ]"
+                  ]"
                 ></v-select>
               </v-col>
               <v-col cols="5" style="padding: 0 1em;">
                 <v-text-field
-                    outlined
-                    dense
-                    v-model="input.item_deskripsi"
-                    placeholder="Tulis Deskripsi"
-                    :rules="[
+                  outlined
+                  dense
+                  v-model="input.item_deskripsi"
+                  placeholder="Tulis Deskripsi"
+                  :rules="[
                     (value) => {
-                        return genericRequiredRule(value, 'Item Deskripsi');
+                      return genericRequiredRule(value, 'Item Deskripsi');
                     },
-                    ]"
+                  ]"
                 ></v-text-field>
               </v-col>
               <v-col cols="1" style="padding: 0 1em;">
                 <v-text-field
-                    outlined
-                    dense
-                    v-model="inputs.quantity"
-                    placeholder="Barel"
-                    :rules="[
+                  outlined
+                  dense
+                  v-model="inputs.quantity"
+                  placeholder="Barel"
+                  :rules="[
                     (value) => {
-                        return genericRequiredRule(value, 'Quantity');
+                      return genericRequiredRule(value, 'Quantity');
                     },
-                    ]"
+                  ]"
                 ></v-text-field>
               </v-col>
               <v-col cols="1" style="padding: 0 1em;">
                 <v-text-field
-                    outlined
-                    dense
-                    v-model="inputs.harga_satuan"
-                    placeholder="0"
-                    type="number"
-                    default=0
-                    :rules="[
+                  outlined
+                  dense
+                  v-model="inputs.harga_satuan"
+                  placeholder="0"
+                  type="number"
+                  default="0"
+                  :rules="[
                     (value) => {
-                        return genericRequiredRule(value, 'Harga Satuan');
+                      return genericRequiredRule(value, 'Harga Satuan');
                     },
-                    ]"
+                  ]"
                 ></v-text-field>
               </v-col>
               <v-col cols="1" style="padding: 0 0 0 1em;">
                 <v-text-field
-                    outlined
-                    dense
-                    v-model="inputs.jumlah"
-                    placeholder="0"
-                    type="number"
-                    :rules="[
+                  outlined
+                  dense
+                  v-model="inputs.jumlah"
+                  placeholder="0"
+                  type="number"
+                  :rules="[
                     (value) => {
-                        return genericRequiredRule(value, 'Jumlah');
+                      return genericRequiredRule(value, 'Jumlah');
                     },
-                    ]"
+                  ]"
                 ></v-text-field>
               </v-col>
               <v-col cols="1" style="padding: 0 0 0 1em;">
                 <v-text-field
-                    outlined
-                    dense
-                    v-model="inputs.jumlah"
-                    placeholder="0"
-                    type="number"
-                    :rules="[
+                  outlined
+                  dense
+                  v-model="inputs.jumlah"
+                  placeholder="0"
+                  type="number"
+                  :rules="[
                     (value) => {
-                        return genericRequiredRule(value, 'Jumlah');
+                      return genericRequiredRule(value, 'Jumlah');
                     },
-                    ]"
+                  ]"
                 ></v-text-field>
               </v-col>
-              <v-col cols="1" style="padding: 0 0 0 1em;" class="delete-container">
-                <div @click.prevent="remove(k)" v-show="k|| ( !k && inputs.length > 1)">
-                <Icon 
-                    icon="octicon:trash-24"
-                    class="delete-icon"
-                  />
+              <v-col
+                cols="1"
+                style="padding: 0 0 0 1em;"
+                class="delete-container"
+              >
+                <div
+                  @click.prevent="remove(k)"
+                  v-show="k || (!k && inputs.length > 1)"
+                >
+                  <Icon icon="octicon:trash-24" class="delete-icon" />
                 </div>
               </v-col>
             </v-row>
@@ -244,46 +224,45 @@
 
           <v-spacer></v-spacer>
           <v-row no-gutters>
-              <button @click.prevent="add" style="background-color: #F8F8F8; border-radius: 1em; padding: 0.5em 1em 0.5em 0.8em; display: flex; align-items: center;" >
-                <img style="filter: brightness(4.8);" src="@/assets/icons/ic_plus.svg" />
-                <span style="padding: 0 0 0 0.5em;">
-                Tambah Item</span></button>
+            <button
+              @click.prevent="add"
+              style="background-color: #F8F8F8; border-radius: 1em; padding: 0.5em 1em 0.5em 0.8em; display: flex; align-items: center;"
+            >
+              <img
+                style="filter: brightness(4.8);"
+                src="@/assets/icons/ic_plus.svg"
+              />
+              <span style="padding: 0 0 0 0.5em;"> Tambah Item</span>
+            </button>
           </v-row>
-
-
         </v-container>
         <v-card-actions height="100%">
           <v-row no-gutters justify="space-between">
             <v-col cols="3">
               Remarks
               <v-text-field
-                    outlined
-                    dense
-                    v-model="remarks"
-                    placeholder="Remarks"
-                    :rules="[
-                    (value) => {
-                        return genericRequiredRule(value, 'Remarks');
-                    },
-                    ]"
-                ></v-text-field>
+                outlined
+                dense
+                v-model="remarks"
+                placeholder="Remarks"
+                :rules="[
+                  (value) => {
+                    return genericRequiredRule(value, 'Remarks');
+                  },
+                ]"
+              ></v-text-field>
             </v-col>
-            <v-col cols="3"  style="background: #F8F8F8; padding: 0.5em 0.3em;">
+            <v-col cols="3" style="background: #F8F8F8; padding: 0.5em 0.3em;">
               Jumlah Total
-              <div style="font-size: 1.25em; display: flex; justify-content: space-between; padding: 0.5em;">
+              <div
+                style="font-size: 1.25em; display: flex; justify-content: space-between; padding: 0.5em;"
+              >
                 <strong>TOTAL</strong>
                 <strong>325.00</strong>
               </div>
             </v-col>
           </v-row>
         </v-card-actions>
-        <!-- <v-card-actions>
-          <v-spacer></v-spacer>
-          <button type="submit" class="btn_save">
-            <span>Selanjutnya</span>
-            <img src="@/assets/icons/ic_bulletnext.svg" />
-          </button>
-        </v-card-actions> -->
       </v-form>
     </v-card-text>
   </v-card>
@@ -300,30 +279,30 @@ export default {
   },
   data() {
     return {
-      tanggalpicker:false,
+      tanggalpicker: false,
       inputs: [
         {
           kode_barang: "",
           item_deskripsi: "",
           quantity: "",
           harga_satuan: "",
-          jumlah: ""
+          jumlah: "",
         },
       ],
-    remarks: ""
-    }
+      remarks: "",
+    };
   },
   computed: {
-      kapalPemilik: {
-        get() {
-            return this.$store.state.po.po_baru.kapal_pemilik
-        },
-        set(value) {
-            this.$store.commit("SET_PO_BARU", {
-                key: "kapal_pemilik",
-                value
-            })
-        }
+    kapalPemilik: {
+      get() {
+        return this.$store.state.po.po_baru.kapal_pemilik;
+      },
+      set(value) {
+        this.$store.commit("SET_PO_BARU", {
+          key: "kapal_pemilik",
+          value,
+        });
+      },
     },
     noPurchaseOrder: {
       get() {
@@ -358,36 +337,35 @@ export default {
         });
       },
     },
-    
   },
   methods: {
-    add () {
+    add() {
       this.inputs.push({
         kode_barang: "",
         item_deskripsi: "",
         quantity: "",
         harga_satuan: "",
-        jumlah: ""
-      })
+        jumlah: "",
+      });
     },
-    remove (index) {
-      this.inputs.splice(index, 1)
+    remove(index) {
+      this.inputs.splice(index, 1);
     },
     handleCloseDialog() {
       this.$emit("handleBuatBaru");
-      this.inputs = [
+      (this.inputs = [
         {
           kode_barang: "",
           item_deskripsi: "",
           quantity: "",
           harga_satuan: "",
-          jumlah: ""
+          jumlah: "",
         },
-      ],
-      this.remarks= ""
+      ]),
+        (this.remarks = "");
     },
-    submitPo(){
-      this.$store.dispatch("addPo",this.$store.state.po.po_baru)
+    submitPo() {
+      this.$store.dispatch("addPo", this.$store.state.po.po_baru);
     },
     handleSubmit() {
       const getRef = this.$refs.initialReport.handleValidate();
@@ -397,23 +375,22 @@ export default {
         return false;
       }
     },
-    
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  .delete-icon {
-    font-size: 1.5em;
-    cursor: pointer;
-  }
-  .delete-icon:hover {
-    color: #000;
-  }
-  .delete-container {
-    padding: 0.5em !important;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-  }
+.delete-icon {
+  font-size: 1.5em;
+  cursor: pointer;
+}
+.delete-icon:hover {
+  color: #000;
+}
+.delete-container {
+  padding: 0.5em !important;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 </style>

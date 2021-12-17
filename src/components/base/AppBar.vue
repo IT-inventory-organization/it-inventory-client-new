@@ -1,11 +1,10 @@
 <template>
   <div>
     <header class="header_app">
-      <img
-        class="header_app_img"
-        src="@/assets/img/logo_kuadran.png"
-        alt="logo_kuadran"
-      />
+      <div class="logo">
+        <img class="header_app_img" src="@/assets/img/logo.png" alt="Logo" />
+        <p>Pelabuhan Kepri</p>
+      </div>
       <div class="header_app_title">IT Inventory</div>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
@@ -15,7 +14,7 @@
                 mdi-account-circle-outline
               </v-icon>
             </v-avatar>
-            <span>User</span>
+            <span>Administrator</span>
             <v-icon light>
               mdi-chevron-down
             </v-icon>

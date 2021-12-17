@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AESDecrypt} from "@/helper/Encryption";
+import { AESDecrypt } from "@/helper/Encryption";
 const baseUrl = process.env.VUE_APP_BASE_URL;
 
 const dashboard = {
@@ -47,13 +47,15 @@ const dashboard = {
           context.commit("SET_LIST_KAPAL", data);
           context.commit("SET_JUMLAH_KAPAL", data.length);
         }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_DASHBOARD", {
+          key: "loadingListKapal",
+          value: false,
+        });
       }
-     catch (error) {
-      console.log(error.response.data);
-    } finally {
-      context.commit("SET_LOADING_DASHBOARD", {key:"loadingListKapal", value:false});
-    }
-    }
+    },
   },
 };
 
