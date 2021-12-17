@@ -72,6 +72,28 @@ const po = {
       }
     },
 
+    async getOnePo(context) {
+      try {
+        context.commit("SET_LOADING_PO", true);
+        const result = await axios({
+          url: baseUrl + "/po/viewPerPo/40",
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        const data = AESDecrypt(result.data.data);
+        if (result.data.success) {
+          context.commit("SET_REPORT", data);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        context.commit("SET_REPORT_ID", false);
+      }
+    },
+
     async addPo(context, payload) {
       try {
         context.commit("SET_LOADING_PO", true);

@@ -1,5 +1,5 @@
 <template lang="">
-  <v-card height="95vh">
+  <v-card style="padding: 1rem">
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
         <span class="headline font-weight-bold">PO-0001</span>
@@ -21,7 +21,7 @@
       <v-row no-gutters>
         <v-col cols="4"> </v-col>
         <v-col cols="3" class="tanggal">
-          01-01-2021
+          {{ reports.tanggalPurchaseOrder }}
         </v-col>
       </v-row>
       <v-row no-gutters class="subtitle">
@@ -29,7 +29,7 @@
           <span>Purchase Order No.</span>
         </v-col>
         <v-col cols="1">
-          <strong>PO-00001</strong>
+          <strong>{{ reports.nomorPO }}</strong>
         </v-col>
       </v-row>
 
@@ -58,13 +58,13 @@
             <th>Harga Satuan</th>
             <th>Jumlah</th>
           </tr>
-          <tr>
-            <td>Cell Content</td>
-            <td>Cell Content</td>
-            <td>Cell Content</td>
-            <td>Cell Content</td>
-            <td>Cell Content</td>
-            <td>Cell Content</td>
+          <tr v-for="barangPO in reports.barangPOs" v-bind:key="barangPO">
+            <td>{{ barangPO.kodeBarang }}</td>
+            <td>{{ barangPO.kodeBarang }}</td>
+            <td>{{ barangPO.kodeBarang }}</td>
+            <td>{{ barangPO.kodeBarang }}</td>
+            <td>{{ barangPO.kodeBarang }}</td>
+            <td>{{ barangPO.kodeBarang }}</td>
           </tr>
         </table>
       </v-row>
@@ -108,6 +108,22 @@ export default {
     handleViewClose() {
       this.$emit("handleBuatBaru");
     },
+  },
+  computed: {
+    reports() {
+      return this.$store.state.po.reports;
+    },
+    optionsTableReports: {
+      get() {
+        return this.$store.state.po.optionsTableReports;
+      },
+      set(val) {
+        this.$store.commit("SET_OPTIONS_TABLE_REPORTS", val);
+      },
+    },
+  },
+  created() {
+    this.$store.dispatch("getOnePo");
   },
 };
 </script>

@@ -46,7 +46,7 @@
         <template v-slot:[`item.no`]="props">
           {{ props.index + 1 }}
         </template>
-        <template v-slot:[`item.action`]>
+        <template v-slot:[`item.action`]="props">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -63,7 +63,7 @@
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item @click="handleViewPurchaseOrder">
+              <v-list-item @click="handleViewPurchaseOrder(props.index)">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -177,8 +177,9 @@ export default {
     handleBuatBaru() {
       this.dialogBuatBaruPO = !this.dialogBuatBaruPO;
     },
-    handleViewPurchaseOrder() {
+    handleViewPurchaseOrder(id) {
       this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
+      console.log(id);
     },
   },
   created() {
