@@ -26,6 +26,7 @@ const po = {
       jumlah_total: "",
     },
     reports: [],
+    reportId: [],
     optionsTableReports: {
       page: 1,
       itemsPerPage: 10,
@@ -72,11 +73,11 @@ const po = {
       }
     },
 
-    async getOnePo(context) {
+    async getOnePo(context, id) {
       try {
         context.commit("SET_LOADING_PO", true);
         const result = await axios({
-          url: baseUrl + "/po/viewPerPo/40",
+          url: `${baseUrl}/po/viewPerPo/${id}`,
           method: "GET",
           headers: {
             authorization:
@@ -84,13 +85,14 @@ const po = {
           },
         });
         const data = AESDecrypt(result.data.data);
+
         if (result.data.success) {
-          context.commit("SET_REPORT", data);
+          context.commit("SET_REPORT_ID", data);
         }
       } catch (error) {
         console.log(error);
       } finally {
-        context.commit("SET_REPORT_ID", false);
+        context.commit("SET_LOADING_PO", false);
       }
     },
 
@@ -99,7 +101,7 @@ const po = {
         context.commit("SET_LOADING_PO", true);
         let eData = AESEncrypt(payload);
         const result = await axios({
-          url: baseUrl + "/po/createpo/createpo",
+          url: baseUrl + "/po/createPO/",
           method: "POST",
           headers: {
             authorization:

@@ -37,7 +37,7 @@
       <v-data-table
         :headers="headers"
         :items="reports"
-        :options.sync="optionsTableReports"
+        :options.sync="reports.optionsTableReports"
         :server-items-length="reports.length"
         no-data-text="Data not available"
         no-results-text="Data not available"
@@ -46,7 +46,7 @@
         <template v-slot:[`item.no`]="props">
           {{ props.index + 1 }}
         </template>
-        <template v-slot:[`item.action`]="props">
+        <template v-slot:[`item.action`]="{ item }">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -63,7 +63,7 @@
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item @click="handleViewPurchaseOrder(props.index)">
+              <v-list-item @click="handleViewPurchaseOrder(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -111,10 +111,9 @@
       v-model="dialogPurchaseOrderView"
       persistent
       width="100%"
-      @click:outside="handleViewPurchaseOrder"
       max-width="70%"
     >
-      <purchase-order-view @handleBuatBaru="handleViewPurchaseOrder" />
+      <purchase-order-view @handleBuatBaru="handleBuatBaru" />
     </v-dialog>
   </div>
 </template>
@@ -175,11 +174,11 @@ export default {
   },
   methods: {
     handleBuatBaru() {
-      this.dialogBuatBaruPO = !this.dialogBuatBaruPO;
+      this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
     },
     handleViewPurchaseOrder(id) {
       this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
-      console.log(id);
+      this.$store.dispatch("getOnePo", id);
     },
   },
   created() {

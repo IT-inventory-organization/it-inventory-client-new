@@ -1,5 +1,5 @@
 <template lang="">
-  <v-card style="padding: 1rem">
+  <v-card>
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
         <span class="headline font-weight-bold">PO-0001</span>
@@ -21,7 +21,7 @@
       <v-row no-gutters>
         <v-col cols="4"> </v-col>
         <v-col cols="3" class="tanggal">
-          {{ reports.tanggalPurchaseOrder }}
+          {{ reportId.tanggalPurchaseOrder }}
         </v-col>
       </v-row>
       <v-row no-gutters class="subtitle">
@@ -29,7 +29,7 @@
           <span>Purchase Order No.</span>
         </v-col>
         <v-col cols="1">
-          <strong>{{ reports.nomorPO }}</strong>
+          <strong>{{ reportId.nomorPO }}</strong>
         </v-col>
       </v-row>
 
@@ -38,13 +38,7 @@
           KAPAL PEMBELI
         </v-col>
         <v-col cols="12" class="list-item">
-          Value
-        </v-col>
-        <v-col cols="12" class="list-title">
-          KAPAL PEMILIK
-        </v-col>
-        <v-col cols="12" class="list-item">
-          Value
+          {{ reportId.kapalPenjual }}
         </v-col>
       </v-row>
 
@@ -58,13 +52,16 @@
             <th>Harga Satuan</th>
             <th>Jumlah</th>
           </tr>
-          <tr v-for="barangPO in reports.barangPOs" v-bind:key="barangPO">
+          <tr
+            v-for="(barangPO, index) in reportId.barangPOs"
+            v-bind:key="index"
+          >
             <td>{{ barangPO.kodeBarang }}</td>
-            <td>{{ barangPO.kodeBarang }}</td>
-            <td>{{ barangPO.kodeBarang }}</td>
-            <td>{{ barangPO.kodeBarang }}</td>
-            <td>{{ barangPO.kodeBarang }}</td>
-            <td>{{ barangPO.kodeBarang }}</td>
+            <td>{{ barangPO.itemDeskripsi }}</td>
+            <td>{{ barangPO.satuanKemasan }}</td>
+            <td>{{ barangPO.quantity }}</td>
+            <td>{{ barangPO.hargaSatuan }}</td>
+            <td>{{ barangPO.jumlah }}</td>
           </tr>
         </table>
       </v-row>
@@ -76,15 +73,11 @@
           <v-text-field
             outlined
             dense
-            v-model="remarks"
+            v-model="reportId.remarks"
             placeholder="Remarks"
             disabled
-            :rules="[
-              (value) => {
-                return genericRequiredRule(value, 'Remarks');
-              },
-            ]"
           ></v-text-field>
+          <!-- v-model="remarks" -->
         </v-col>
         <v-col cols="3" style="background: #F8F8F8; padding: 0.5em 0.3em;">
           Jumlah Total
@@ -92,7 +85,7 @@
             style="font-size: 1.25em; display: flex; justify-content: space-between; padding: 0.5em;"
           >
             <strong>TOTAL</strong>
-            <strong>325.00</strong>
+            <strong>{{ reportId.jumlahTotal }}</strong>
           </div>
         </v-col>
       </v-row>
@@ -110,20 +103,9 @@ export default {
     },
   },
   computed: {
-    reports() {
-      return this.$store.state.po.reports;
+    reportId() {
+      return this.$store.state.po.reportId;
     },
-    optionsTableReports: {
-      get() {
-        return this.$store.state.po.optionsTableReports;
-      },
-      set(val) {
-        this.$store.commit("SET_OPTIONS_TABLE_REPORTS", val);
-      },
-    },
-  },
-  created() {
-    this.$store.dispatch("getOnePo");
   },
 };
 </script>
