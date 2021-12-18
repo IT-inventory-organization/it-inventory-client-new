@@ -34,7 +34,7 @@ const dashboard = {
       try{
         context.commit("SET_LOADING_DASHBOARD", {key:"loadingListKapal", value:true});
         const result = await axios({
-          url: baseUrl + "/report/dashboard/",
+          url: baseUrl + "/report/getall/",
           method: "GET",
           headers: {
             authorization:
