@@ -156,20 +156,45 @@ const inventory = {
       },
     },
     actions: {
-
-      async getAllReport(context){
+      async produksiBarangAdd(context,payload){
         try{
           context.commit("SET_LOADING_INVENTORY", {key:"MainInventory", value:true});
           const result = await axios({
-            url: baseUrl + "/report/getall/",
+            url: baseUrl + "/produksi/create/",
+            method: "POST",
+            headers: {
+              authorization:
+                "Bearer " + localStorage.getItem("token_it_inventory"),
+            },
+            data:payload
+          });
+          const data = result.data.data
+          // console.log(data,"KAPAL KARAM")
+          if (result.data.success) {
+            context.commit("SET_REPORT_INVENTORY", {key:'data',value:data});
+          }
+        }
+       catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_INVENTORY", {key:"MainInventory", value:false});
+      }
+
+      },
+
+      async getInventoryData(context){
+        try{
+          context.commit("SET_LOADING_INVENTORY", {key:"MainInventory", value:true});
+          const result = await axios({
+            url: baseUrl + "/inventory/GetViewInventory/",
             method: "GET",
             headers: {
               authorization:
                 "Bearer " + localStorage.getItem("token_it_inventory"),
             },
           });
-          const data = AESDecrypt(result.data.data);
-          // console.log(data,"KAPAL KARAM")
+          const data = result.data.data
+          // console.log(data,"KAPAL KARAM INVENTORY")
           if (result.data.success) {
             context.commit("SET_REPORT_INVENTORY", {key:'data',value:data});
           }

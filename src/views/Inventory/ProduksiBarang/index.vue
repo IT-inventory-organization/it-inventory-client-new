@@ -140,6 +140,7 @@ export default {
       dialogBuatBaruPO: false,
       dialogPurchaseOrderView: false,
       headers: [
+        
         {
           text: "No. Produksi",
           value: "nomorProduksi",

@@ -64,6 +64,8 @@ const po = {
         });
         const data = AESDecrypt(result.data.data);
         if (result.data.success) {
+        // console.log(data);
+
           context.commit("SET_REPORT", data);
         }
       } catch (error) {

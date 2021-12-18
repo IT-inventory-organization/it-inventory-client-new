@@ -55,9 +55,9 @@
               <tr>
                 <td>{{ details.kodeBarang }}</td>
                 <td>{{ details.namaBarang }}</td>
-                <td>{{ details.uraian }}</td>
+                <td>{{ details.itemDeskripsi }}</td>
                 <td>{{ details.satuanKemasan }}</td>
-                <td>{{ details.stock }}</td>
+                <td>{{ details.quantity }}</td>
                 <td>
                   <template>
                     <v-menu offset-y>
@@ -184,11 +184,11 @@ export default {
         },
         {
           text: 'Jenis Dokumen',
-          value: 'jenisPemberitahuan'
+          value: 'jenisDokumen'
         },
         {
           text: 'Bendera',
-          value: 'dataKapal.benderaKapal'
+          value: 'dataKapal.bendera'
         },
         {
           text: 'Actions',
@@ -257,7 +257,7 @@ export default {
     }
   },
   async created() {
-    await this.$store.dispatch('getAllReport');
+    await this.$store.dispatch('getInventoryData');
   }
 };
 </script>

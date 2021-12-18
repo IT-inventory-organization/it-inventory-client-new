@@ -280,6 +280,11 @@ export default {
   data() {
     return {
       inputs: [
+        // nomorProduksi
+        // dataBarangId
+        // quantity
+        // tanggalProduksi
+        // remarks
         {
           kode_barang: '',
           item_deskripsi: '',
