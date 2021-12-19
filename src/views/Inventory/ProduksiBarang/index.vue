@@ -103,7 +103,7 @@
       @click:outside="handleBuatBaru"
       max-width="95%"
     >
-      <form-po @handleBuatBaru="handleBuatBaru" />
+      <form-po  @handleBuatBaru="handleBuatBaru" />
     </v-dialog>
 
     <v-dialog
@@ -180,6 +180,7 @@ export default {
     reports() {
       return this.$store.state.ProduksiBarang.reports;
     },
+    
     optionsTableReports: {
       get() {
         return this.$store.state.po.optionsTableReports;
@@ -192,18 +193,23 @@ export default {
   methods: {
     handleBuatBaru() {
       this.dialogBuatBaruPO = !this.dialogBuatBaruPO;
+      if(this.dialogBuatBaruPO){
+        this.$store.dispatch("getItemKapal",this.$route.params.id)
+      }
     },
     handleViewPurchaseOrder() {
       this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
     },
     handleOpenView(id) {
-      console.log(id);
       this.dialogView = true;
     },
     handleCloseView() {
       this.dialogView = false;
     },
   },
+  created() {
+      this.$store.dispatch("getallProduksiBarang")
+    },
 };
 </script>
 

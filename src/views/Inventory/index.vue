@@ -108,7 +108,7 @@
         <template v-slot:[`item.no`]="props">
           {{ props.index + 1 }}
         </template>
-        <template v-slot:[`item.action`]>
+        <template v-slot:[`item.action`]="props">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -116,7 +116,7 @@
                 outlined
                 v-bind="attrs"
                 v-on="on"
-                @click="pilihProduksiBarang"
+                @click="pilihProduksiBarang(props.item.reportId)"
               >
                 <!-- Actions -->
                 <img
@@ -252,8 +252,8 @@ export default {
     handleViewPurchaseOrder() {
       this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
     },
-    pilihProduksiBarang() {
-      this.$router.push({ name: 'ProduksiBarang', params: { id: 1 } });
+    pilihProduksiBarang(ids) {
+      this.$router.push({ name: 'ProduksiBarang', params: { id: ids } });
     }
   },
   async created() {

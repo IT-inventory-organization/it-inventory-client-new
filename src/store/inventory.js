@@ -194,7 +194,7 @@ const inventory = {
             },
           });
           const data = result.data.data
-          // console.log(data,"KAPAL KARAM INVENTORY")
+          console.log(data,"KAPAL KARAM INVENTORY")
           if (result.data.success) {
             context.commit("SET_REPORT_INVENTORY", {key:'data',value:data});
           }

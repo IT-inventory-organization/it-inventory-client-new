@@ -131,7 +131,7 @@ export default {
         },
         {
           text: "Tanggal",
-          value: "tanggal",
+          value: "createdAt",
         },
         {
           text: "Jenis Pemberitahuan",
@@ -139,23 +139,24 @@ export default {
         },
         {
           text: "Jenis Dokumen",
-          value: "jenisDokumen",
+          value: "jenisDokumenBC",
         },
         {
           text: "Nomor Dokumen",
+          // TODO: tidak ada di reponse
           value: "nomorDokumen",
         },
         {
           text: "Voyage Kapal",
-          value: "voyageKapal",
+          value: "dataKapal.voyageKapal",
         },
         {
           text: "Nama Kapal",
-          value: "namaKapal",
+          value: "dataKapal.namaKapal",
         },
         {
           text: "Bendera",
-          value: "bendera",
+          value: "dataKapal.benderaKapal",
         },
         {
           text: "Actions",
@@ -201,6 +202,9 @@ export default {
       this.dialogView = false;
     },
   },
+  created() {
+    this.$store.dispatch("getAllPlb")
+  }
 };
 </script>
 

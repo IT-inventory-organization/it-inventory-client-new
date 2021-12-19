@@ -17,7 +17,7 @@
               Batal
             </button>
             <button
-              class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
+              class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green" @click="handleSubmit"
             >
               Simpan
             </button>
@@ -38,7 +38,7 @@
                   <v-text-field
                     outlined
                     dense
-                    v-model="kapalPemilik"
+                    v-model="payload.nomorProduksi"
                     placeholder="value"
                     :rules="[
                       value => {
@@ -65,6 +65,7 @@
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
+                        v-model="payload.tanggalProduksi"
                         prepend-inner-icon="mdi-calendar-month-outline"
                         append-icon="mdi-chevron-down"
                         placeholder="Pilih Tanggal"
@@ -76,6 +77,7 @@
                       ></v-text-field>
                     </template>
                     <v-date-picker
+                      v-model="payload.tanggalProduksi"
                       scrollable
                       no-title
                       @input="tanggal = false"
@@ -96,7 +98,7 @@
                   <v-text-field
                     outlined
                     dense
-                    v-model="kapalPembeli"
+                    v-model="payload.dataBarangId"
                     placeholder="value"
                     :rules="[
                       value => {
@@ -131,7 +133,7 @@
                   <v-text-field
                     outlined
                     dense
-                    v-model="kapalPembeli"
+                    v-model="payload.quantity"
                     placeholder="value"
                     :rules="[
                       value => {
@@ -160,20 +162,23 @@
                 <v-select
                   outlined
                   dense
-                  v-model="input.kode_barang"
+                  v-model="inputs[k].barang"
                   placeholder="Pilih Kode Barang"
+                  :items="databarang"
+                  item-text="kodeBarang"
                   :rules="[
                     value => {
                       return genericRequiredRule(value, 'Kode Barang');
                     }
                   ]"
+                  return-object
                 ></v-select>
               </v-col>
               <v-col cols="5" style="padding: 0 1em;">
                 <v-text-field
                   outlined
                   dense
-                  v-model="input.item_deskripsi"
+                  v-model="inputs[k].deskripsi"
                   placeholder="Tulis Deskripsi"
                   :rules="[
                     value => {
@@ -186,7 +191,7 @@
                 <v-text-field
                   outlined
                   dense
-                  v-model="inputs.quantity"
+                  v-model="inputs[k].quantity"
                   placeholder="Barel"
                   :rules="[
                     value => {
@@ -199,7 +204,7 @@
                 <v-text-field
                   outlined
                   dense
-                  v-model="inputs.jumlah"
+                  v-model="inputs[k].jumlah"
                   placeholder="0"
                   type="number"
                   :rules="[
@@ -277,26 +282,35 @@ export default {
   components: {
     Icon
   },
+
   data() {
     return {
+      payload:{
+        nomorProduksi:'',
+        dataBarangId:'',
+        quantity:'',
+        tanggalProduksi:'',
+        remarks:'',
+        details:[]
+      },
       inputs: [
-        // nomorProduksi
-        // dataBarangId
-        // quantity
-        // tanggalProduksi
-        // remarks
-        {
-          kode_barang: '',
-          item_deskripsi: '',
-          quantity: '',
-          harga_satuan: '',
-          jumlah: ''
-        }
+       {
+        kodeBarang: '',
+        dataBarangId: '',
+        quantity: '',
+        deskripsi: '',
+        jumlah: ''
+      }
       ],
       remarks: ''
     };
   },
   computed: {
+    databarang:{
+      get() {
+        return this.$store.state.po.data_barang;
+      }
+    },
     kapalPemilik: {
       get() {
         return this.$store.state.po.po_baru.kapal_pemilik;
@@ -343,12 +357,15 @@ export default {
     }
   },
   methods: {
+    showbarang(){
+      
+    },
     add() {
       this.inputs.push({
-        kode_barang: '',
-        item_deskripsi: '',
+        kodeBarang: '',
+        dataBarangId: '',
         quantity: '',
-        harga_satuan: '',
+        deskripsi: '',
         jumlah: ''
       });
     },
@@ -359,18 +376,26 @@ export default {
       this.$emit('handleBuatBaru');
       (this.inputs = [
         {
-          kode_barang: '',
-          item_deskripsi: '',
+          kodeBarang: '',
+          dataBarangId: '',
           quantity: '',
-          harga_satuan: '',
+          deskripsi: '',
           jumlah: ''
         }
       ]),
         (this.remarks = '');
     },
     handleSubmit() {
-      const getRef = this.$refs.initialReport.handleValidate();
+      const getRef = this.$refs.initialReport.validate();
+      this.inputs.map((val)=>{
+        val.dataBarangId = +val.barang.id;
+        val.kodeBarang = val.barang.kodeBarang;
+        delete val.barang;
+      })
+      this.payload.details=this.inputs
+      this.payload.dataBarangId= +this.payload.dataBarangId
       if (getRef) {
+        this.$store.dispatch("SubmitProduksiBarang",this.payload)
         this.$router.push('/po/add');
       } else {
         return false;

@@ -15,6 +15,7 @@ const plb = {
       loadingReports: false,
       loadingDokumen: false,
       loadingBarang: false,
+      loadingData:false
     },
     report: {
       jenisPemberitahuan: "",
@@ -219,6 +220,10 @@ const plb = {
     },
     SET_REPORT_PLB(state, payload) {
       state.report[payload.key] = payload.value;
+    },
+    SET_REPORTS_PLB(state, payload) {
+      state.reports[payload.key] = payload.value;
+
     },
     SET_OPTIONS_TABLE_REPORTS(state, payload) {
       state.optionsTableReports = Object.assign({}, payload);
@@ -540,7 +545,7 @@ const plb = {
         });
 
         if (result.data) {
-          console.log(result.data)
+          // console.log(result.data)
           context.commit("SET_XML_DOCUMENT", result.data);
         }
       }
@@ -566,7 +571,7 @@ const plb = {
         });
 
         if (result.data) {
-          console.log(result.data)
+          // console.log(result.data)
           context.commit("SET_XML_DOCUMENT", result.data);
         }
       }
@@ -579,6 +584,34 @@ const plb = {
     }
 
     },
+    async getAllPlb(context){
+      try{
+        context.commit("SET_LOADING_PLB", {key: "loadingData", value: true});
+
+        const result = await axios({
+          url: baseUrl + `/plb`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          }
+        });
+
+        if (result.data.success) {
+          // console.log(result.data.data.rows)
+          context.commit("SET_REPORTS_PLB", {key: "data", value: result.data.data.rows});
+        }
+        context.commit("SET_LOADING_PLB", {key: "loadingData", value: true});
+
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      console.log("final");
+
+
+    }
+    }
 
 
 

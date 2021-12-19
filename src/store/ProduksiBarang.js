@@ -1,5 +1,11 @@
+import axios from "axios";
+import { AESDecrypt, AESEncrypt} from "@/helper/Encryption";
+const baseUrl = process.env.VUE_APP_BASE_URL;
 const ProduksiBarang = {
   state: {
+    loading:{
+      produksilist:false
+    },
     barang_produksi_baru: {
       nomorProduksi: "005",
       dataBarangId: 7,
@@ -168,11 +174,11 @@ const ProduksiBarang = {
     SET_REPORT_ID(state, payload) {
       state.reportId = payload;
     },
-    SET_LOADING(state, payload) {
-      state.loading = payload;
+    SET_LOADING_PRODUKSI(state, payload) {
+      state.loading[payload.key] = payload.value;
     },
-    SET_REPORT(state, payload) {
-      state.report = payload;
+    SET_REPORT_PRODUKSI(state, payload) {
+      state.reports[payload.key] = payload.value;
     },
     SET_PO_BARU_(state, payload) {
       state.barang_produksi_baru = payload;
@@ -181,7 +187,58 @@ const ProduksiBarang = {
       state.optionsTableReports = Object.assign({}, payload);
     },
   },
-  actions: {},
+  actions: {
+    async getallProduksiBarang(context){
+      try{
+        context.commit("SET_LOADING_PRODUKSI", {key:"produksilist", value:true});
+        const result = await axios({
+          url: baseUrl + "/produksi",
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        const data = result.data.data
+        console.log(data,"PRODUKSI")
+        if (result.data.success) {
+          context.commit("SET_REPORT_PRODUKSI", {key:'data',value:data});
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      context.commit("SET_LOADING_PRODUKSI", {key:"produksilist", value:false});
+    }
+    },
+
+
+
+    async SubmitProduksiBarang(context,payload){
+      try{
+        context.commit("SET_LOADING_PRODUKSI", {key:"produksilist", value:true});
+        const result = await axios({
+          url: baseUrl + "/produksi/create",
+          method: "POST",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+          data:payload
+        });
+        const data = result.data.data
+        // console.log(data,"PRODUKSI CREATE")
+        if (result.data.success) {
+          // context.commit("SET_REPORT_PRODUKSI", {key:'data',value:data});
+        }
+      }
+     catch (error) {
+      console.log(error.response.data);
+    } finally {
+      context.commit("SET_LOADING_PRODUKSI", {key:"produksilist", value:false});
+    }
+    }
+  },
 };
 
 export default ProduksiBarang;

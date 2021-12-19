@@ -32,6 +32,7 @@ const po = {
       itemsPerPage: 10,
       search: "",
     },
+    data_barang:[]
   },
   mutations: {
     SET_REPORT_ID(state, payload) {
@@ -48,6 +49,9 @@ const po = {
     },
     SET_OPTIONS_TABLE_REPORTS(state, payload) {
       state.optionsTableReports = Object.assign({}, payload);
+    },
+    SET_DATA_BARANG(state, payload) {
+      state.data_barang = payload;
     },
   },
   actions: {
@@ -119,6 +123,28 @@ const po = {
         }
       } catch (error) {
         console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PO", false);
+      }
+    },
+    async getItemKapal(context, id) {
+      try {
+        context.commit("SET_LOADING_PO", true);
+        const result = await axios({
+          url: `${baseUrl}/po/fetchDataForKapalPenjual/items/${id}`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        const data =  AESDecrypt(result.data.data);
+        console.log(data)
+        if (result.data.success) {
+          context.commit("SET_DATA_BARANG", data);
+        }
+      } catch (error) {
+        console.log(error);
       } finally {
         context.commit("SET_LOADING_PO", false);
       }

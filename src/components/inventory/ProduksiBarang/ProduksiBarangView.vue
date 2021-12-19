@@ -121,6 +121,7 @@ export default {
     handleClose() {
       this.$emit("handleCloseView");
     },
+    
   },
 };
 </script>
