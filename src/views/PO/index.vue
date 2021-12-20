@@ -113,7 +113,9 @@
       width="100%"
       max-width="70%"
     >
-      <purchase-order-view @handleBuatBaru="handleBuatBaru" />
+      <purchase-order-view
+        @dialogPurchaseOrderView="dialogPurchaseOrderView = false"
+      />
     </v-dialog>
   </div>
 </template>
@@ -174,7 +176,7 @@ export default {
   },
   methods: {
     handleBuatBaru() {
-      this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
+      this.dialogBuatBaruPO = !this.dialogBuatBaruPO;
     },
     handleViewPurchaseOrder(id) {
       this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;

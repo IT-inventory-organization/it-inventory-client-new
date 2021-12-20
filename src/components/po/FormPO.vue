@@ -33,7 +33,7 @@
             <v-col lg="5">
               <v-row no-gutters>
                 <v-col cols="4">
-                  <div class="mt-2">Kapal Pemilik</div>
+                  <div class="mt-2">Kapal Penjual</div>
                 </v-col>
                 <v-col cols="7">
                   <v-select

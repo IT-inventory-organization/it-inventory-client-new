@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     handleViewClose() {
-      this.$emit("handleBuatBaru");
+      this.$emit("dialogPurchaseOrderView");
     },
   },
   computed: {
