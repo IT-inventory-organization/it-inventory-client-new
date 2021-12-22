@@ -20,7 +20,11 @@
     <!-- Search bar and button  -->
     <v-row no-gutters class="mt-2">
       <v-col lg="3">
-        <v-text-field placeholder="Cari" class="it-inventory-search-list-kapal">
+        <v-text-field
+          v-model="optionsTableListBCF.search"
+          placeholder="Cari"
+          class="it-inventory-search-list-kapal"
+        >
           <template slot="prepend-inner">
             <Icon
               icon="akar-icons:search"
@@ -36,9 +40,10 @@
     <div class="it-inventory-box mt-2">
       <v-data-table
         :headers="headers"
-        :items="reports"
-        :options.sync="optionsTableReports"
-        :server-items-length="reports.length"
+        :options.sync="optionsTableListBCF"
+        :items="listBCF.rows"
+        :loading="loadingViewList"
+        :search="optionsTableListBCF.search"
         no-data-text="Data not available"
         no-results-text="Data not available"
         class="it-inventory-simple-table"
@@ -47,10 +52,8 @@
           {{ props.index + 1 }}
         </template>
 
-        <template v-slot:[`item.status`]>
-          <div class="it-inventory-actions-status">
-            <p>Disetujui</p>
-          </div>
+        <template v-slot:[`item.status`]="{ item }">
+          <status-list-table :status="item.status" />
         </template>
 
         <template v-slot:[`item.action`]>
@@ -126,19 +129,12 @@
       v-model="dialogBuatBaruBCF"
       persistent
       width="100%"
-      @click:outside="handleBuatBaru"
       max-width="95%"
     >
       <form-bcf @handleBuatBaru="handleBuatBaru" />
     </v-dialog>
 
-    <v-dialog
-      v-model="dialogBCFView"
-      persistent
-      width="100%"
-      @click:outside="handleViewBCF"
-      max-width="70%"
-    >
+    <v-dialog v-model="dialogBCFView" persistent width="100%" max-width="70%">
       <bcf-view @handleBuatBaru="handleViewBCF" />
     </v-dialog>
   </div>
@@ -152,6 +148,7 @@ export default {
     Icon,
     FormBcf: () => import("@/components/bcf/FormBCF"),
     BcfView: () => import("@/components/bcf/BCFView"),
+    StatusListTable: () => import("@/components/StatusListTable"),
   },
   data() {
     return {
@@ -160,11 +157,11 @@ export default {
       headers: [
         {
           text: "Exportir/Pengusaha PLB/PDPLB",
-          value: "exportir",
+          value: "nama",
         },
         {
           text: "Nomor PO",
-          value: "nomor_po",
+          value: "nomorPO",
         },
         {
           text: "Tanggal",
@@ -172,7 +169,7 @@ export default {
         },
         {
           text: "Nomor",
-          value: "nomor",
+          value: "nomorFormBcf3315",
         },
         {
           text: "Status",
@@ -186,23 +183,24 @@ export default {
     };
   },
   watch: {
-    optionsTableReports: {
-      handler() {
-        console.log("trigger change options table reports");
-      },
+    optionsTableListBCF: {
+      handler() {},
       deep: true,
     },
   },
   computed: {
-    reports() {
-      return this.$store.state.po.reports;
+    loadingViewList() {
+      return this.$store.state.bcf.loading.loadingViewList;
     },
-    optionsTableReports: {
+    listBCF() {
+      return this.$store.state.bcf.listBCF;
+    },
+    optionsTableListBCF: {
       get() {
-        return this.$store.state.po.optionsTableReports;
+        return this.$store.state.bcf.optionsTableListBCF;
       },
       set(val) {
-        this.$store.commit("SET_OPTIONS_TABLE_REPORTS", val);
+        this.$store.commit("SET_OPTIONS_TABLE_LIST_BCF", val);
       },
     },
   },
@@ -213,6 +211,9 @@ export default {
     handleViewBCF() {
       this.dialogBCFView = !this.dialogBCFView;
     },
+  },
+  created() {
+    this.$store.dispatch("fetchGetAllBCF");
   },
 };
 </script>

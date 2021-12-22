@@ -7,6 +7,7 @@ import user from "@/store/user";
 import po from "@/store/po";
 import inventory from "@/store/inventory";
 import ProduksiBarang from "@/store/ProduksiBarang";
+import bcf from "@/store/bcf";
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     user,
     po,
     inventory,
-    ProduksiBarang
+    ProduksiBarang,
+    bcf,
   },
 });
