@@ -1,19 +1,19 @@
 <template>
   <div>
     <div
-      v-if="status === 'diterima'"
+      v-if="status === 'DISETUJUI'"
       class="it-inventory-actions-status it-inventory-actions-status__approve"
     >
       <p>Disetujui</p>
     </div>
     <div
-      v-if="status === 'perbaikan'"
+      v-if="status === 'PERBAIKAN'"
       class="it-inventory-actions-status it-inventory-actions-status__revision"
     >
       <p>Perbaikan</p>
     </div>
     <div
-      v-if="status === 'menunggu'"
+      v-if="status === 'MENUNGGU'"
       class="it-inventory-actions-status it-inventory-actions-status__waiting"
     >
       <p>Menunggu</p>

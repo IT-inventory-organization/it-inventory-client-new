@@ -3,9 +3,7 @@
     <!-- Page subtitle and create new button -->
     <v-row no-gutters align="center">
       <v-col cols="11">
-        <div class="display-1 font-weight-bold">
-          BCF 3.3.15
-        </div>
+        <div class="display-1 font-weight-bold">BCF 3.3.15</div>
       </v-col>
       <v-col cols="1">
         <button
@@ -66,9 +64,7 @@
                 v-on="on"
               >
                 Actions
-                <v-icon right>
-                  mdi-chevron-down
-                </v-icon>
+                <v-icon right> mdi-chevron-down </v-icon>
               </v-btn>
             </template>
 
@@ -131,7 +127,7 @@
       width="100%"
       max-width="95%"
     >
-      <form-bcf @handleBuatBaru="handleBuatBaru" />
+      <form-bcf v-if="dialogBuatBaruBCF" @handleBuatBaru="handleBuatBaru" />
     </v-dialog>
 
     <v-dialog v-model="dialogBCFView" persistent width="100%" max-width="70%">
@@ -200,7 +196,7 @@ export default {
         return this.$store.state.bcf.optionsTableListBCF;
       },
       set(val) {
-        this.$store.commit("SET_OPTIONS_TABLE_LIST_BCF", val);
+        this.$store.commit("bcf/SET_OPTIONS_TABLE_LIST_BCF", val);
       },
     },
   },
@@ -213,7 +209,7 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch("fetchGetAllBCF");
+    this.$store.dispatch("bcf/fetchGetAllBCF");
   },
 };
 </script>
