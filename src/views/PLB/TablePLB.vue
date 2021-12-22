@@ -47,7 +47,7 @@
         <template v-slot:[`item.no`]="props">
           {{ props.index + 1 }}
         </template>
-        <template v-slot:[`item.action`]>
+        <template v-slot:[`item.action`]="{ item }">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -64,7 +64,7 @@
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item @click.prevent="handleOpenView">
+              <v-list-item @click.prevent="handleOpenView(item)">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -195,16 +195,20 @@ export default {
       this.dialogBuatBaruPLB = false;
       this.isEdit = false;
     },
-    handleOpenView() {
+    handleOpenView(item) {
       this.dialogView = true;
+      this.$store.commit("SET_NOTIFICATION_TYPE", item.jenisPemberitahuan);
+      this.$store.commit("SET_REPORT_ID", item.id);
     },
     handleCloseView() {
       this.dialogView = false;
+      this.$store.commit("SET_NOTIFICATION_TYPE", "");
+      this.$store.commit("SET_REPORT_ID", "");
     },
   },
   created() {
-    this.$store.dispatch("getAllPlb")
-  }
+    this.$store.dispatch("getAllPlb");
+  },
 };
 </script>
 

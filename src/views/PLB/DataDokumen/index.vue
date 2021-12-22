@@ -26,7 +26,7 @@
       </v-expansion-panels>
 
       <v-row no-gutters style="justify-content: flex-end" class="my-4">
-        <button type="submit" class="btn_save">
+        <button type="submit" class="btn_save" :disabled="loadingDokumen">
           <span>Selanjutnya</span>
           <img src="@/assets/icons/ic_bulletnext.svg" />
         </button>
@@ -44,12 +44,15 @@ export default {
       import("@/views/PLB/DataDokumen/LaporanPemasukanPengeluaranBarang/index"),
   },
   computed: {
+    loadingDokumen() {
+      return this.$store.state.plb.loading.loadingDokumen;
+    },
     dokumenSaveSucceded: {
       get() {
         return this.$store.state.plb.dokumenSaveSucceded;
-      }
-  },
-  constantPengeluaran() {
+      },
+    },
+    constantPengeluaran() {
       return this.$store.state.plb.constant.pengeluaran;
     },
   },
@@ -58,22 +61,25 @@ export default {
       return localStorage.getItem("NotificationType");
     },
     async submitDocument() {
-      if(this.handleNotificationType()===this.constantPengeluaran){
-        
-        await this.$store.dispatch("saveDocumentPengeluaran", this.$store.state.plb);
-      }else{
-        await this.$store.dispatch("saveDocumentPemasukan", this.$store.state.plb);
+      if (this.handleNotificationType() === this.constantPengeluaran) {
+        await this.$store.dispatch(
+          "saveDocumentPengeluaran",
+          this.$store.state.plb
+        );
+      } else {
+        await this.$store.dispatch(
+          "saveDocumentPemasukan",
+          this.$store.state.plb
+        );
       }
-      if(this.dokumenSaveSucceded){
-         this.$store.commit("SET_STEPPER", 3);
+      if (this.dokumenSaveSucceded) {
+        this.$store.commit("SET_STEPPER", 3);
       }
       // TODO: create error handle here if data is not saved succesfully
     },
-   async handleSubmit() {
-      
+    async handleSubmit() {
       if (this.$refs.formDataDokumen.validate()) {
         await this.submitDocument();
-         
       } else {
         return false;
       }

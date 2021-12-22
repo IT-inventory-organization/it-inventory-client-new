@@ -107,6 +107,12 @@
                 (value) => {
                   return genericRequiredRule(value, 'Netto, Brutto, Volume');
                 },
+                (value) => {
+                  return genericNumberRule(value, 'Netto, Brutto, Volume');
+                },
+                (value) => {
+                  return genericMinRule(value, 'Netto, Brutto, Volume');
+                },
               ]"
               dense
             />
@@ -145,6 +151,12 @@
                 (value) => {
                   return genericRequiredRule(value, 'Stock');
                 },
+                (value) => {
+                  return genericNumberRule(value, 'Stock');
+                },
+                (value) => {
+                  return genericMinRule(value, 'Stock');
+                },
               ]"
               dense
             />
@@ -153,7 +165,7 @@
         <v-row no-gutters>
           <v-col cols="3">
             <span class="it-inven-dataperusahaan__label"
-              >Nilai Pabean Harga Penyerahan</span
+              >Nilai Pabean, Harga Penyerahan</span
             >
           </v-col>
           <v-col cols="9">
@@ -208,6 +220,12 @@
                 (value) => {
                   return genericRequiredRule(value, 'BM');
                 },
+                (value) => {
+                  return genericNumberRule(value, 'BM');
+                },
+                (value) => {
+                  return genericMinRule(value, 'BM');
+                },
               ]"
               dense
             />
@@ -226,6 +244,12 @@
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'PPN');
+                },
+                (value) => {
+                  return genericNumberRule(value, 'PPN');
+                },
+                (value) => {
+                  return genericMinRule(value, 'PPN');
                 },
               ]"
               dense
@@ -246,6 +270,12 @@
                 (value) => {
                   return genericRequiredRule(value, 'PPNBM');
                 },
+                (value) => {
+                  return genericNumberRule(value, 'PPNBM');
+                },
+                (value) => {
+                  return genericMinRule(value, 'PPNBM');
+                },
               ]"
               dense
             />
@@ -264,6 +294,12 @@
               :rules="[
                 (value) => {
                   return genericRequiredRule(value, 'Cukai');
+                },
+                (value) => {
+                  return genericNumberRule(value, 'Cukai');
+                },
+                (value) => {
+                  return genericMinRule(value, 'Cukai');
                 },
               ]"
               dense

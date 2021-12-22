@@ -2,9 +2,8 @@ import router from "@/router/";
 import countriesMock from "@/_mocks_/countries";
 import currencyMock from "@/_mocks_/currency";
 import axios from "axios";
-import { AESDecrypt, AESEncrypt} from "@/helper/Encryption";
+import { AESDecrypt, AESEncrypt } from "@/helper/Encryption";
 const baseUrl = process.env.VUE_APP_BASE_URL;
-
 
 const plb = {
   state: {
@@ -15,7 +14,8 @@ const plb = {
       loadingReports: false,
       loadingDokumen: false,
       loadingBarang: false,
-      loadingData:false
+      loadingData: false,
+      loadingPreviewXML: false,
     },
     report: {
       jenisPemberitahuan: "",
@@ -79,8 +79,9 @@ const plb = {
       { name: "PO-0002" },
       { name: "PO-0003" },
     ],
-    XMLdocument:'',
-    itemDokumenPemasukan:[],
+    NotificationType: "",
+    XMLdocument: "",
+    itemDokumenPemasukan: [],
     itemJenisIdentitasPenjual: ["NPWP", "KTP"],
     itemJenisIdentitasPengirim: ["NPWP", "KTP"],
     itemJenisIdentitasPengusahaPLB: ["NPWP", "KTP"],
@@ -93,11 +94,11 @@ const plb = {
     selectedDokumenPO: [],
     // payload save
     dokumenPengeluaran: {
-      reportId: '',
+      reportId: "",
       nomorDokumen: "",
       tanggalDokumen: "",
-      dokumenPemasukanId: ''
-  },
+      dokumenPemasukanId: "",
+    },
     dokumenPemasukan: {
       nomorDokumenPemasukan: "",
       tanggalDokumenPemasukan: "",
@@ -203,6 +204,9 @@ const plb = {
     listBarang: [],
   },
   mutations: {
+    SET_NOTIFICATION_TYPE(state, payload) {
+      state.NotificationType = payload;
+    },
     SET_XML_DOCUMENT(state, payload) {
       state.XMLdocument = payload;
     },
@@ -223,7 +227,6 @@ const plb = {
     },
     SET_REPORTS_PLB(state, payload) {
       state.reports[payload.key] = payload.value;
-
     },
     SET_OPTIONS_TABLE_REPORTS(state, payload) {
       state.optionsTableReports = Object.assign({}, payload);
@@ -314,15 +317,14 @@ const plb = {
     },
   },
   actions: {
-
     // report
 
-
-
-
-    async generateReportId(context,payload){
-      try{
-        context.commit("SET_LOADING_PLB", {key: "loadingReports", value: true});
+    async generateReportId(context, payload) {
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingReports",
+          value: true,
+        });
 
         const result = await axios({
           url: baseUrl + "/report/save",
@@ -330,19 +332,22 @@ const plb = {
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
-          },data: {dataReport:AESEncrypt(payload)}
+          },
+          data: { dataReport: AESEncrypt(payload) },
         });
-        const data = result.data.message
+        const data = result.data.message;
         if (result.data.success) {
           context.commit("SET_REPORT_ID", data.id);
         }
+        return;
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingReports",
+          value: false,
+        });
       }
-     catch (error) {
-      console.log(error.response.data);
-    } finally {
-      context.commit("SET_LOADING_PLB", {key: "loadingReports", value: false});
-    }
-
     },
 
     handleSubmitReport(context) {
@@ -350,16 +355,16 @@ const plb = {
         "NotificationType",
         context.state.report.jenisPemberitahuan
       );
-      localStorage.setItem("reportId", context.state.reportId);
-
+      if (context.state.reportId) {
+        localStorage.setItem("reportId", context.state.reportId);
+      }
       router.push("/plb/add");
     },
 
-// dokumen
-
+    // dokumen
 
     // DOKUMEN PEMASUKAN ACTION
-    async saveDocumentPemasukan(context,payload) {
+    async saveDocumentPemasukan(context, payload) {
       let formatted_payload = {};
       let payload_requeired = new Set([
         "dokumenPemasukan",
@@ -376,20 +381,22 @@ const plb = {
         "dataPengangkutan",
         "beratDanVolume",
         "tempatPenimbunan",
-      ])
+      ]);
       Object.keys(payload).forEach(function(key) {
-        if(payload_requeired.has(key)){
+        if (payload_requeired.has(key)) {
           formatted_payload[key] = payload[key];
           // formatted_payload[key].reportId=localStorage.getItem("reportId");
         }
       });
-      formatted_payload.reportId=parseInt(localStorage.getItem("reportId"));
-
+      formatted_payload.reportId = parseInt(localStorage.getItem("reportId"));
 
       // console.log(formatted_payload);
-      
-      try{
-        context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: true});
+
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: true,
+        });
         // console.log(payload)
         const result = await axios({
           url: baseUrl + "/report/dokumen/save/pemasukan",
@@ -397,7 +404,8 @@ const plb = {
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
-          },data: {dataDokumen:AESEncrypt(formatted_payload)}
+          },
+          data: { dataDokumen: AESEncrypt(formatted_payload) },
         });
         const data = AESDecrypt(result.data.data);
         if (result.data.success) {
@@ -405,16 +413,18 @@ const plb = {
           // console.log("response",data)
           context.commit("SET_DOCUMENT_SAVED", true);
         }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: false,
+        });
       }
-     catch (error) {
-      console.log(error.response.data);
-    } finally {
-      context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: false});
-    }
     },
 
     //DOKUMEN PENGELUARAN ACTION
-    async saveDocumentPengeluaran(context,payload) {
+    async saveDocumentPengeluaran(context, payload) {
       let formatted_payload = {};
       let payload_requeired = new Set([
         "dokumenPengeluaran",
@@ -431,22 +441,23 @@ const plb = {
         "dataPengangkutan",
         "beratDanVolume",
         "tempatPenimbunan",
-      ])
+      ]);
       Object.keys(payload).forEach(function(key) {
-        if(payload_requeired.has(key)){
+        if (payload_requeired.has(key)) {
           formatted_payload[key] = payload[key];
-          formatted_payload[key].reportId= +localStorage.getItem("reportId");
-
+          formatted_payload[key].reportId = +localStorage.getItem("reportId");
         }
       });
-      formatted_payload.reportId=parseInt(localStorage.getItem("reportId"));
+      formatted_payload.reportId = parseInt(localStorage.getItem("reportId"));
       // formatted_payload.dokumenPengeluaran.reportId=parseInt(localStorage.getItem("reportId"));
 
-
       console.log(formatted_payload);
-      
-      try{
-        context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: true});
+
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: true,
+        });
         // console.log(payload)
         const result = await axios({
           url: baseUrl + "/report/dokumen/save/pengeluaran",
@@ -454,7 +465,8 @@ const plb = {
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
-          },data: {ref:formatted_payload}
+          },
+          data: { ref: formatted_payload },
         });
         // const data = AESDecrypt(result.data.data);
         if (result.data.success) {
@@ -462,131 +474,138 @@ const plb = {
           // console.log("response",data)
           context.commit("SET_DOCUMENT_SAVED", true);
         }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: false,
+        });
       }
-     catch (error) {
-      console.log(error.response.data);
-    } finally {
-      context.commit("SET_LOADING_PLB", {key: "loadingDokumen", value: false});
-    }
     },
-
-
 
     // barang
 
-
-    async saveDataBarang(context,listBarang) {
-      try{
-        context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: true});
+    async saveDataBarang(context, listBarang) {
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingBarang",
+          value: true,
+        });
         // console.log(listBarang)
-        let formatted_payload={
-          listDataBarang:listBarang,
-          reportId:parseInt(localStorage.getItem("reportId"))
-        }
+        let formatted_payload = {
+          listDataBarang: listBarang,
+          reportId: parseInt(localStorage.getItem("reportId")),
+        };
         const result = await axios({
           url: baseUrl + "/report/barang/save",
           method: "POST",
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
-          },data: {dataBarang:AESEncrypt(formatted_payload)}
+          },
+          data: { dataBarang: AESEncrypt(formatted_payload) },
         });
         const data = AESDecrypt(result.data.data);
         if (result.data.success) {
           // ga tau nyimpen nya di mana, masih di console
-          console.log(data)
+          console.log(data);
         }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingBarang",
+          value: false,
+        });
       }
-     catch (error) {
-      console.log(error.response.data);
-    } finally {
-      context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: false});
-    }
     },
 
-
-    async getPemasukanByuser(context){
-      try{
+    async getPemasukanByuser(context) {
+      try {
         const result = await axios({
           url: baseUrl + "/report/dokumen/list/pemasukan",
           method: "GET",
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
-          }
+          },
         });
         // const data = AESDecrypt(result.data.data);
         if (result.data.success) {
           // ga tau nyimpen nya di mana, masih di console
-          console.log(result.data.data)
+          console.log(result.data.data);
           context.commit("SET_DOCUMENT_PEMASUKAN_ITEM", result.data.data);
         }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        // context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: false});
+        console.log("final");
       }
-     catch (error) {
-      console.log(error.response.data);
-    } finally {
-      // context.commit("SET_LOADING_PLB", {key: "loadingBarang", value: false});
-      console.log("final");
-
-
-    }
     },
-  
-    async previewPengeluaran(context){
-      let reportId=+localStorage.getItem("reportId");
-      try{
+
+    async previewPengeluaran(context, reportId = "") {
+      let id = reportId ? reportId : +localStorage.getItem("reportId");
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingPreviewXML",
+          value: true,
+        });
         const result = await axios({
-          url: baseUrl + `/report/dokumen/preview/pengeluaran/${reportId}`,
+          url: baseUrl + `/report/dokumen/preview/pengeluaran/${id}`,
           method: "GET",
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
-          }
+          },
         });
 
         if (result.data) {
           // console.log(result.data)
           context.commit("SET_XML_DOCUMENT", result.data);
         }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingPreviewXML",
+          value: false,
+        });
       }
-     catch (error) {
-      console.log(error.response.data);
-    } finally {
-      console.log("final");
-
-
-    }
-
     },
-    async previewPemasukan(context){
-      let reportId=+localStorage.getItem("reportId");
-      try{
+    async previewPemasukan(context, reportId = "") {
+      let id = reportId ? reportId : +localStorage.getItem("reportId");
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingPreviewXML",
+          value: true,
+        });
         const result = await axios({
-          url: baseUrl + `/report/dokumen/preview/pemasukan/${reportId}`,
+          url: baseUrl + `/report/dokumen/preview/pemasukan/${id}`,
           method: "GET",
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
-          }
+          },
         });
 
         if (result.data) {
           // console.log(result.data)
           context.commit("SET_XML_DOCUMENT", result.data);
         }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingPreviewXML",
+          value: false,
+        });
       }
-     catch (error) {
-      console.log(error.response.data);
-    } finally {
-      console.log("final");
-
-
-    }
-
     },
-    async getAllPlb(context){
-      try{
-        context.commit("SET_LOADING_PLB", {key: "loadingData", value: true});
+    async getAllPlb(context) {
+      try {
+        context.commit("SET_LOADING_PLB", { key: "loadingData", value: true });
 
         const result = await axios({
           url: baseUrl + `/plb`,
@@ -594,28 +613,22 @@ const plb = {
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
-          }
+          },
         });
 
         if (result.data.success) {
           // console.log(result.data.data.rows)
-          context.commit("SET_REPORTS_PLB", {key: "data", value: result.data.data.rows});
+          context.commit("SET_REPORTS_PLB", {
+            key: "data",
+            value: result.data.data.rows,
+          });
         }
-        context.commit("SET_LOADING_PLB", {key: "loadingData", value: true});
-
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", { key: "loadingData", value: false });
       }
-     catch (error) {
-      console.log(error.response.data);
-    } finally {
-      console.log("final");
-
-
-    }
-    }
-
-
-
-
+    },
   },
 };
 

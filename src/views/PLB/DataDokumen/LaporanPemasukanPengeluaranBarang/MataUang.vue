@@ -108,6 +108,12 @@
               (value) => {
                 return genericRequiredRule(value, 'Harga Penyerahan');
               },
+              (value) => {
+                return genericNumberRule(value, 'Harga Penyerahan');
+              },
+              (value) => {
+                return genericMinRule(value, 'Harga Penyerahan');
+              },
             ]"
             placeholder="Harga Penyerahan"
           ></v-text-field>
@@ -142,7 +148,7 @@ export default {
         return this.$store.state.plb.mataUang.freight;
       },
       set(value) {
-        value = parseInt(value)
+        value = parseInt(value);
         this.$store.commit("SET_MATA_UANG", {
           key: "freight",
           value,
