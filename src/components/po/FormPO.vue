@@ -1,33 +1,32 @@
 <template>
   <v-card>
-    <v-card-title>
-      <v-row no-gutters align-content="center">
-        <v-col cols="10">
-          <span class="headline font-weight-bold">Purchase Order Baru</span>
-        </v-col>
-        <!-- <span style="cursor: pointer" @click.prevent="handleCloseDialog"
+    <v-form ref="initialReport" @submit.prevent="handleSubmit">
+      <v-card-title>
+        <v-row no-gutters align-content="center">
+          <v-col cols="10">
+            <span class="headline font-weight-bold">Purchase Order Baru</span>
+          </v-col>
+          <!-- <span style="cursor: pointer" @click.prevent="handleCloseDialog"
           ><v-icon>mdi-close</v-icon></span
         > -->
-        <v-col cols="2">
-          <div class="d-flex">
-            <button
-              @click="handleCloseDialog"
-              class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__grey"
-            >
-              Batal
-            </button>
-            <button
-              class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
-              @click="submitPo"
-            >
-              Simpan
-            </button>
-          </div>
-        </v-col>
-      </v-row>
-    </v-card-title>
-    <v-card-text class="mt-10">
-      <v-form ref="initialReport" @submit.prevent="handleSubmit">
+          <v-col cols="2">
+            <div class="d-flex">
+              <button
+                @click="handleCloseDialog"
+                class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__grey"
+              >
+                Batal
+              </button>
+              <button
+                class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
+              >
+                Simpan
+              </button>
+            </div>
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-card-text class="mt-10">
         <v-container fluid>
           <v-row no-gutters width="100%">
             <v-col lg="5">
@@ -39,6 +38,13 @@
                   <v-select
                     outlined
                     dense
+                    v-model="kapalPenjual"
+                    :items="kapalPenjual"
+                    item-value="id"
+                    item-text="namaKapal"
+                    @change="
+                      getBarangAfterChoosingKapalPenjual(kapalPenjual.id)
+                    "
                     placeholder="Value"
                     :rules="[
                       (value) => {
@@ -69,15 +75,15 @@
                         append-icon="mdi-chevron-down"
                         placeholder="Pilih Tanggal"
                         dense
+                        v-model="tanggalPurchaseOrder"
                         outlined
                         clearable
                         v-bind="attrs"
                         v-on="on"
-                        v-model="tanggal"
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="tanggal"
+                      v-model="tanggalPurchaseOrder"
                       scrollable
                       no-title
                       @input="tanggalpicker = false"
@@ -98,7 +104,7 @@
                   <v-text-field
                     outlined
                     dense
-                    v-model="noPurchaseOrder"
+                    v-model="nomorPO"
                     placeholder="value"
                     :rules="[
                       (value) => {
@@ -123,13 +129,15 @@
             <v-col cols="1" style="padding: 0 0 0 1em;">Jumlah</v-col>
           </v-row>
           <div class="mt-5"></div>
-          <div v-for="(input, k) in inputs" :key="k">
+          <div v-for="(input, k) in ListPurchaseOrderItem" :key="k">
             <v-row no-gutters>
               <v-col cols="2" style="padding: 0 1em 0 0;">
                 <v-select
                   outlined
                   dense
-                  v-model="input.kode_barang"
+                  :items="dataBarang"
+                  v-model="input.kodeBarang"
+                  item-text="kodeBarang"
                   placeholder="Pilih Kode Barang"
                   :rules="[
                     (value) => {
@@ -142,7 +150,7 @@
                 <v-text-field
                   outlined
                   dense
-                  v-model="input.item_deskripsi"
+                  v-model="input.itemDeskripsi"
                   placeholder="Tulis Deskripsi"
                   :rules="[
                     (value) => {
@@ -155,11 +163,11 @@
                 <v-text-field
                   outlined
                   dense
-                  v-model="inputs.quantity"
+                  v-model="input.satuanKemasan"
                   placeholder="Barel"
                   :rules="[
                     (value) => {
-                      return genericRequiredRule(value, 'Quantity');
+                      return genericRequiredRule(value, 'Satuan Kemasan');
                     },
                   ]"
                 ></v-text-field>
@@ -168,10 +176,26 @@
                 <v-text-field
                   outlined
                   dense
-                  v-model="inputs.harga_satuan"
+                  v-model="input.quantity"
+                  @change="hitungJumlah()"
                   placeholder="0"
                   type="number"
                   default="0"
+                  :rules="[
+                    (value) => {
+                      return genericRequiredRule(value, 'Quantity');
+                    },
+                  ]"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="1" style="padding: 0 0 0 1em;">
+                <v-text-field
+                  outlined
+                  dense
+                  v-model="input.hargaSatuan"
+                  @change="hitungJumlah()"
+                  placeholder="0"
+                  type="number"
                   :rules="[
                     (value) => {
                       return genericRequiredRule(value, 'Harga Satuan');
@@ -183,21 +207,8 @@
                 <v-text-field
                   outlined
                   dense
-                  v-model="inputs.jumlah"
-                  placeholder="0"
-                  type="number"
-                  :rules="[
-                    (value) => {
-                      return genericRequiredRule(value, 'Jumlah');
-                    },
-                  ]"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="1" style="padding: 0 0 0 1em;">
-                <v-text-field
-                  outlined
-                  dense
-                  v-model="inputs.jumlah"
+                  readonly
+                  v-model="input.jumlah"
                   placeholder="0"
                   type="number"
                   :rules="[
@@ -214,7 +225,7 @@
               >
                 <div
                   @click.prevent="remove(k)"
-                  v-show="k || (!k && inputs.length > 1)"
+                  v-show="k || (!k && ListPurchaseOrderItem.length > 1)"
                 >
                   <Icon icon="octicon:trash-24" class="delete-icon" />
                 </div>
@@ -258,13 +269,13 @@
                 style="font-size: 1.25em; display: flex; justify-content: space-between; padding: 0.5em;"
               >
                 <strong>TOTAL</strong>
-                <strong>325.00</strong>
+                <strong>{{ jumlahTotal }}</strong>
               </div>
             </v-col>
           </v-row>
         </v-card-actions>
-      </v-form>
-    </v-card-text>
+      </v-card-text>
+    </v-form>
   </v-card>
 </template>
 
@@ -279,102 +290,135 @@ export default {
   },
   data() {
     return {
-      tanggalpicker: false,
-      inputs: [
-        {
-          kode_barang: "",
-          item_deskripsi: "",
-          quantity: "",
-          harga_satuan: "",
-          jumlah: "",
-        },
-      ],
-      remarks: "",
+      tanggalpicker: "",
+      namaKapal: [],
     };
   },
+
   computed: {
-    kapalPemilik: {
+    kapalPenjual: {
       get() {
-        return this.$store.state.po.po_baru.kapal_pemilik;
+        return this.$store.state.po.kapalPenjual;
       },
       set(value) {
-        this.$store.commit("SET_PO_BARU", {
-          key: "kapal_pemilik",
+        this.$store.commit("SET_PURCHASE_ORDER", {
+          key: "kapalPenjual",
           value,
         });
       },
     },
-    noPurchaseOrder: {
+    nomorPO: {
       get() {
-        return this.$store.state.po.po_baru.no_purchase_order;
+        return this.$store.state.po.PurchaseOrder.nomorPO;
       },
       set(value) {
-        this.$store.commit("SET_PO_BARU", {
-          key: "no_purchase_order",
+        this.$store.commit("SET_PURCHASE_ORDER", {
+          key: "nomorPO",
           value,
         });
       },
     },
-    kapalPembeli: {
+    tanggalPurchaseOrder: {
       get() {
-        return this.$store.state.po.po_baru.kapal_pembeli;
+        return this.$store.state.po.PurchaseOrder.tanggalPurchaseOrder;
       },
       set(value) {
-        this.$store.commit("SET_PO_BARU", {
-          key: "kapal_pembeli",
+        this.$store.commit("SET_PURCHASE_ORDER", {
+          key: "tanggalPurchaseOrder",
           value,
         });
       },
     },
-    tanggal: {
+    ListPurchaseOrderItem: {
       get() {
-        return this.$store.state.po.po_baru.tanggal;
+        return this.$store.state.po.ListPurchaseOrderItem;
       },
       set(value) {
-        this.$store.commit("SET_PO_BARU", {
-          key: "tanggal",
+        this.$store.commit("SET_PURCHASE_ORDER_ITEM", {
+          key: "ListPurchaseOrderItem",
           value,
         });
       },
+    },
+    jumlahTotal: {
+      get() {
+        return this.$store.state.po.PurchaseOrder.jumlahTotal;
+      },
+      set(value) {
+        this.$store.commit("SET_PURCHASE_ORDER", {
+          key: "jumlahTotal",
+          value,
+        });
+      },
+    },
+    remarks: {
+      get() {
+        return this.$store.state.po.PurchaseOrder.remarks;
+      },
+      set(value) {
+        this.$store.commit("SET_PURCHASE_ORDER", {
+          key: "remarks",
+          value,
+        });
+      },
+    },
+    dataBarang() {
+      return this.$store.state.po.dataBarang;
     },
   },
   methods: {
     add() {
-      this.inputs.push({
-        kode_barang: "",
-        item_deskripsi: "",
+      this.ListPurchaseOrderItem.push({
+        kodeBarang: "",
+        itemDeskripsi: "",
+        satuanKemasan: "",
         quantity: "",
-        harga_satuan: "",
+        hargaSatuan: "",
         jumlah: "",
       });
     },
     remove(index) {
-      this.inputs.splice(index, 1);
+      this.ListPurchaseOrderItem.splice(index, 1);
     },
     handleCloseDialog() {
       this.$emit("handleBuatBaru");
-      (this.inputs = [
-        {
-          kode_barang: "",
-          item_deskripsi: "",
-          quantity: "",
-          harga_satuan: "",
-          jumlah: "",
-        },
-      ]),
-        (this.remarks = "");
-    },
-    submitPo() {
-      this.$store.dispatch("addPo", this.$store.state.po.po_baru);
     },
     handleSubmit() {
-      const getRef = this.$refs.initialReport.handleValidate();
+      const getRef = this.$refs.initialReport.validate();
       if (getRef) {
-        this.$router.push("/po/add");
+        this.$store.dispatch("addPo");
       } else {
         return false;
       }
     },
+    getBarangAfterChoosingKapalPenjual(id) {
+      this.$store.dispatch("getBarangAfterChoosingKapalPenjual", id);
+      console.log(id);
+    },
+    hitungJumlah() {
+      let value = this.$store.state.po.ListPurchaseOrderItem;
+      let result = 0;
+      for (let i = 0; i < value.length; i++) {
+        let quantity = parseInt(value[i].quantity);
+        let hargaSatuan = parseInt(value[i].hargaSatuan);
+
+        result = quantity * hargaSatuan;
+        this.ListPurchaseOrderItem[i].jumlah = result;
+      }
+
+      this.hitungJumlahTotal();
+    },
+    hitungJumlahTotal() {
+      let value = this.$store.state.po.ListPurchaseOrderItem;
+      let result = 0;
+      for (let i = 0; i < value.length; i++) {
+        result += parseInt(value[i].jumlah);
+      }
+      this.jumlahTotal = result;
+    },
+  },
+  created() {
+    this.$store.dispatch("fetchKapalPenjual");
   },
 };
 </script>

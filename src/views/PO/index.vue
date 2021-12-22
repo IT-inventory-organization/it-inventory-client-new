@@ -36,9 +36,9 @@
     <div class="it-inventory-box mt-2">
       <v-data-table
         :headers="headers"
-        :items="reports"
+        :items="reports.rows"
         :options.sync="reports.optionsTableReports"
-        :server-items-length="reports.length"
+        :server-items-length="reports.count"
         no-data-text="Data not available"
         no-results-text="Data not available"
         class="it-inventory-simple-table"
@@ -72,7 +72,7 @@
                   View
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="handleDeletePurchaseOrder(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="octicon:trash-24"
@@ -181,6 +181,9 @@ export default {
     handleViewPurchaseOrder(id) {
       this.dialogPurchaseOrderView = !this.dialogPurchaseOrderView;
       this.$store.dispatch("getOnePo", id);
+    },
+    handleDeletePurchaseOrder(id) {
+      this.$store.dispatch("deletePo", id);
     },
   },
   created() {

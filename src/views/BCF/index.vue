@@ -195,11 +195,11 @@ export default {
   },
   computed: {
     reports() {
-      return this.$store.state.po.reports;
+      return this.$store.state.bcf.reports;
     },
     optionsTableReports: {
       get() {
-        return this.$store.state.po.optionsTableReports;
+        return this.$store.state.bcf.optionsTableReports;
       },
       set(val) {
         this.$store.commit("SET_OPTIONS_TABLE_REPORTS", val);
@@ -213,6 +213,9 @@ export default {
     handleViewBCF() {
       this.dialogBCFView = !this.dialogBCFView;
     },
+  },
+  created() {
+    this.$store.dispatch("getAllBcf");
   },
 };
 </script>

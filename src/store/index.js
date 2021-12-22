@@ -5,6 +5,7 @@ import MasterData from "@/store/MasterData";
 import plb from "@/store/plb";
 import user from "@/store/user";
 import po from "@/store/po";
+import bcf from "@/store/bcf";
 import inventory from "@/store/inventory";
 import ProduksiBarang from "@/store/ProduksiBarang";
 
@@ -17,7 +18,8 @@ export default new Vuex.Store({
     plb,
     user,
     po,
+    bcf,
     inventory,
-    ProduksiBarang
+    ProduksiBarang,
   },
 });
