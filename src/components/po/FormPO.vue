@@ -40,10 +40,9 @@
                     dense
                     v-model="kapalPenjual"
                     :items="kapalPenjual"
-                    item-value="id"
                     item-text="namaKapal"
-                    @change="
-                      getBarangAfterChoosingKapalPenjual(kapalPenjual.id)
+                    v-on:change="
+                      getBarangAfterChoosingKapalPenjual(...kapalPenjual)
                     "
                     placeholder="Value"
                     :rules="[
@@ -139,6 +138,7 @@
                   v-model="input.kodeBarang"
                   item-text="kodeBarang"
                   placeholder="Pilih Kode Barang"
+                  @change="idDataBarang(...dataBarang)"
                   :rules="[
                     (value) => {
                       return genericRequiredRule(value, 'Kode Barang');
@@ -296,6 +296,17 @@ export default {
   },
 
   computed: {
+    reportId: {
+      get() {
+        return this.$store.state.po.PurchaseOrder.reportId;
+      },
+      set(value) {
+        this.$store.commit("SET_PURCHASE_ORDER", {
+          key: "reportId",
+          value,
+        });
+      },
+    },
     kapalPenjual: {
       get() {
         return this.$store.state.po.kapalPenjual;
@@ -386,14 +397,22 @@ export default {
     handleSubmit() {
       const getRef = this.$refs.initialReport.validate();
       if (getRef) {
-        this.$store.dispatch("addPo");
+        this.$store.dispatch("addPo").then((result) => {
+          if (result) {
+            this.handleCloseDialog();
+          }
+        });
       } else {
         return false;
       }
     },
-    getBarangAfterChoosingKapalPenjual(id) {
-      this.$store.dispatch("getBarangAfterChoosingKapalPenjual", id);
-      console.log(id);
+    getBarangAfterChoosingKapalPenjual(kapalPenjual) {
+      this.reportId = kapalPenjual.id;
+      this.$store.dispatch(
+        "getBarangAfterChoosingKapalPenjual",
+        kapalPenjual.idKapal
+      );
+      console.log(kapalPenjual.idKapal);
     },
     hitungJumlah() {
       let value = this.$store.state.po.ListPurchaseOrderItem;
@@ -415,6 +434,12 @@ export default {
         result += parseInt(value[i].jumlah);
       }
       this.jumlahTotal = result;
+    },
+    idDataBarang(dataBarang) {
+      let value = this.$store.state.po.ListPurchaseOrderItem;
+      for (let i = 0; i < value.length; i++) {
+        this.ListPurchaseOrderItem[i].idBarang = dataBarang.id;
+      }
     },
   },
   created() {

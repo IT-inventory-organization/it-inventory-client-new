@@ -7,7 +7,7 @@ const po = {
   state: {
     loading: false,
     PurchaseOrder: {
-      reportId: "1",
+      reportId: "",
       kapalPenjual: "",
       nomorPO: "",
       tanggalPurchaseOrder: "",
@@ -16,6 +16,7 @@ const po = {
     },
     ListPurchaseOrderItem: [
       {
+        idBarang: "",
         kodeBarang: "",
         itemDeskripsi: "",
         satuanKemasan: "",
@@ -108,6 +109,7 @@ const po = {
     },
 
     async addPo(context) {
+      console.log("add PO");
       const { PurchaseOrder, ListPurchaseOrderItem } = context.state;
       try {
         context.commit("SET_LOADING_PO", true);
@@ -129,9 +131,13 @@ const po = {
         });
         if (result.data.success) {
           Swal.fire("Berhasil", "Berhasil Menambahkan PO", "success");
+          context.dispatch("getAllPo");
+
+          return result.data.success;
         }
       } catch (error) {
         console.log(error.response.data);
+        Swal.fire("Gagal!", `${error.response.data.message}`, "error");
       } finally {
         context.commit("SET_LOADING_PO", false);
       }
