@@ -13,19 +13,13 @@
             <div class="d-flex">
               <button
                 @click="handleCloseDialog"
-                class="
-                  mx-2
-                  it-inventory-btn it-inventory-btn__fw it-inventory-btn__grey
-                "
+                class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__grey"
               >
                 Batal
               </button>
               <button
                 type="submit"
-                class="
-                  mx-2
-                  it-inventory-btn it-inventory-btn__fw it-inventory-btn__green
-                "
+                class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
               >
                 Simpan
               </button>
@@ -542,8 +536,13 @@ export default {
     listNomorPO() {
       return this.$store.state.bcf.listNomorPO;
     },
-    listBarang() {
-      return this.$store.state.bcf.listBarang;
+    listBarang: {
+      get() {
+        return this.$store.state.bcf.listBarang;
+      },
+      set(value) {
+        this.$store.commit("bcf/SET_LIST_BARANG", value);
+      },
     },
     tanggal: {
       get() {
@@ -714,6 +713,7 @@ export default {
     handleCloseDialog() {
       this.$emit("handleBuatBaru");
       this.$refs.formBCF.reset();
+      this.listBarang = [];
     },
     handleSubmit() {
       const getRef = this.$refs.formBCF.validate();
@@ -733,11 +733,7 @@ export default {
   },
   created() {
     this.$store.dispatch("bcf/fetchGetPO");
-    this.$store.commit("bcf/SET_ADD_NEW_BCF", {
-      key: "caraPengangkutan",
-      value: "Laut",
-    });
-    console.log("yeah");
+    this.caraPengangkutan = "Laut";
   },
 };
 </script>
