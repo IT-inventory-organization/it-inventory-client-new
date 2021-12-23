@@ -10,11 +10,12 @@ const bcf = {
       loadingAddNewBCF: false,
       loadingGetPO: false,
       loadingGetBarang: false,
+      loadingDeleteBCF: false,
     },
     listBCF: [],
     optionsTableListBCF: {
       page: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       search: "",
     },
     addNewBCF: {
@@ -157,6 +158,29 @@ const bcf = {
       } finally {
         context.commit("SET_LOADING_BCF", {
           key: "loadingAddNewBCF",
+          value: false,
+        });
+      }
+    },
+    async deleteListBCF(context, id) {
+      try {
+        context.commit("SET_LOADING_BCF", {
+          key: "loadingDeleteBCF",
+          value: true,
+        });
+
+        const res = await axios.delete(`${baseUrl}/bcf3315/delete/${id}`, {
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        return res.data;
+      } catch (error) {
+        return error.response.data;
+      } finally {
+        context.commit("SET_LOADING_BCF", {
+          key: "loadingDeleteBCF",
           value: false,
         });
       }

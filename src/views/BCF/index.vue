@@ -40,7 +40,7 @@
         :headers="headers"
         :options.sync="optionsTableListBCF"
         :items="listBCF.rows"
-        :loading="loadingViewList"
+        :loading="loadingViewList || loadingDeleteBCF"
         :search="optionsTableListBCF.search"
         no-data-text="Data not available"
         no-results-text="Data not available"
@@ -54,7 +54,7 @@
           <status-list-table :status="item.status" />
         </template>
 
-        <template v-slot:[`item.action`]>
+        <template v-slot:[`item.action`]="{ item }">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -96,7 +96,7 @@
                   Edit
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="handleDelete(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="octicon:trash-24"
@@ -185,6 +185,9 @@ export default {
     },
   },
   computed: {
+    loadingDeleteBCF() {
+      return this.$store.state.bcf.loading.loadingDeleteBCF;
+    },
     loadingViewList() {
       return this.$store.state.bcf.loading.loadingViewList;
     },
@@ -206,6 +209,16 @@ export default {
     },
     handleViewBCF() {
       this.dialogBCFView = !this.dialogBCFView;
+    },
+    handleDelete(id) {
+      this.$store.dispatch("bcf/deleteListBCF", id).then((result) => {
+        if (result.success) {
+          this.$swal.fire("Berhasil!", result.message, "success");
+          this.$store.dispatch("bcf/fetchGetAllBCF");
+        } else {
+          this.$swal.fire("Gagal!", result.message, "error");
+        }
+      });
     },
   },
   created() {
