@@ -18,7 +18,7 @@ const bcf = {
       itemsPerPage: 10,
       search: "",
     },
-    addNewBCF: {
+    ListFormBCF: {
       tanggal: "",
       penanggungJawab: "",
       jabatan: "",
@@ -51,7 +51,7 @@ const bcf = {
       state.optionsTableListBCF = Object.assign({}, payload);
     },
     SET_ADD_NEW_BCF(state, payload) {
-      state.addNewBCF[payload.key] = payload.value;
+      state.ListFormBCF[payload.key] = payload.value;
     },
     SET_LIST_NOMOR_PO(state, payload) {
       state.listNomorPO = payload;
