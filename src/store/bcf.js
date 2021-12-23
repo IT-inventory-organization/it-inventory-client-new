@@ -5,12 +5,15 @@ const baseUrl = process.env.VUE_APP_BASE_URL;
 const bcf = {
   namespaced: true,
   state: {
+    BCFId: "",
     loading: {
       loadingViewList: false,
       loadingAddNewBCF: false,
       loadingGetPO: false,
       loadingGetBarang: false,
       loadingDeleteBCF: false,
+      loadingGetOneBCF: false,
+      loadingUpdateBCF: false,
     },
     listBCF: [],
     optionsTableListBCF: {
@@ -58,6 +61,9 @@ const bcf = {
     },
     SET_LIST_BARANG(state, payload) {
       state.listBarang = payload;
+    },
+    SET_BCF_ID(state, payload) {
+      state.BCFId = payload;
     },
   },
   actions: {
@@ -144,7 +150,7 @@ const bcf = {
 
         const res = await axios.post(
           `${baseUrl}/bcf3315/create`,
-          context.state.addNewBCF,
+          context.state.ListFormBCF,
           {
             headers: {
               authorization:
@@ -181,6 +187,128 @@ const bcf = {
       } finally {
         context.commit("SET_LOADING_BCF", {
           key: "loadingDeleteBCF",
+          value: false,
+        });
+      }
+    },
+    async getOneBCF(context) {
+      try {
+        context.commit("SET_LOADING_BCF", {
+          key: "loadingGetOneBCF",
+          value: true,
+        });
+
+        const res = await axios.get(
+          `${baseUrl}/bcf3315/${context.state.BCFId}`,
+          {
+            headers: {
+              authorization:
+                "Bearer " + localStorage.getItem("token_it_inventory"),
+            },
+          }
+        );
+        const dataDecrypted = AESDecrypt(res.data.data);
+
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "tanggal",
+          value: dataDecrypted.tanggal,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "penanggungJawab",
+          value: dataDecrypted.penanggungJawab,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "jabatan",
+          value: dataDecrypted.jabatan,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "nomorFormBcf3315",
+          value: dataDecrypted.nomorFormBcf3315,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "lampiran",
+          value: dataDecrypted.lampiran,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "npwp",
+          value: dataDecrypted.npwp,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "alamat",
+          value: dataDecrypted.alamat,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "nama",
+          value: dataDecrypted.nama,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "lokasiPLB",
+          value: dataDecrypted.lokasiPLB,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "caraPengangkutan",
+          value: dataDecrypted.caraPengangkutan,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "pelabuhanMuat",
+          value: dataDecrypted.pelabuhanMuat,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "tanggalPerkiraan",
+          value: dataDecrypted.tanggalPerkiraan,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "namaPengangkutKeLuar",
+          value: dataDecrypted.namaPengangkutKeLuar,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "voyage",
+          value: dataDecrypted.voyage,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "callSign",
+          value: dataDecrypted.callSign,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "status",
+          value: dataDecrypted.status,
+        });
+        context.commit("SET_ADD_NEW_BCF", {
+          key: "poId",
+          value: dataDecrypted.poId,
+        });
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_BCF", {
+          key: "loadingGetOneBCF",
+          value: false,
+        });
+      }
+    },
+    async updateBCF(context) {
+      try {
+        context.commit("SET_LOADING_BCF", {
+          key: "loadingUpdateBCF",
+          value: true,
+        });
+
+        const res = await axios.put(
+          `${baseUrl}/bcf3315/update/${context.state.BCFId}`,
+          context.state.ListFormBCF,
+          {
+            headers: {
+              authorization:
+                "Bearer " + localStorage.getItem("token_it_inventory"),
+            },
+          }
+        );
+        return res.data;
+      } catch (error) {
+        return error.response.data;
+      } finally {
+        context.commit("SET_LOADING_BCF", {
+          key: "loadingUpdateBCF",
           value: false,
         });
       }

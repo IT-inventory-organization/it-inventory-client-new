@@ -1,6 +1,9 @@
 <template>
-  <v-form ref="formBCF" @submit.prevent="handleSubmit">
-    <v-card :loading="loadingAddNewBCF">
+  <v-form
+    ref="formBCF"
+    @submit.prevent="isBCFEdit ? handleUpdate() : handleSubmit()"
+  >
+    <v-card :loading="loadingAddNewBCF || loadingGetOneBCF || loadingUpdateBCF">
       <template slot="progress">
         <progress-linear />
       </template>
@@ -19,6 +22,9 @@
               </button>
               <button
                 type="submit"
+                :disabled="
+                  loadingAddNewBCF || loadingGetOneBCF || loadingUpdateBCF
+                "
                 class="mx-2 it-inventory-btn it-inventory-btn__fw it-inventory-btn__green"
               >
                 Simpan
@@ -514,6 +520,7 @@ import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "FormBCF",
   mixins: [FieldRequired],
+  props: ["isBCFEdit"],
   components: {
     ProgressLinear: () => import("@/components/ProgressLinear"),
   },
@@ -524,6 +531,12 @@ export default {
     };
   },
   computed: {
+    loadingUpdateBCF() {
+      return this.$store.state.bcf.loading.loadingUpdateBCF;
+    },
+    loadingGetOneBCF() {
+      return this.$store.state.bcf.loading.loadingGetOneBCF;
+    },
     loadingAddNewBCF() {
       return this.$store.state.bcf.loading.loadingAddNewBCF;
     },
@@ -546,7 +559,7 @@ export default {
     },
     tanggal: {
       get() {
-        return this.$store.state.bcf.addNewBCF.tanggal;
+        return this.$store.state.bcf.ListFormBCF.tanggal;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "tanggal", value });
@@ -554,7 +567,7 @@ export default {
     },
     penanggungJawab: {
       get() {
-        return this.$store.state.bcf.addNewBCF.penanggungJawab;
+        return this.$store.state.bcf.ListFormBCF.penanggungJawab;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", {
@@ -565,7 +578,7 @@ export default {
     },
     jabatan: {
       get() {
-        return this.$store.state.bcf.addNewBCF.jabatan;
+        return this.$store.state.bcf.ListFormBCF.jabatan;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "jabatan", value });
@@ -573,7 +586,7 @@ export default {
     },
     nomorFormBcf3315: {
       get() {
-        return this.$store.state.bcf.addNewBCF.nomorFormBcf3315;
+        return this.$store.state.bcf.ListFormBCF.nomorFormBcf3315;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", {
@@ -584,7 +597,7 @@ export default {
     },
     lampiran: {
       get() {
-        return this.$store.state.bcf.addNewBCF.lampiran;
+        return this.$store.state.bcf.ListFormBCF.lampiran;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "lampiran", value });
@@ -592,7 +605,7 @@ export default {
     },
     npwp: {
       get() {
-        return this.$store.state.bcf.addNewBCF.npwp;
+        return this.$store.state.bcf.ListFormBCF.npwp;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "npwp", value });
@@ -600,7 +613,7 @@ export default {
     },
     alamat: {
       get() {
-        return this.$store.state.bcf.addNewBCF.alamat;
+        return this.$store.state.bcf.ListFormBCF.alamat;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "alamat", value });
@@ -608,7 +621,7 @@ export default {
     },
     nama: {
       get() {
-        return this.$store.state.bcf.addNewBCF.nama;
+        return this.$store.state.bcf.ListFormBCF.nama;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "nama", value });
@@ -616,7 +629,7 @@ export default {
     },
     lokasiPLB: {
       get() {
-        return this.$store.state.bcf.addNewBCF.lokasiPLB;
+        return this.$store.state.bcf.ListFormBCF.lokasiPLB;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "lokasiPLB", value });
@@ -624,7 +637,7 @@ export default {
     },
     caraPengangkutan: {
       get() {
-        return this.$store.state.bcf.addNewBCF.caraPengangkutan;
+        return this.$store.state.bcf.ListFormBCF.caraPengangkutan;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", {
@@ -635,7 +648,7 @@ export default {
     },
     pelabuhanMuat: {
       get() {
-        return this.$store.state.bcf.addNewBCF.pelabuhanMuat;
+        return this.$store.state.bcf.ListFormBCF.pelabuhanMuat;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", {
@@ -646,7 +659,7 @@ export default {
     },
     tanggalPerkiraan: {
       get() {
-        return this.$store.state.bcf.addNewBCF.tanggalPerkiraan;
+        return this.$store.state.bcf.ListFormBCF.tanggalPerkiraan;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", {
@@ -657,7 +670,7 @@ export default {
     },
     namaPengangkutKeLuar: {
       get() {
-        return this.$store.state.bcf.addNewBCF.namaPengangkutKeLuar;
+        return this.$store.state.bcf.ListFormBCF.namaPengangkutKeLuar;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", {
@@ -668,7 +681,7 @@ export default {
     },
     voyage: {
       get() {
-        return this.$store.state.bcf.addNewBCF.voyage;
+        return this.$store.state.bcf.ListFormBCF.voyage;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "voyage", value });
@@ -676,7 +689,7 @@ export default {
     },
     callSign: {
       get() {
-        return this.$store.state.bcf.addNewBCF.callSign;
+        return this.$store.state.bcf.ListFormBCF.callSign;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "callSign", value });
@@ -684,7 +697,7 @@ export default {
     },
     status: {
       get() {
-        return this.$store.state.bcf.addNewBCF.status;
+        return this.$store.state.bcf.ListFormBCF.status;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "status", value });
@@ -692,7 +705,7 @@ export default {
     },
     poId: {
       get() {
-        return this.$store.state.bcf.addNewBCF.poId;
+        return this.$store.state.bcf.ListFormBCF.poId;
       },
       set(value) {
         this.$store.commit("bcf/SET_ADD_NEW_BCF", { key: "poId", value });
@@ -719,13 +732,26 @@ export default {
       const getRef = this.$refs.formBCF.validate();
       if (getRef) {
         this.$store.dispatch("bcf/addNewBCF").then((res) => {
-          console.log(res);
           if (res.success) {
             this.$swal.fire("Berhasil!", "Berhasil menambahkan.", "success");
             this.$store.dispatch("bcf/fetchGetAllBCF");
             this.handleCloseDialog();
           } else {
             this.$swal.fire("Gagal!", "Gagal menambahkan.", "error");
+          }
+        });
+      }
+    },
+    handleUpdate() {
+      const getRef = this.$refs.formBCF.validate();
+      if (getRef) {
+        this.$store.dispatch("bcf/updateBCF").then((res) => {
+          if (res.success) {
+            this.$swal.fire("Berhasil!", res.message, "success");
+            this.$store.dispatch("bcf/fetchGetAllBCF");
+            this.handleCloseDialog();
+          } else {
+            this.$swal.fire("Gagal!", res.message, "error");
           }
         });
       }

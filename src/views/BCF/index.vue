@@ -87,7 +87,7 @@
                   View BCF 3.3.14
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="handleEditFormBCF(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="ph:pencil-line-light"
@@ -127,7 +127,11 @@
       width="100%"
       max-width="95%"
     >
-      <form-bcf v-if="dialogBuatBaruBCF" @handleBuatBaru="handleBuatBaru" />
+      <form-bcf
+        v-if="dialogBuatBaruBCF"
+        @handleBuatBaru="handleBuatBaru"
+        :isBCFEdit="isBCFEdit"
+      />
     </v-dialog>
 
     <v-dialog v-model="dialogBCFView" persistent width="100%" max-width="70%">
@@ -150,6 +154,7 @@ export default {
     return {
       dialogBuatBaruBCF: false,
       dialogBCFView: false,
+      isBCFEdit: false,
       headers: [
         {
           text: "Exportir/Pengusaha PLB/PDPLB",
@@ -206,9 +211,18 @@ export default {
   methods: {
     handleBuatBaru() {
       this.dialogBuatBaruBCF = !this.dialogBuatBaruBCF;
+      this.isBCFEdit = false;
     },
     handleViewBCF() {
       this.dialogBCFView = !this.dialogBCFView;
+    },
+    handleEditFormBCF(id) {
+      this.dialogBuatBaruBCF = !this.dialogBuatBaruBCF;
+      this.isBCFEdit = !this.isBCFEdit;
+      (async () => {
+        await this.$store.commit("bcf/SET_BCF_ID", id);
+        await this.$store.dispatch("bcf/getOneBCF");
+      })();
     },
     handleDelete(id) {
       this.$store.dispatch("bcf/deleteListBCF", id).then((result) => {
