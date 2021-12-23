@@ -135,7 +135,7 @@
     </v-dialog>
 
     <v-dialog v-model="dialogBCFView" persistent width="100%" max-width="70%">
-      <bcf-view @handleBuatBaru="handleViewBCF" />
+      <bcf-view @handleViewBCF="handleViewBCF" />
     </v-dialog>
   </div>
 </template>
