@@ -8,7 +8,16 @@ import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import VueHtmlToPaper from "vue-html-to-paper";
 
-Vue.use(VueHtmlToPaper);
+const options = {
+  name: "_blank",
+  specs: ["fullscreen=yes", "scrollbars=yes"],
+  styles: [
+    "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css",
+    "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js",
+  ],
+};
+
+Vue.use(VueHtmlToPaper, options);
 Vue.use(VueSweetalert2);
 Vue.use(VueApexCharts);
 

@@ -211,11 +211,6 @@
                   v-model="input.jumlah"
                   placeholder="0"
                   type="number"
-                  :rules="[
-                    (value) => {
-                      return genericRequiredRule(value, 'Jumlah');
-                    },
-                  ]"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -432,6 +427,9 @@ export default {
       let result = 0;
       for (let i = 0; i < value.length; i++) {
         result += parseInt(value[i].jumlah);
+      }
+      if (isNaN(result)) {
+        result = 0;
       }
       this.jumlahTotal = result;
     },

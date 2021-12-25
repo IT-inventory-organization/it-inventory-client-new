@@ -81,7 +81,7 @@
                   Delete
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="handlePrintPurchaseOrder(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:print-24-regular"
@@ -109,12 +109,29 @@
 
     <v-dialog
       v-model="dialogPurchaseOrderView"
+      ref="dialogPurchaseOrderView"
       persistent
       width="100%"
       max-width="70%"
+      eager
     >
       <purchase-order-view
         @dialogPurchaseOrderView="dialogPurchaseOrderView = false"
+        ref="PurchaseOrderView"
+      />
+    </v-dialog>
+
+    <v-dialog
+      v-model="dialogPurchaseOrderPrint"
+      ref="dialogPurchaseOrderPrint"
+      persistent
+      width="100%"
+      max-width="70%"
+      eager
+    >
+      <purchase-order-print
+        @dialogPurchaseOrderPrint="dialogPurchaseOrderPrint = false"
+        ref="PurchaseOrderView"
       />
     </v-dialog>
   </div>
@@ -122,17 +139,20 @@
 
 <script>
 import { Icon } from "@iconify/vue2";
+
 export default {
   name: "TablePO",
   components: {
     Icon,
     FormPo: () => import("@/components/po/FormPO"),
     PurchaseOrderView: () => import("@/components/po/PurchaseOrderView"),
+    PurchaseOrderPrint: () => import("@/components/po/PrintPO"),
   },
   data() {
     return {
       dialogBuatBaruPO: false,
       dialogPurchaseOrderView: false,
+      dialogPurchaseOrderPrint: false,
       headers: [
         {
           text: "No. PO",
@@ -184,6 +204,11 @@ export default {
     },
     handleDeletePurchaseOrder(id) {
       this.$store.dispatch("deletePo", id);
+    },
+    handlePrintPurchaseOrder(id) {
+      this.$store.commit("SET_PRINT_PO", true);
+      this.$store.dispatch("getOnePo", id);
+      this.dialogPurchaseOrderPrint = !this.dialogPurchaseOrderPrint;
     },
   },
   created() {

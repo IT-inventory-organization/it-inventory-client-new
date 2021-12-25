@@ -5,14 +5,22 @@ const baseUrl = process.env.VUE_APP_BASE_URL;
 
 const po = {
   state: {
-    loading: false,
+    loading: {
+      loadingReports: false,
+      loadingReportId: false,
+      loadingAddPo: false,
+      loadingDeletePo: false,
+      loadingPrintPo: false,
+      loadingKapalPenjual: false,
+      loadingDataBarang: false,
+    },
     PurchaseOrder: {
       reportId: "",
       kapalPenjual: "",
       nomorPO: "",
       tanggalPurchaseOrder: "",
       remarks: "",
-      jumlahTotal: "",
+      jumlahTotal: 0,
     },
     ListPurchaseOrderItem: [
       {
@@ -25,9 +33,9 @@ const po = {
         jumlah: "",
       },
     ],
-
     reports: [],
     reportId: [],
+    isPrint: false,
     optionsTableReports: {
       page: 1,
       itemsPerPage: 10,
@@ -41,7 +49,7 @@ const po = {
       state.reportId = payload;
     },
     SET_LOADING_PO(state, payload) {
-      state.loading = payload;
+      state.loading[payload.key] = payload.value;
     },
     SET_REPORT(state, payload) {
       state.reports = payload;
@@ -61,11 +69,17 @@ const po = {
     SET_PURCHASE_ORDER_ITEM(state, payload) {
       state.PurchaseOrder[payload.key] = payload.value;
     },
+    SET_PRINT_PO(state, payload) {
+      state.isPrint = payload;
+    },
   },
   actions: {
     async getAllPo(context) {
       try {
-        context.commit("SET_LOADING_PO", true);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingReports",
+          value: true,
+        });
         const result = await axios({
           url: baseUrl + "/po/getAllPO",
           method: "GET",
@@ -81,13 +95,19 @@ const po = {
       } catch (error) {
         console.log(error);
       } finally {
-        context.commit("SET_LOADING_PO", false);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingReports",
+          value: false,
+        });
       }
     },
 
     async getOnePo(context, id) {
       try {
-        context.commit("SET_LOADING_PO", true);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingReportId",
+          value: true,
+        });
         const result = await axios({
           url: `${baseUrl}/po/viewPerPo/${id}`,
           method: "GET",
@@ -104,7 +124,10 @@ const po = {
       } catch (error) {
         console.log(error);
       } finally {
-        context.commit("SET_LOADING_PO", false);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingReportId",
+          value: false,
+        });
       }
     },
 
@@ -112,7 +135,10 @@ const po = {
       console.log("add PO");
       const { PurchaseOrder, ListPurchaseOrderItem } = context.state;
       try {
-        context.commit("SET_LOADING_PO", true);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingAddPo",
+          value: true,
+        });
         const payload = {
           PurchaseOrder,
           ListPurchaseOrderItem,
@@ -139,13 +165,19 @@ const po = {
         console.log(error.response.data);
         Swal.fire("Gagal!", `${error.response.data.message}`, "error");
       } finally {
-        context.commit("SET_LOADING_PO", false);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingAddPo",
+          value: false,
+        });
       }
     },
 
     async deletePo(context, id) {
       try {
-        context.commit("SET_LOADING_PO", true);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingDeletePo",
+          value: true,
+        });
         const result = await axios({
           url: `${baseUrl}/po/deletePurchaseOrder/${id}`,
           method: "DELETE",
@@ -161,13 +193,19 @@ const po = {
       } catch (error) {
         console.log(error);
       } finally {
-        context.commit("SET_LOADING_PO", false);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingDeletePo",
+          value: false,
+        });
       }
     },
 
     async fetchKapalPenjual(context) {
       try {
-        context.commit("SET_LOADING_PO", true);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingKapalPenjual",
+          value: true,
+        });
         const result = await axios({
           url: `${baseUrl}/po/fetchDataForKapalPenjual/list`,
           method: "GET",
@@ -183,13 +221,19 @@ const po = {
       } catch (error) {
         console.log(error);
       } finally {
-        context.commit("SET_LOADING_PO", false);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingKapalPenjual",
+          value: false,
+        });
       }
     },
 
     async getBarangAfterChoosingKapalPenjual(context, id) {
       try {
-        context.commit("SET_LOADING_PO", true);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingDataBarang",
+          value: true,
+        });
         const result = await axios({
           url: `${baseUrl}/po/fetchDataForKapalPenjual/items/${id}`,
           method: "GET",
@@ -206,7 +250,10 @@ const po = {
       } catch (error) {
         console.log(error);
       } finally {
-        context.commit("SET_LOADING_PO", false);
+        context.commit("SET_LOADING_PO", {
+          key: "loadingDataBarang",
+          value: false,
+        });
       }
     },
   }, // action end
