@@ -6,6 +6,7 @@ const bcf = {
   namespaced: true,
   state: {
     BCFId: "",
+    BCF3315Id: [],
     loading: {
       loadingViewList: false,
       loadingAddNewBCF: false,
@@ -13,6 +14,7 @@ const bcf = {
       loadingGetBarang: false,
       loadingDeleteBCF: false,
       loadingGetOneBCF: false,
+      loadingGetOneBCF3315: false,
       loadingUpdateBCF: false,
     },
     listBCF: [],
@@ -61,6 +63,9 @@ const bcf = {
     },
     SET_LIST_BARANG(state, payload) {
       state.listBarang = payload;
+    },
+    SET_BCF3315_ID(state, payload) {
+      state.BCF3315Id = payload;
     },
     SET_BCF_ID(state, payload) {
       state.BCFId = payload;
@@ -309,6 +314,33 @@ const bcf = {
       } finally {
         context.commit("SET_LOADING_BCF", {
           key: "loadingUpdateBCF",
+          value: false,
+        });
+      }
+    },
+    async getOneBCF3315(context, id) {
+      try {
+        context.commit("SET_LOADING_BCF", {
+          key: "loadingGetOneBCF3315",
+          value: true,
+        });
+
+        const res = await axios.get(
+          `${baseUrl}/bcf3315/${context.state.BCFId}`,
+          {
+            headers: {
+              authorization:
+                "Bearer " + localStorage.getItem("token_it_inventory"),
+            },
+          }
+        );
+        const dataDecrypted = AESDecrypt(res.data.data);
+        context.commit("SET_BCF3315_ID", dataDecrypted);
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_BCF", {
+          key: "loadingGetOneBCF3315",
           value: false,
         });
       }

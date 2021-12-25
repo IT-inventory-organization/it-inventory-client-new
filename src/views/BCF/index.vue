@@ -69,7 +69,7 @@
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item @click="handleViewBCF">
+              <v-list-item @click="handleViewBCF(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -78,7 +78,7 @@
                   View
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="handleViewBCF3314">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -137,6 +137,15 @@
     <v-dialog v-model="dialogBCFView" persistent width="100%" max-width="70%">
       <bcf-view @handleViewBCF="handleViewBCF" />
     </v-dialog>
+
+    <v-dialog
+      v-model="dialogBCF3314View"
+      persistent
+      width="100%"
+      max-width="70%"
+    >
+      <bcf-3314-view @handleViewBCF3314="handleViewBCF3314" />
+    </v-dialog>
   </div>
 </template>
 
@@ -148,12 +157,14 @@ export default {
     Icon,
     FormBcf: () => import("@/components/bcf/FormBCF"),
     BcfView: () => import("@/components/bcf/BCFView"),
+    Bcf3314View: () => import("@/components/bcf/BCF3314View"),
     StatusListTable: () => import("@/components/StatusListTable"),
   },
   data() {
     return {
       dialogBuatBaruBCF: false,
       dialogBCFView: false,
+      dialogBCF3314View: false,
       isBCFEdit: false,
       headers: [
         {
@@ -213,8 +224,15 @@ export default {
       this.dialogBuatBaruBCF = !this.dialogBuatBaruBCF;
       this.isBCFEdit = false;
     },
-    handleViewBCF() {
+    handleViewBCF(id) {
       this.dialogBCFView = !this.dialogBCFView;
+      (async () => {
+        await this.$store.commit("bcf/SET_BCF_ID", id);
+        await this.$store.dispatch("bcf/getOneBCF3315");
+      })();
+    },
+    handleViewBCF3314() {
+      this.dialogBCF3314View = !this.dialogBCF3314View;
     },
     handleEditFormBCF(id) {
       this.dialogBuatBaruBCF = !this.dialogBuatBaruBCF;

@@ -8,23 +8,22 @@
         <tr>
           <td valign="top">Nomor</td>
           <td valign="top">:</td>
-          <td valign="top">12345</td>
+          <td valign="top">{{ reportId.nomorFormBcf3315 }}</td>
         </tr>
         <tr>
           <td style="width: 100px">Lampiran</td>
           <td valign="top">:</td>
-          <td valign="top">...........</td>
+          <td valign="top">{{ reportId.lampiran }}</td>
         </tr>
         <tr>
           <td valign="top">Hal</td>
           <td valign="top">:</td>
           <td valign="top" style="width: 357px">
-            Permohonan Pemasukan atau Pengeluaran Barang ke atau dari PLB
-            dan/atau Pemuatan Barang ke Sarana Pengangkut Sebelum Penyampaian
-            Pemberitahuan Pabean.
+            {{ reportId.alasan }}
           </td>
         </tr>
       </table>
+
       <br />
       <br />
       <div>
@@ -48,28 +47,27 @@
               <td style="width: 20px">a.</td>
               <td style="width: 170px">NPWP</td>
               <td>:</td>
-              <td>1234567890</td>
+              <td>{{ reportId.npwp }}</td>
             </tr>
             <tr>
               <td>b.</td>
               <td>Nama</td>
               <td>:</td>
-              <td>Bahari Nusantara</td>
+              <td>{{ reportId.nama }}</td>
             </tr>
             <tr>
               <td>c.</td>
               <td>Alamat</td>
               <td>:</td>
               <td>
-                Jl. Sudirman, Sukajadi, Kec. Batam Kota, Kota Batam, Kepulauan
-                Riau 29432
+                {{ reportId.alamat }}
               </td>
             </tr>
             <tr>
               <td>d.</td>
               <td>Lokasi PLB</td>
               <td>:</td>
-              <td>MEDELIN WEST, GENERAL PURPOSE (BO)</td>
+              <td>{{ reportId.lokasiPLB }}</td>
             </tr>
           </table>
         </li>
@@ -103,16 +101,14 @@
             >Cara Pengangkutan</span
           >
           <span>:</span>
-          <span style="padding-left: 5px">LAUT</span>
+          <span style="padding-left: 5px">{{ reportId.caraPengangkutan }}</span>
         </li>
         <li class="">
           <span style="display: inline-block; width: 194px"
             >Pelabuhan Muat/Tempat Muat</span
           >
           <span>:</span>
-          <span style="padding-left: 5px"
-            >MEDELIN WEST, GENERAL PURPOSE (BO)</span
-          >
+          <span style="padding-left: 5px">{{ reportId.pelabuhanMuat }}</span>
         </li>
         <li>
           <span style="display: inline-block"
@@ -120,9 +116,7 @@
             Pengangkut*</span
           >
           <span>:</span>
-          <span style="padding-left: 5px"
-            >MEDELIN WEST, GENERAL PURPOSE (BO)</span
-          >
+          <span style="padding-left: 5px">{{ reportId.tanggalPerkiraan }}</span>
         </li>
         <li>
           Sarana Pengangkut yang akan mengangkut barang ke Luar Daerah Pabean:
@@ -131,19 +125,19 @@
               <td style="width: 20px">a.</td>
               <td style="width: 170px">Nama</td>
               <td>:</td>
-              <td>JOHN CHAINE 2, GENERAL PURPOSE (CO)</td>
+              <td>{{ reportId.namaPengangkutKeLuar }}</td>
             </tr>
             <tr>
               <td>b.</td>
               <td>Voyage/Flight/Nopol</td>
               <td>:</td>
-              <td>1989</td>
+              <td>{{ reportId.voyage }}</td>
             </tr>
             <tr>
               <td>c.</td>
               <td>Call Sign</td>
               <td>:</td>
-              <td>PK-PO</td>
+              <td>{{ reportId.callSign }}</td>
             </tr>
           </table>
         </li>
@@ -164,8 +158,8 @@
           <div style="width: fit-content">Tanjungpinang, 01 Januari 2021</div>
           <div style="width: fit-content">Tanda tangan dan cap perusahaan</div>
           <div style="height: 70px"></div>
-          <div style="text-align: center">Stefan Anderson</div>
-          <div style="text-align: center">Product Metrics Coordinator</div>
+          <div style="text-align: center">{{ reportId.penanggungJawab }}</div>
+          <div style="text-align: center">{{ reportId.jabatan }}</div>
         </div>
       </div>
     </div>
@@ -175,5 +169,10 @@
 <script>
 export default {
   name: "PreviewBCF3115",
+  computed: {
+    reportId() {
+      return this.$store.state.bcf.BCF3315Id;
+    },
+  },
 };
 </script>
