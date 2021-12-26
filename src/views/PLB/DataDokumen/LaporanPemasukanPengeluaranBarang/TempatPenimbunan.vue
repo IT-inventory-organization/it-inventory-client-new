@@ -13,6 +13,7 @@
             :disabled="disableTempatPenimbunan"
             v-model="tempatPenimbunan"
             :items="itemTempatPenimbunan"
+            item-text="tempatPenimbunan"
             :rules="[
               (value) => {
                 return genericRequiredRule(value, 'Tempat Penimbunan');
@@ -138,6 +139,7 @@ export default {
         });
       } else {
         this.disableTempatPenimbunan = false;
+        this.$store.dispatch("getTempatPenimbun");
         this.$store.commit("SET_TEMPAT_PENIMBUNAN", {
           key: "tempatPenimbunan",
           value: "",
@@ -146,13 +148,16 @@ export default {
     },
   },
   methods: {
-    formatDate (date) {
-        if (!date) return null
+    formatDate(date) {
+      if (!date) return null;
 
-        const [year, month, day] = date.toString().split('-')
-        return `${day}-${month}-${year}`
-      },
-  }
+      const [year, month, day] = date.toString().split("-");
+      return `${day}-${month}-${year}`;
+    },
+  },
+  created() {
+    this.$store.dispatch("getTempatPenimbun");
+  },
 };
 </script>
 

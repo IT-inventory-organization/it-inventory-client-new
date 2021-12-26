@@ -79,7 +79,9 @@ const plb = {
 
     itemDokumenBCF: [],
     selectedDokumenBCF: [],
+
     // payload save
+
     dokumenPengeluaran: {
       reportId: "",
       nomorDokumen: "",
@@ -168,11 +170,14 @@ const plb = {
       beratKapalDenganMuatan: 0,
       volume: 0,
     },
+
+    // Penimbunan
     tempatPenimbunan: {
       tempatPenimbunan: "",
       perkiraanTanggalPengeluaran: "",
       isTempatPenimbunan: false,
     },
+
     // end payload
     dataBarang: {
       kodeBarang: "",
@@ -212,8 +217,10 @@ const plb = {
     SET_REPORT_PLB(state, payload) {
       state.report[payload.key] = payload.value;
     },
+
+    // Get All PLB
     SET_REPORTS_PLB(state, payload) {
-      state.reports[payload.key] = payload.value;
+      state.reports = payload;
     },
     SET_OPTIONS_TABLE_REPORTS(state, payload) {
       state.optionsTableReports = Object.assign({}, payload);
@@ -287,7 +294,7 @@ const plb = {
       state.beratDanVolume[payload.key] = payload.value;
     },
     SET_ITEM_TEMPAT_PENIMBUNAN(state, payload) {
-      state.itemTempatPenimbunan = [...state.itemTempatPenimbunan, payload];
+      state.itemTempatPenimbunan = payload;
     },
     SET_TEMPAT_PENIMBUNAN(state, payload) {
       state.tempatPenimbunan[payload.key] = payload.value;
@@ -618,10 +625,7 @@ const plb = {
         const data = AESDecrypt(result.data.data);
         if (result.data.success) {
           // console.log(result.data.data.rows)
-          context.commit("SET_REPORTS_PLB", {
-            key: "data",
-            value: result.data.data.rows,
-          });
+          context.commit("SET_REPORTS_PLB", data);
         }
       } catch (error) {
         console.log(error.response.data);
@@ -629,6 +633,8 @@ const plb = {
         context.commit("SET_LOADING_PLB", { key: "loadingData", value: false });
       }
     },
+
+    // Dokumen BCF
 
     async getDokumenBCF(context) {
       try {
@@ -645,13 +651,40 @@ const plb = {
               "Bearer " + localStorage.getItem("token_it_inventory"),
           },
         });
-
+        const data = AESDecrypt(result.data.data);
         if (result.data.success) {
-          // console.log(result.data.data.rows)
-          context.commit("SET_DOKUMEN_BCF", {
-            key: "data",
-            value: result.data.data.rows,
-          });
+          context.commit("SET_DOKUMEN_BCF", data);
+        }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: false,
+        });
+      }
+    },
+
+    // Data Dokumen
+
+    async getTempatPenimbun(context) {
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: true,
+        });
+
+        const result = await axios({
+          url: baseUrl + `/report/getTempatPenimpuinan`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        const data = AESDecrypt(result.data.data);
+        if (result.data.success) {
+          context.commit("SET_ITEM_TEMPAT_PENIMBUNAN", data);
         }
       } catch (error) {
         console.log(error.response.data);
