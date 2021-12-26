@@ -74,11 +74,7 @@ const plb = {
       "FAS",
       "CIF",
     ],
-    itemDokumenPO: [
-      { name: "PO-0001" },
-      { name: "PO-0002" },
-      { name: "PO-0003" },
-    ],
+
     NotificationType: "",
     XMLdocument: "",
     itemDokumenPemasukan: [],
@@ -91,7 +87,11 @@ const plb = {
     itemCaraAngkut: ["Laut", "Udara", "Darat"],
     itemBendera: countriesMock,
     itemTempatPenimbunan: [],
-    selectedDokumenPO: [],
+
+    // Dokumen BCF
+
+    itemDokumenBCF: [],
+    selectedDokumenBCF: [],
     // payload save
     dokumenPengeluaran: {
       reportId: "",
@@ -235,15 +235,25 @@ const plb = {
       state.stepper = payload;
       localStorage.setItem("stepper", payload);
     },
-    SET_SELECTED_DOKUMEN_PO(state, payload) {
-      state.selectedDokumenPO = payload;
+
+    // Dokumen BCF
+
+    SET_DOKUMEN_BCF(state, payload) {
+      state.itemDokumenBCF = payload;
     },
-    DELETE_SELECTED_DOKUMEN_PO(state, payload) {
-      const index = state.selectedDokumenPO.indexOf(payload);
+
+    SET_SELECTED_DOKUMEN_BCF(state, payload) {
+      state.selectedDokumenBCF = payload;
+    },
+    DELETE_SELECTED_DOKUMEN_BCF(state, payload) {
+      const index = state.selectedDokumenBCF.indexOf(payload);
       if (index != -1) {
-        state.selectedDokumenPO.splice(index, 1);
+        state.selectedDokumenBCF.splice(index, 1);
       }
     },
+
+    //
+
     SET_DOKUMEN_PEMASUKAN(state, payload) {
       state.dokumenPemasukan[payload.key] = payload.value;
     },
@@ -627,6 +637,39 @@ const plb = {
         console.log(error.response.data);
       } finally {
         context.commit("SET_LOADING_PLB", { key: "loadingData", value: false });
+      }
+    },
+
+    async getDokumenBCF(context) {
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: true,
+        });
+
+        const result = await axios({
+          url: baseUrl + `/report/dokumen/get/bcf`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+
+        if (result.data.success) {
+          // console.log(result.data.data.rows)
+          context.commit("SET_DOKUMEN_BCF", {
+            key: "data",
+            value: result.data.data.rows,
+          });
+        }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: false,
+        });
       }
     },
   },
