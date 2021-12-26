@@ -7,18 +7,16 @@ const baseUrl = process.env.VUE_APP_BASE_URL;
 
 const user = {
   state: {
-    registerData:{
-      
-        namaPerusahaan:'',
-        npwp:'',
-        alamat:'',
-        nomorTelepon:'',
-        bidangUsaha:'',
-        namaPemilik:'',
-        email:'',
-        password:'',
-        confirmPassword:''
-        
+    registerData: {
+      namaPerusahaan: "",
+      npwp: "",
+      alamat: "",
+      nomorTelepon: "",
+      bidangUsaha: "",
+      namaPemilik: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
     user: {
       email: "",
@@ -45,7 +43,7 @@ const user = {
     },
   },
   actions: {
-    async registerActionUser(context){
+    async registerActionUser(context) {
       try {
         context.commit("SET_ISLOADING_USER", true);
         const result = await axios({
@@ -55,7 +53,7 @@ const user = {
             dataRegister: AESEncrypt(context.state.registerData),
           },
         });
-        console.log(result)
+        console.log(result);
       } catch (error) {
         if (error.message === "Network Error") {
           Swal.fire("Tidak ada jaringan!", "", "error");
@@ -67,7 +65,6 @@ const user = {
       } finally {
         context.commit("SET_ISLOADING_USER", false);
       }
-
     },
     async loginActionUser(context) {
       try {

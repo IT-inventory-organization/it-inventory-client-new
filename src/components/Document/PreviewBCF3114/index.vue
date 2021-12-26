@@ -17,7 +17,7 @@
         SEBELUM PENYAMPAIAN PEMBERITAHUAN PABEAN
       </h2>
       <p style="text-align:center">
-        Nomor : ................... Tanggal : 01 Januari 2021
+        Nomor : {{ reportId.nomorFormBcf3315 }} Tanggal : {{ reportId.tanggal }}
       </p>
 
       <p>Kepada :</p>
@@ -26,25 +26,25 @@
         <tr>
           <td valign="top">a. NPWP</td>
           <td valign="top">:</td>
-          <td valign="top">123456789</td>
+          <td valign="top">{{ reportId.npwp }}</td>
         </tr>
         <tr>
           <td style="width: 150px">b. Nama</td>
           <td valign="top">:</td>
-          <td valign="top">Bahari Nusantara</td>
+          <td valign="top">{{ reportId.nama }}</td>
         </tr>
         <tr>
           <td valign="top">c. Alamat</td>
           <td valign="top">:</td>
           <td valign="top">
-            Jl. Sudirman, Sukajadi, Kec Batam, Kepulauan Riau 291031
+            {{ reportId.alamat }}
           </td>
         </tr>
         <tr>
           <td valign="top">d. Lokasi PLB</td>
           <td valign="top">:</td>
           <td valign="top">
-            MEDELIN WEST, GENERAL PURPOSE (BO)
+            {{ reportId.lokasiPLB }}
           </td>
         </tr>
       </table>
@@ -58,12 +58,12 @@
       </div>
       <br />
       <p style="text-align:center">Lampiran Data Barang</p>
-      <h4 style="text-align:center; font-weight:normal">
-        SURAT PERSETUJUAN PEMASUKAN ATAU PENGELUARAN BARANG KE ATAU DARI PLB
-        DAN/ATAU PEMUATAN <br />
-        BARANG KE SARANA PENGANGKUT SEBELUM PENYAMPAIAN PEMBERITAHUAN PABEAN
+      <h4
+        style="text-align:center; font-weight:normal; text-transform:uppercase;"
+      >
+        {{ reportId.lampiran }}
       </h4>
-
+      <br />
       <table style="border-collapse: collapse; width: 100%;" border="1">
         <thead>
           <tr>
@@ -99,16 +99,14 @@
             >Cara Pengangkutan</span
           >
           <span>:</span>
-          <span style="padding-left: 5px">LAUT</span>
+          <span style="padding-left: 5px">{{ reportId.caraPengangkutan }}</span>
         </li>
         <li class="">
           <span style="display: inline-block; width: 194px"
             >Pelabuhan Muat/Tempat Muat</span
           >
           <span>:</span>
-          <span style="padding-left: 5px"
-            >MEDELIN WEST, GENERAL PURPOSE (BO)</span
-          >
+          <span style="padding-left: 5px">{{ reportId.pelabuhanMuat }}</span>
         </li>
         <li>
           <span style="display: inline-block"
@@ -116,9 +114,7 @@
             Pengangkut*</span
           >
           <span>:</span>
-          <span style="padding-left: 5px"
-            >MEDELIN WEST, GENERAL PURPOSE (BO)</span
-          >
+          <span style="padding-left: 5px">{{ reportId.tanggalPerkiraan }}</span>
         </li>
         <li>
           Sarana Pengangkut yang akan mengangkut barang ke Luar Daerah Pabean:
@@ -127,19 +123,19 @@
               <td style="width: 20px">a.</td>
               <td style="width: 170px">Nama</td>
               <td>:</td>
-              <td>JOHN CHAINE 2, GENERAL PURPOSE (CO)</td>
+              <td>{{ reportId.namaPengangkutKeLuar }}</td>
             </tr>
             <tr>
               <td>b.</td>
               <td>Voyage/Flight/Nopol</td>
               <td>:</td>
-              <td>1989</td>
+              <td>{{ reportId.voyage }}</td>
             </tr>
             <tr>
               <td>c.</td>
               <td>Call Sign</td>
               <td>:</td>
-              <td>PK-PO</td>
+              <td>{{ reportId.callSign }}</td>
             </tr>
           </table>
         </li>
@@ -175,7 +171,7 @@
           <tr>
             <td style="width: 100px">Nama</td>
             <td valign="top">:</td>
-            <td valign="top">Bahari Nusantara</td>
+            <td valign="top">{{ reportId.penanggungJawab }}</td>
           </tr>
           <tr>
             <td valign="top">NIP</td>
@@ -278,5 +274,10 @@
 <script>
 export default {
   name: "PreviewBCF3114",
+  computed: {
+    reportId() {
+      return this.$store.state.bcf.BCF3314Id;
+    },
+  },
 };
 </script>

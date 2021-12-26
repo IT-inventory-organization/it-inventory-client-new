@@ -78,7 +78,7 @@
                   View
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item @click="handleViewBCF3314">
+              <v-list-item @click="handleViewBCF3314(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -231,8 +231,12 @@ export default {
         await this.$store.dispatch("bcf/getOneBCF3315");
       })();
     },
-    handleViewBCF3314() {
+    handleViewBCF3314(id) {
       this.dialogBCF3314View = !this.dialogBCF3314View;
+      (async () => {
+        await this.$store.commit("bcf/SET_BCF_ID", id);
+        await this.$store.dispatch("bcf/getOneBCF3314");
+      })();
     },
     handleEditFormBCF(id) {
       this.dialogBuatBaruBCF = !this.dialogBuatBaruBCF;
