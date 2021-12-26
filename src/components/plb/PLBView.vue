@@ -47,12 +47,28 @@ export default {
       dialogXML: false,
     };
   },
+  computed: {
+    constantPengeluaran() {
+      return this.$store.state.plb.constant.pengeluaran;
+    },
+    NotificationType() {
+      return this.$store.state.plb.NotificationType;
+    },
+    reportId() {
+      return this.$store.state.plb.reportId;
+    },
+  },
   methods: {
     handleClose() {
       this.$emit("handleCloseView");
     },
     handleOpenDialogXML() {
       this.dialogXML = true;
+      if (this.NotificationType === this.constantPengeluaran) {
+        this.$store.dispatch("previewPengeluaran", this.reportId);
+      } else {
+        this.$store.dispatch("previewPemasukan", this.reportId);
+      }
     },
     handleCloseDialogXML() {
       this.dialogXML = false;

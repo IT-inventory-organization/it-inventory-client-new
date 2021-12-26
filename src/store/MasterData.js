@@ -67,7 +67,7 @@ const MasterData = {
 
     async updateInformasiPerusahaan(context) {
       try {
-        context.commit("SET_LOADING", {
+        context.commit("SET_LOADING_INFO", {
           key: "loadingEditInformasiPerusahaan",
           value: true,
         });
@@ -98,7 +98,7 @@ const MasterData = {
         }
         return error.response.data.success;
       } finally {
-        context.commit("SET_LOADING", {
+        context.commit("SET_LOADING_INFO", {
           key: "loadingEditInformasiPerusahaan",
           value: false,
         });

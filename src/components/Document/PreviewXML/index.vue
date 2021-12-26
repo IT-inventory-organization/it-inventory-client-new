@@ -1,5 +1,8 @@
 <template>
-  <v-card>
+  <v-card :loading="loadingPreviewXML">
+    <template slot="progress">
+      <progress-linear />
+    </template>
     <v-card-title>
       <v-row no-gutters align="center">
         <v-col cols="10">
@@ -19,7 +22,7 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <code>{{XMLdocument}}</code>
+      <code v-if="!loadingPreviewXML">{{ XMLdocument }}</code>
     </v-card-text>
   </v-card>
 </template>
@@ -27,6 +30,9 @@
 <script>
 export default {
   name: "PreviewXML",
+  components: {
+    ProgressLinear: () => import("@/components/ProgressLinear"),
+  },
   methods: {
     handleClose() {
       this.$emit("handleCloseDialogXML");
@@ -36,7 +42,10 @@ export default {
     XMLdocument() {
       return this.$store.state.plb.XMLdocument;
     },
-  }
+    loadingPreviewXML() {
+      return this.$store.state.plb.loading.loadingPreviewXML;
+    },
+  },
 };
 </script>
 

@@ -1,0 +1,178 @@
+<template>
+  <div style="padding: 0 48px; font-size: 12px; width: 8.27in">
+    <h4 style="text-align: right">BCF 3.3.15</h4>
+    <div style="border: 1px solid black; padding: 20px 16px">
+      <h4 style="text-align: center">KOP PERUSAHAAN</h4>
+      <br />
+      <table>
+        <tr>
+          <td valign="top">Nomor</td>
+          <td valign="top">:</td>
+          <td valign="top">{{ reportId.nomorFormBcf3315 }}</td>
+        </tr>
+        <tr>
+          <td style="width: 100px">Lampiran</td>
+          <td valign="top">:</td>
+          <td valign="top">{{ reportId.lampiran }}</td>
+        </tr>
+        <tr>
+          <td valign="top">Hal</td>
+          <td valign="top">:</td>
+          <td valign="top" style="width: 357px">
+            {{ reportId.alasan }}
+          </td>
+        </tr>
+      </table>
+
+      <br />
+      <br />
+      <div>
+        Yth. <br />Kepala Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe B
+        Tanjungpinang
+      </div>
+      <br />
+      <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dengan
+        Ini kami mengajukan permohonan untuk pemuatan barang ke sarana
+        pengangkut sebelum penyampaian P3BET yang akan dilakukan secara berkala
+        karena barang memiliki bisnis proses yang memerlukan pergerakan barang
+        secara cepat dan singkat dengan rincian sebagai berikut :
+      </p>
+
+      <ol start="1">
+        <li>
+          Exportir Pengusaha PLB/PDPLB*
+          <table>
+            <tr>
+              <td style="width: 20px">a.</td>
+              <td style="width: 170px">NPWP</td>
+              <td>:</td>
+              <td>{{ reportId.npwp }}</td>
+            </tr>
+            <tr>
+              <td>b.</td>
+              <td>Nama</td>
+              <td>:</td>
+              <td>{{ reportId.nama }}</td>
+            </tr>
+            <tr>
+              <td>c.</td>
+              <td>Alamat</td>
+              <td>:</td>
+              <td>
+                {{ reportId.alamat }}
+              </td>
+            </tr>
+            <tr>
+              <td>d.</td>
+              <td>Lokasi PLB</td>
+              <td>:</td>
+              <td>{{ reportId.lokasiPLB }}</td>
+            </tr>
+          </table>
+        </li>
+        <br />
+        <p style="text-align: center">
+          Lampiran Data Barang <br />
+          Permohonan Pemasukan/Pemuatan Barang ke PLB/Sarana Pengangkut Sebelum
+          Penyampaian Pemberitahuan Pabean
+        </p>
+        <table style="border-collapse: collapse; width: 100%" border="1">
+          <thead>
+            <th>No</th>
+            <th>Jenis Barang</th>
+            <th>Ex. HS 4 Digit</th>
+            <th>Persyaratan Expor</th>
+            <th>Perikiraan Jumlah dan Satuan</th>
+          </thead>
+          <tbody style="font-size: 10px">
+            <td align="center">No</td>
+            <td>Jenis Barang</td>
+            <td>Ex. HS 4 Digit</td>
+            <td>Persyaratan Expor</td>
+            <td>Perikiraan Jumlah dan Satuan</td>
+          </tbody>
+        </table>
+      </ol>
+      <br />
+      <ol start="3" style="paddin: 0">
+        <li>
+          <span style="display: inline-block; width: 194px"
+            >Cara Pengangkutan</span
+          >
+          <span>:</span>
+          <span style="padding-left: 5px">{{ reportId.caraPengangkutan }}</span>
+        </li>
+        <li class="">
+          <span style="display: inline-block; width: 194px"
+            >Pelabuhan Muat/Tempat Muat</span
+          >
+          <span>:</span>
+          <span style="padding-left: 5px">{{ reportId.pelabuhanMuat }}</span>
+        </li>
+        <li>
+          <span style="display: inline-block"
+            >Tanggal Perkiraan Pemasukan ke PLB/Pemuatan ke Sarana
+            Pengangkut*</span
+          >
+          <span>:</span>
+          <span style="padding-left: 5px">{{ reportId.tanggalPerkiraan }}</span>
+        </li>
+        <li>
+          Sarana Pengangkut yang akan mengangkut barang ke Luar Daerah Pabean:
+          <table>
+            <tr>
+              <td style="width: 20px">a.</td>
+              <td style="width: 170px">Nama</td>
+              <td>:</td>
+              <td>{{ reportId.namaPengangkutKeLuar }}</td>
+            </tr>
+            <tr>
+              <td>b.</td>
+              <td>Voyage/Flight/Nopol</td>
+              <td>:</td>
+              <td>{{ reportId.voyage }}</td>
+            </tr>
+            <tr>
+              <td>c.</td>
+              <td>Call Sign</td>
+              <td>:</td>
+              <td>{{ reportId.callSign }}</td>
+            </tr>
+          </table>
+        </li>
+      </ol>
+      <br />
+      <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Demikian
+        Permohonan ini diajukan dengan sesungguhnya dan kami bertanggungjawab
+        terhadap pemenuhan ketentuan perundang-undangan.
+      </p>
+      <br />
+      <div style="display: grid; grid-template-columns: 1fr auto">
+        <div style="align-self: end">
+          Catatan:<br />
+          *=Coret yang tidak perlu
+        </div>
+        <div style="margin-right: 70px">
+          <div style="width: fit-content">Tanjungpinang, 01 Januari 2021</div>
+          <div style="width: fit-content">Tanda tangan dan cap perusahaan</div>
+          <div style="height: 70px"></div>
+          <div style="text-align: center">{{ reportId.penanggungJawab }}</div>
+          <div style="text-align: center">{{ reportId.jabatan }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "PreviewBCF3115",
+  computed: {
+    reportId() {
+      return this.$store.state.bcf.BCF3315Id;
+    },
+  },
+};
+</script>

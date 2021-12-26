@@ -127,6 +127,10 @@ export default {
     handleFinish() {
       this.$router.push("/plb");
       this.$store.commit("SET_STEPPER", 1);
+      this.$store.commit("SET_REPORT_ID", "");
+      localStorage.removeItem("reportId");
+      localStorage.removeItem("stepper");
+      localStorage.removeItem("NotificationType");
     },
     handleOpenDialogXML() {
       this.dialogXML = true;

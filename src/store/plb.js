@@ -16,6 +16,7 @@ const plb = {
       loadingDokumen: false,
       loadingBarang: false,
       loadingData: false,
+      loadingPreviewXML: false,
     },
     report: {
       jenisPemberitahuan: "",
@@ -60,7 +61,8 @@ const plb = {
       "FAS",
       "CIF",
     ],
-    itemDokumenBCF: [],
+
+    NotificationType: "",
     XMLdocument: "",
     itemDokumenPemasukan: [],
     itemJenisIdentitasPenjual: ["NPWP", "KTP"],
@@ -72,6 +74,10 @@ const plb = {
     itemCaraAngkut: ["Laut", "Udara", "Darat"],
     itemBendera: countriesMock,
     itemTempatPenimbunan: [],
+
+    // Dokumen BCF
+
+    itemDokumenBCF: [],
     selectedDokumenBCF: [],
     // payload save
     dokumenPengeluaran: {
@@ -185,6 +191,9 @@ const plb = {
     listBarang: [],
   },
   mutations: {
+    SET_NOTIFICATION_TYPE(state, payload) {
+      state.NotificationType = payload;
+    },
     SET_XML_DOCUMENT(state, payload) {
       state.XMLdocument = payload;
     },
@@ -204,7 +213,7 @@ const plb = {
       state.report[payload.key] = payload.value;
     },
     SET_REPORTS_PLB(state, payload) {
-      state.reports = payload;
+      state.reports[payload.key] = payload.value;
     },
     SET_OPTIONS_TABLE_REPORTS(state, payload) {
       state.optionsTableReports = Object.assign({}, payload);
@@ -217,11 +226,12 @@ const plb = {
       localStorage.setItem("stepper", payload);
     },
 
-    // Stepper Dokumen BCF
+    // Dokumen BCF
 
     SET_DOKUMEN_BCF(state, payload) {
       state.itemDokumenBCF = payload;
     },
+
     SET_SELECTED_DOKUMEN_BCF(state, payload) {
       state.selectedDokumenBCF = payload;
     },
@@ -231,6 +241,9 @@ const plb = {
         state.selectedDokumenBCF.splice(index, 1);
       }
     },
+
+    //
+
     SET_DOKUMEN_PEMASUKAN(state, payload) {
       state.dokumenPemasukan[payload.key] = payload.value;
     },
@@ -326,6 +339,7 @@ const plb = {
         if (result.data.success) {
           context.commit("SET_REPORT_ID", data.id);
         }
+        return;
       } catch (error) {
         console.log(error.response.data);
       } finally {
@@ -341,8 +355,9 @@ const plb = {
         "NotificationType",
         context.state.report.jenisPemberitahuan
       );
-      localStorage.setItem("reportId", context.state.reportId);
-
+      if (context.state.reportId) {
+        localStorage.setItem("reportId", context.state.reportId);
+      }
       router.push("/plb/add");
     },
 
@@ -530,11 +545,15 @@ const plb = {
       }
     },
 
-    async previewPengeluaran(context) {
-      let reportId = +localStorage.getItem("reportId");
+    async previewPengeluaran(context, reportId = "") {
+      let id = reportId ? reportId : +localStorage.getItem("reportId");
       try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingPreviewXML",
+          value: true,
+        });
         const result = await axios({
-          url: baseUrl + `/report/dokumen/preview/pengeluaran/${reportId}`,
+          url: baseUrl + `/report/dokumen/preview/pengeluaran/${id}`,
           method: "GET",
           headers: {
             authorization:
@@ -549,14 +568,21 @@ const plb = {
       } catch (error) {
         console.log(error.response.data);
       } finally {
-        console.log("final");
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingPreviewXML",
+          value: false,
+        });
       }
     },
-    async previewPemasukan(context) {
-      let reportId = +localStorage.getItem("reportId");
+    async previewPemasukan(context, reportId = "") {
+      let id = reportId ? reportId : +localStorage.getItem("reportId");
       try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingPreviewXML",
+          value: true,
+        });
         const result = await axios({
-          url: baseUrl + `/report/dokumen/preview/pemasukan/${reportId}`,
+          url: baseUrl + `/report/dokumen/preview/pemasukan/${id}`,
           method: "GET",
           headers: {
             authorization:
@@ -571,7 +597,10 @@ const plb = {
       } catch (error) {
         console.log(error.response.data);
       } finally {
-        console.log("final");
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingPreviewXML",
+          value: false,
+        });
       }
     },
     async getAllPlb(context) {
@@ -588,15 +617,19 @@ const plb = {
         });
         const data = AESDecrypt(result.data.data);
         if (result.data.success) {
-          context.commit("SET_REPORTS_PLB", data);
+          // console.log(result.data.data.rows)
+          context.commit("SET_REPORTS_PLB", {
+            key: "data",
+            value: result.data.data.rows,
+          });
         }
       } catch (error) {
         console.log(error.response.data);
       } finally {
-        context.commit("SET_LOADING_PLB", { key: "loadingData", value: true });
-        console.log("final");
+        context.commit("SET_LOADING_PLB", { key: "loadingData", value: false });
       }
     },
+
     async getDokumenBCF(context) {
       try {
         context.commit("SET_LOADING_PLB", {
@@ -605,25 +638,28 @@ const plb = {
         });
 
         const result = await axios({
-          url: `${baseUrl}/report/dokumen/get/bcf`,
+          url: baseUrl + `/report/dokumen/get/bcf`,
           method: "GET",
           headers: {
             authorization:
               "Bearer " + localStorage.getItem("token_it_inventory"),
           },
         });
-        const data = AESDecrypt(result.data.data);
+
         if (result.data.success) {
-          context.commit("SET_DOKUMEN_BCF", data);
+          // console.log(result.data.data.rows)
+          context.commit("SET_DOKUMEN_BCF", {
+            key: "data",
+            value: result.data.data.rows,
+          });
         }
       } catch (error) {
         console.log(error.response.data);
       } finally {
         context.commit("SET_LOADING_PLB", {
           key: "loadingDokumen",
-          value: true,
+          value: false,
         });
-        console.log("final");
       }
     },
   },

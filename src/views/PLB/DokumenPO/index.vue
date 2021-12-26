@@ -19,7 +19,7 @@
           ]"
           single-line
           :items="itemDokumenBCF"
-          item-text="bcf"
+          item-text="name"
           multiple
           hide-details
           class="it-inventory-select-po"

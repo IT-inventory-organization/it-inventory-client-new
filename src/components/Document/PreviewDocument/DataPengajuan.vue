@@ -9,12 +9,12 @@
           <tr>
             <td>Diajukan Di Kantor</td>
             <td>:</td>
-            <td>Kantor A</td>
+            <td>{{ report.diAjukanDiKantor }}</td>
           </tr>
           <tr>
             <td>Jenis Pemberitahuan</td>
             <td>:</td>
-            <td>Pemasukan</td>
+            <td>{{ report.jenisPemberitahuan }}</td>
           </tr>
           <tr>
             <td>Jenis Dokumen Pemasukan/Pengeluaran</td>
@@ -79,6 +79,11 @@
 <script>
 export default {
   name: "DataPengajuan",
+  computed: {
+    report() {
+      return this.$store.state.plb.report;
+    },
+  },
 };
 </script>
 

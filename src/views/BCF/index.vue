@@ -3,9 +3,7 @@
     <!-- Page subtitle and create new button -->
     <v-row no-gutters align="center">
       <v-col cols="11">
-        <div class="display-1 font-weight-bold">
-          BCF 3.3.15
-        </div>
+        <div class="display-1 font-weight-bold">BCF 3.3.15</div>
       </v-col>
       <v-col cols="1">
         <button
@@ -20,7 +18,11 @@
     <!-- Search bar and button  -->
     <v-row no-gutters class="mt-2">
       <v-col lg="3">
-        <v-text-field placeholder="Cari" class="it-inventory-search-list-kapal">
+        <v-text-field
+          v-model="optionsTableListBCF.search"
+          placeholder="Cari"
+          class="it-inventory-search-list-kapal"
+        >
           <template slot="prepend-inner">
             <Icon
               icon="akar-icons:search"
@@ -36,9 +38,10 @@
     <div class="it-inventory-box mt-2">
       <v-data-table
         :headers="headers"
-        :items="reports"
-        :options.sync="optionsTableReports"
-        :server-items-length="reports.length"
+        :options.sync="optionsTableListBCF"
+        :items="listBCF.rows"
+        :loading="loadingViewList || loadingDeleteBCF"
+        :search="optionsTableListBCF.search"
         no-data-text="Data not available"
         no-results-text="Data not available"
         class="it-inventory-simple-table"
@@ -47,13 +50,11 @@
           {{ props.index + 1 }}
         </template>
 
-        <template v-slot:[`item.status`]>
-          <div class="it-inventory-actions-status">
-            <p>Disetujui</p>
-          </div>
+        <template v-slot:[`item.status`]="{ item }">
+          <status-list-table :status="item.status" />
         </template>
 
-        <template v-slot:[`item.action`]>
+        <template v-slot:[`item.action`]="{ item }">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -63,14 +64,12 @@
                 v-on="on"
               >
                 Actions
-                <v-icon right>
-                  mdi-chevron-down
-                </v-icon>
+                <v-icon right> mdi-chevron-down </v-icon>
               </v-btn>
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item @click="handleViewBCF">
+              <v-list-item @click="handleViewBCF(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -79,7 +78,7 @@
                   View
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="handleViewBCF3314(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -88,7 +87,7 @@
                   View BCF 3.3.14
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="handleEditFormBCF(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="ph:pencil-line-light"
@@ -97,7 +96,7 @@
                   Edit
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="handleDelete(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="octicon:trash-24"
@@ -126,20 +125,26 @@
       v-model="dialogBuatBaruBCF"
       persistent
       width="100%"
-      @click:outside="handleBuatBaru"
       max-width="95%"
     >
-      <form-bcf @handleBuatBaru="handleBuatBaru" />
+      <form-bcf
+        v-if="dialogBuatBaruBCF"
+        @handleBuatBaru="handleBuatBaru"
+        :isBCFEdit="isBCFEdit"
+      />
+    </v-dialog>
+
+    <v-dialog v-model="dialogBCFView" persistent width="100%" max-width="70%">
+      <bcf-view @handleViewBCF="handleViewBCF" />
     </v-dialog>
 
     <v-dialog
-      v-model="dialogBCFView"
+      v-model="dialogBCF3314View"
       persistent
       width="100%"
-      @click:outside="handleViewBCF"
       max-width="70%"
     >
-      <bcf-view @handleBuatBaru="handleViewBCF" />
+      <bcf-3314-view @handleViewBCF3314="handleViewBCF3314" />
     </v-dialog>
   </div>
 </template>
@@ -152,19 +157,23 @@ export default {
     Icon,
     FormBcf: () => import("@/components/bcf/FormBCF"),
     BcfView: () => import("@/components/bcf/BCFView"),
+    Bcf3314View: () => import("@/components/bcf/BCF3314View"),
+    StatusListTable: () => import("@/components/StatusListTable"),
   },
   data() {
     return {
       dialogBuatBaruBCF: false,
       dialogBCFView: false,
+      dialogBCF3314View: false,
+      isBCFEdit: false,
       headers: [
         {
           text: "Exportir/Pengusaha PLB/PDPLB",
-          value: "exportir",
+          value: "nama",
         },
         {
           text: "Nomor PO",
-          value: "nomor_po",
+          value: "nomorPO",
         },
         {
           text: "Tanggal",
@@ -172,7 +181,7 @@ export default {
         },
         {
           text: "Nomor",
-          value: "nomor",
+          value: "nomorFormBcf3315",
         },
         {
           text: "Status",
@@ -186,36 +195,70 @@ export default {
     };
   },
   watch: {
-    optionsTableReports: {
-      handler() {
-        console.log("trigger change options table reports");
-      },
+    optionsTableListBCF: {
+      handler() {},
       deep: true,
     },
   },
   computed: {
-    reports() {
-      return this.$store.state.bcf.reports;
+    loadingDeleteBCF() {
+      return this.$store.state.bcf.loading.loadingDeleteBCF;
     },
-    optionsTableReports: {
+    loadingViewList() {
+      return this.$store.state.bcf.loading.loadingViewList;
+    },
+    listBCF() {
+      return this.$store.state.bcf.listBCF;
+    },
+    optionsTableListBCF: {
       get() {
-        return this.$store.state.bcf.optionsTableReports;
+        return this.$store.state.bcf.optionsTableListBCF;
       },
       set(val) {
-        this.$store.commit("SET_OPTIONS_TABLE_REPORTS", val);
+        this.$store.commit("bcf/SET_OPTIONS_TABLE_LIST_BCF", val);
       },
     },
   },
   methods: {
     handleBuatBaru() {
       this.dialogBuatBaruBCF = !this.dialogBuatBaruBCF;
+      this.isBCFEdit = false;
     },
-    handleViewBCF() {
+    handleViewBCF(id) {
       this.dialogBCFView = !this.dialogBCFView;
+      (async () => {
+        await this.$store.commit("bcf/SET_BCF_ID", id);
+        await this.$store.dispatch("bcf/getOneBCF3315");
+      })();
+    },
+    handleViewBCF3314(id) {
+      this.dialogBCF3314View = !this.dialogBCF3314View;
+      (async () => {
+        await this.$store.commit("bcf/SET_BCF_ID", id);
+        await this.$store.dispatch("bcf/getOneBCF3314");
+      })();
+    },
+    handleEditFormBCF(id) {
+      this.dialogBuatBaruBCF = !this.dialogBuatBaruBCF;
+      this.isBCFEdit = !this.isBCFEdit;
+      (async () => {
+        await this.$store.commit("bcf/SET_BCF_ID", id);
+        await this.$store.dispatch("bcf/getOneBCF");
+      })();
+    },
+    handleDelete(id) {
+      this.$store.dispatch("bcf/deleteListBCF", id).then((result) => {
+        if (result.success) {
+          this.$swal.fire("Berhasil!", result.message, "success");
+          this.$store.dispatch("bcf/fetchGetAllBCF");
+        } else {
+          this.$swal.fire("Gagal!", result.message, "error");
+        }
+      });
     },
   },
   created() {
-    this.$store.dispatch("getAllBcf");
+    this.$store.dispatch("bcf/fetchGetAllBCF");
   },
 };
 </script>

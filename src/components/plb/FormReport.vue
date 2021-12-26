@@ -1,5 +1,8 @@
 <template>
-  <v-card>
+  <v-card :loading="loadingReports">
+    <template slot="progress">
+      <progress-linear />
+    </template>
     <v-card-title>
       <v-row no-gutters align-content="center" justify="space-between">
         <span class="headline font-weight-bold">Buat Baru</span>
@@ -72,7 +75,7 @@
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <button type="submit" class="btn_save">
+          <button type="submit" class="btn_save" :disabled="loadingReports">
             <span>Selanjutnya</span>
             <img src="@/assets/icons/ic_bulletnext.svg" />
           </button>
@@ -87,12 +90,18 @@ import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "FormReport",
   mixins: [FieldRequired],
+  components: {
+    ProgressLinear: () => import("@/components/ProgressLinear"),
+  },
   data() {
     return {
       itemJenisDokumenBC: [],
     };
   },
   computed: {
+    loadingReports() {
+      return this.$store.state.plb.loading.loadingReports;
+    },
     diAjukanDiKantor: {
       get() {
         return this.$store.state.plb.report.diAjukanDiKantor;
@@ -145,15 +154,19 @@ export default {
   methods: {
     handleCloseDialog() {
       this.$emit("handleCloseBuatBaru");
+      this.$refs.initialReport.resetValidation();
     },
     handleNotificationType() {
       return localStorage.getItem("NotificationType");
     },
-    handleSubmit() {
+    async handleSubmit() {
       const getRef = this.$refs.initialReport.validate();
       if (getRef) {
-        this.$store.dispatch("handleSubmitReport");
-        this.$store.dispatch("generateReportId",this.$store.state.plb.report);
+        await this.$store.dispatch(
+          "generateReportId",
+          this.$store.state.plb.report
+        );
+        await this.$store.dispatch("handleSubmitReport");
       } else {
         return false;
       }

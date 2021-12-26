@@ -15,23 +15,24 @@
       </div>
     </v-card-title>
     <div class="px-6 py-5" style="display: flex; justify-content: center">
-      <preview-BCF-3115 />
+      <PreviewBCF3114 />
     </div>
   </v-card>
 </template>
+
 <script>
 import { Icon } from "@iconify/vue2";
 export default {
   components: {
     Icon,
-    PreviewBCF3115: () => import("@/components/Document/PreviewBCF3115"),
+    PreviewBCF3114: () => import("@/components/Document/PreviewBCF3114"),
   },
   data() {
     return {};
   },
   methods: {
     handleViewClose() {
-      this.$emit("handleViewBCF");
+      this.$emit("handleViewBCF3314");
     },
   },
 };
