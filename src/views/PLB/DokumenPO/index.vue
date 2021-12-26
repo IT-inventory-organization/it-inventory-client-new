@@ -18,12 +18,12 @@
             },
           ]"
           single-line
-          :items="itemDokumenPO"
-          item-text="name"
+          :items="itemDokumenBCF"
+          item-text="bcf"
           multiple
           hide-details
           class="it-inventory-select-po"
-          v-model="selectedDokumenPO"
+          v-model="selectedDokumenBCF"
           append-icon="mdi-chevron-down"
         >
         </v-select>
@@ -32,7 +32,7 @@
     <v-row
       justify="center"
       class="mt-5"
-      v-for="(item, index) in selectedDokumenPO"
+      v-for="(item, index) in selectedDokumenBCF"
       :key="index"
     >
       <v-col cols="4" style="position:relative">
@@ -81,21 +81,21 @@ export default {
     Icon,
   },
   computed: {
-    itemDokumenPO() {
-      return this.$store.state.plb.itemDokumenPO;
+    itemDokumenBCF() {
+      return this.$store.state.plb.itemDokumenBCF;
     },
-    selectedDokumenPO: {
+    selectedDokumenBCF: {
       get() {
-        return this.$store.state.plb.selectedDokumenPO;
+        return this.$store.state.plb.selectedDokumenBCF;
       },
       set(value) {
-        this.$store.commit("SET_SELECTED_DOKUMEN_PO", value);
+        this.$store.commit("SET_SELECTED_DOKUMEN_BCF", value);
       },
     },
   },
   methods: {
     handleDelete(value) {
-      this.$store.commit("DELETE_SELECTED_DOKUMEN_PO", value);
+      this.$store.commit("DELETE_SELECTED_DOKUMEN_BCF", value);
     },
     handleView() {
       alert("View");
@@ -104,6 +104,9 @@ export default {
       this.$store.commit("SET_STEPPER", 2);
       return true;
     },
+  },
+  created() {
+    this.$store.dispatch("getDokumenBCF");
   },
 };
 </script>

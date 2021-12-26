@@ -37,9 +37,9 @@
     <div class="it-inventory-box mt-2">
       <v-data-table
         :headers="headers"
-        :items="reports.data"
+        :items="reports.rows"
         :options.sync="optionsTableReports"
-        :server-items-length="reports.data_size"
+        :server-items-length="reports.length"
         no-data-text="Data not available"
         no-results-text="Data not available"
         class="it-inventory-simple-table"
@@ -203,8 +203,8 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch("getAllPlb")
-  }
+    this.$store.dispatch("getAllPlb");
+  },
 };
 </script>
 
