@@ -563,6 +563,8 @@ const plb = {
       }
     },
 
+    // Preview XML
+
     async previewPengeluaran(context, reportId = "") {
       let id = reportId ? reportId : +localStorage.getItem("reportId");
       try {
@@ -571,7 +573,7 @@ const plb = {
           value: true,
         });
         const result = await axios({
-          url: baseUrl + `/report/dokumen/preview/pengeluaran/${id}`,
+          url: baseUrl + `/report/ViewDokumen/get/pengeluaranXML/${id}`,
           method: "GET",
           headers: {
             authorization:
@@ -581,7 +583,7 @@ const plb = {
 
         if (result.data) {
           // console.log(result.data)
-          context.commit("SET_XML_DOCUMENT", result.data);
+          context.commit("SET_XML_DOCUMENT", result.data.data);
         }
       } catch (error) {
         console.log(error.response.data);
@@ -600,7 +602,7 @@ const plb = {
           value: true,
         });
         const result = await axios({
-          url: baseUrl + `/report/dokumen/preview/pemasukan/${id}`,
+          url: baseUrl + `/report/ViewDokumen/get/pemasukanXML/${id}`,
           method: "GET",
           headers: {
             authorization:
@@ -610,7 +612,7 @@ const plb = {
 
         if (result.data) {
           // console.log(result.data)
-          context.commit("SET_XML_DOCUMENT", result.data);
+          context.commit("SET_XML_DOCUMENT", result.data.data);
         }
       } catch (error) {
         console.log(error.response.data);
