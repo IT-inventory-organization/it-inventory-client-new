@@ -2,7 +2,7 @@
   <div>
     <div class="wrapper">
       <div
-        style="padding: 0 48px; font-size: 12px; width: 8.27in"
+        style="padding: 0 48px; font-size: 12px; width: 100%"
         ref="dokumenBCF3315"
         id="dokumenBCF3315"
       >
@@ -240,14 +240,13 @@ export default {
   display: inline-block;
   padding: 0.3rem 0.5rem;
   border-radius: 50px;
-  margin-left: auto;
   font-weight: 500;
 }
 .wrapper {
   display: flex;
 
   .alasan {
-    width: 330px;
+    width: 30%;
 
     .card {
       font-size: 0.8rem;
