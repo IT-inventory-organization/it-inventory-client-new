@@ -1,74 +1,65 @@
-<template lang="">
-  <div id="PurchaseOrderView" ref="PurchaseOrderView">
-    <v-card>
-      <v-card-title>
-        <v-row no-gutters align-content="center" justify="space-between">
-          <span class="headline font-weight-bold">{{ reportId.nomorPO }}</span>
-          <span @click="handleViewClose" style="cursor: pointer"
-            ><v-icon>mdi-close</v-icon></span
-          >
-        </v-row>
-      </v-card-title>
-      <v-card-text>
-        <v-container fluid>
-          <v-row no-gutters>
-            <v-col cols="3">
-              <div class="mt-2 head">Purchase Order No</div>
-            </v-col>
-            <v-col cols="7">
-              <div class="mt-2">: {{ reportId.nomorPO }}</div>
-            </v-col>
-          </v-row>
+<template>
+  <div id="dokumenPO" style="padding:1rem">
+    <div style="border: 1px solid black; padding: 20px 16px; font-size:14px">
+      <h3>PO-0001</h3>
+      <br />
+      <h3>PURCHASE ORDER</h3>
+      <table>
+        <tr>
+          <td style="width:180px;">Tanggal</td>
+          <td valign="top">:</td>
+          <td valign="top">{{ reportId.tanggalPurchaseOrder }}</td>
+        </tr>
+        <tr>
+          <td valign="top">No. Purchase Order</td>
+          <td valign="top">:</td>
+          <td valign="top">{{ reportId.nomorPO }}</td>
+        </tr>
+        <tr>
+          <td valign="top">Kapal Penjual</td>
+          <td valign="top">:</td>
+          <td valign="top">{{ reportId.kapalPenjual }}</td>
+        </tr>
+      </table>
 
-          <v-row no-gutters>
-            <v-col cols="3">
-              <div class="mt-2 head">Tanggal</div>
-            </v-col>
-            <v-col cols="7">
-              <div class="mt-2">: {{ reportId.tanggalPurchaseOrder }}</div>
-            </v-col>
-          </v-row>
+      <br />
+      <table style="border-collapse: collapse; width: 100%" border="1">
+        <thead>
+          <tr>
+            <th>Kode Barang</th>
+            <th>Item Deskripsi</th>
+            <th>Satuan Kemasan</th>
+            <th>Quantity</th>
+            <th>Harga Satuan</th>
+            <th>Jumlah</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(barangPO, key) in reportId.barangPOs" v-bind:key="key">
+            <td>{{ barangPO.kodeBarang }}</td>
+            <td>{{ barangPO.itemDeskripsi }}</td>
+            <td>{{ barangPO.satuanKemasan }}</td>
+            <td>{{ barangPO.quantity }}</td>
+            <td>{{ barangPO.hargaSatuan }}</td>
+            <td>{{ barangPO.jumlah }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <div style="display:flex; justify-content:space-between;">
+        <table>
+          <tr>
+            <td valign="top">Remarks</td>
+            <td valign="top">:</td>
+            <td valign="top" style="width:200px">
+              {{ reportId.remarks }}
+            </td>
+          </tr>
+        </table>
 
-          <v-row no-gutters>
-            <v-col cols="3">
-              <div class="mt-2 head">Kapal Penjual</div>
-            </v-col>
-            <v-col cols="7">
-              <div class="mt-2">: {{ reportId.kapalPenjual }}</div>
-            </v-col>
-          </v-row>
-
-          <v-data-table
-            :headers="headers"
-            :items="reportId.barangPOs"
-            no-data-text="Data not available"
-            no-results-text="Data not available"
-            class="it-inventory-simple-table mt-10"
-          >
-          </v-data-table>
-
-          <v-row no-gutters>
-            <v-col cols="3">
-              <div class="mt-2 head">Jumlah Total</div>
-            </v-col>
-            <v-col cols="7">
-              <div class="mt-2">: {{ reportId.jumlahTotal }}</div>
-            </v-col>
-          </v-row>
-
-          <v-row no-gutters class="mt-10">
-            <v-col cols="3">
-              <div class="mt-2 head">Remarks :</div>
-            </v-col>
-            <v-col cols="7">
-              <div class="mt-2">
-                {{ reportId.remarks }}
-              </div>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-    </v-card>
+        <h3>Jumlah Total = {{ reportId.jumlahTotal }}</h3>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -106,7 +97,7 @@ export default {
     },
     print() {
       if (this.loadingReportId) {
-        this.$htmlToPaper("PurchaseOrderView");
+        this.$htmlToPaper("dokumenPO");
       }
       this.handleViewClose();
     },
@@ -131,40 +122,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.subtitle {
-  padding-left: 0.8rem;
-}
-
-.card-subtitle {
-  margin-top: 3em;
-  align-items: flex-end;
-}
-
-.tanggal {
-  color: #697d95;
-}
-
-.list-title {
-  font-weight: 400;
-  margin-top: 1em;
-}
-
-.list-item {
-  color: #697d95;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  box-shadow: inset -1px 0px 0px #eaeaea, inset 1px 0px 0px #eaeaea,
-    inset 0px 1px 0px #eaeaea;
-}
-
-th,
-td {
-  color: #848484;
-  padding: 1em 1.1em !important;
-  text-align: left;
-}
-</style>
