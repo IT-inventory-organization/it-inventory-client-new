@@ -14,19 +14,17 @@
             <tr>
               <td valign="top">Nomor</td>
               <td valign="top">:</td>
-              <td valign="top">{{ reportId.nomorFormBcf3315 }}</td>
+              <td valign="top"></td>
             </tr>
             <tr>
               <td style="width: 100px">Lampiran</td>
               <td valign="top">:</td>
-              <td valign="top">{{ reportId.lampiran }}</td>
+              <td valign="top"></td>
             </tr>
             <tr>
               <td valign="top">Hal</td>
               <td valign="top">:</td>
-              <td valign="top" style="width: 357px">
-                {{ reportId.alasan }}
-              </td>
+              <td valign="top" style="width: 357px"></td>
             </tr>
           </table>
 
@@ -54,27 +52,25 @@
                   <td style="width: 20px">a.</td>
                   <td style="width: 170px">NPWP</td>
                   <td>:</td>
-                  <td>{{ reportId.npwp }}</td>
+                  <td>{{ report.npwp }}</td>
                 </tr>
                 <tr>
                   <td>b.</td>
                   <td>Nama</td>
                   <td>:</td>
-                  <td>{{ reportId.nama }}</td>
+                  <td>{{ report.nama }}</td>
                 </tr>
                 <tr>
                   <td>c.</td>
                   <td>Alamat</td>
                   <td>:</td>
-                  <td>
-                    {{ reportId.alamat }}
-                  </td>
+                  <td>{{ report.alamat }}</td>
                 </tr>
                 <tr>
                   <td>d.</td>
                   <td>Lokasi PLB</td>
                   <td>:</td>
-                  <td>{{ reportId.lokasiPLB }}</td>
+                  <td>{{ report.lokasiPLB }}</td>
                 </tr>
               </table>
             </li>
@@ -86,18 +82,25 @@
             </p>
             <table style="border-collapse: collapse; width: 100%" border="1">
               <thead>
-                <th>No</th>
-                <th>Jenis Barang</th>
-                <th>Ex. HS 4 Digit</th>
-                <th>Persyaratan Expor</th>
-                <th>Perikiraan Jumlah dan Satuan</th>
+                <tr>
+                  <th>No</th>
+                  <th>Jenis Barang</th>
+                  <th>Ex. HS 4 Digit</th>
+                  <th>Persyaratan Expor</th>
+                  <th>Perikiraan Jumlah dan Satuan</th>
+                </tr>
               </thead>
               <tbody style="font-size: 10px">
-                <td align="center">No</td>
-                <td>Jenis Barang</td>
-                <td>Ex. HS 4 Digit</td>
-                <td>Persyaratan Expor</td>
-                <td>Perikiraan Jumlah dan Satuan</td>
+                <tr v-for="barangPO in barangPOs" v-bind:key="barangPO">
+                  <td align="center">No</td>
+                  <td>{{ barangPO.dataBarang.jenisBarang }}</td>
+                  <td>{{ barangPO.dataBarang.hsCode }}</td>
+                  <td>Persyaratan Expor</td>
+                  <td>
+                    {{ barangPO.perkiraanJumlah }}
+                    {{ barangPO.satuan }}
+                  </td>
+                </tr>
               </tbody>
             </table>
           </ol>
@@ -107,19 +110,15 @@
               <span style="display: inline-block; width: 194px"
                 >Cara Pengangkutan</span
               >
-              <span>:</span>
-              <span style="padding-left: 5px">{{
-                reportId.caraPengangkutan
-              }}</span>
+              <span>: {{ report.caraPengangkutan }}</span>
+              <span style="padding-left: 5px"></span>
             </li>
             <li class="">
               <span style="display: inline-block; width: 194px"
                 >Pelabuhan Muat/Tempat Muat</span
               >
-              <span>:</span>
-              <span style="padding-left: 5px">{{
-                reportId.pelabuhanMuat
-              }}</span>
+              <span>: {{ report.pelabuhanMuat }}</span>
+              <span style="padding-left: 5px"></span>
             </li>
             <li>
               <span style="display: inline-block"
@@ -127,9 +126,9 @@
                 Pengangkut*</span
               >
               <span>:</span>
-              <span style="padding-left: 5px">{{
-                reportId.tanggalPerkiraan
-              }}</span>
+              <span style="padding-left: 5px">
+                {{ report.tanggalPerkiraan }}
+              </span>
             </li>
             <li>
               Sarana Pengangkut yang akan mengangkut barang ke Luar Daerah
@@ -139,19 +138,19 @@
                   <td style="width: 20px">a.</td>
                   <td style="width: 170px">Nama</td>
                   <td>:</td>
-                  <td>{{ reportId.namaPengangkutKeLuar }}</td>
+                  <td>{{ report.namaPengangkutKeLuar }}</td>
                 </tr>
                 <tr>
                   <td>b.</td>
                   <td>Voyage/Flight/Nopol</td>
                   <td>:</td>
-                  <td>{{ reportId.voyage }}</td>
+                  <td>{{ report.voyage }}</td>
                 </tr>
                 <tr>
                   <td>c.</td>
                   <td>Call Sign</td>
                   <td>:</td>
-                  <td>{{ reportId.callSign }}</td>
+                  <td>{{ report.callSign }}</td>
                 </tr>
               </table>
             </li>
@@ -177,9 +176,11 @@
               </div>
               <div style="height: 70px"></div>
               <div style="text-align: center">
-                {{ reportId.penanggungJawab }}
+                ppppp
               </div>
-              <div style="text-align: center">{{ reportId.jabatan }}</div>
+              <div style="text-align: center">
+                pppp
+              </div>
             </div>
           </div>
         </div>
@@ -207,8 +208,11 @@ export default {
     return {};
   },
   computed: {
-    reportId() {
+    report() {
       return this.$store.state.bcf.BCF3315Id;
+    },
+    barangPOs() {
+      return this.$store.state.bcf.BCF3315Id.po.barangPOs;
     },
     isPrint() {
       return this.$store.state.bcf.dokumenBCF3315;
