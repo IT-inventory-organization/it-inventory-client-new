@@ -69,7 +69,10 @@
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item @click="handleViewBCF(item.id)">
+              <v-list-item
+                @click="handleViewBCF(item.id)"
+                v-if="item.status !== 'DISETUJUI'"
+              >
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -78,7 +81,10 @@
                   View
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item @click="handleViewBCF3314(item.id)">
+              <v-list-item
+                @click="handleViewBCF3314(item.id)"
+                v-if="item.status === 'DISETUJUI'"
+              >
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -96,15 +102,20 @@
                   Edit
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item @click="handleDelete(item.id)">
-                <v-list-item-title>
-                  <Icon
-                    icon="octicon:trash-24"
-                    class="v-icon--left it-inventory-action-list__icon"
-                  />
-                  Delete
-                </v-list-item-title>
-              </v-list-item>
+              <div v-if="item.status !== 'PERBAIKAN'">
+                <v-list-item
+                  @click="handleDelete(item.id)"
+                  v-if="item.status !== 'DISETUJUI'"
+                >
+                  <v-list-item-title>
+                    <Icon
+                      icon="octicon:trash-24"
+                      class="v-icon--left it-inventory-action-list__icon"
+                    />
+                    Delete
+                  </v-list-item-title>
+                </v-list-item>
+              </div>
               <v-list-item>
                 <v-list-item-title>
                   <Icon

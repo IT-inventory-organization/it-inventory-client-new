@@ -24,7 +24,11 @@
             <tr>
               <td valign="top">Hal</td>
               <td valign="top">:</td>
-              <td valign="top" style="width: 357px"></td>
+              <td valign="top" style="width: 357px">
+                Permohonan Pemasukan atau Pengeluaran Barang ke atau dari PLB
+                dan/atau Pemuatan Barang ke Sarana Pengangkut Sebelum
+                Penyampaian Pemberitahuan Pabean
+              </td>
             </tr>
           </table>
 
@@ -91,7 +95,7 @@
                 </tr>
               </thead>
               <tbody style="font-size: 10px">
-                <tr v-for="barangPO in barangPOs" v-bind:key="barangPO">
+                <tr v-for="(barangPO, key) in barangPOs" v-bind:key="key">
                   <td align="center">No</td>
                   <td>{{ barangPO.dataBarang.jenisBarang }}</td>
                   <td>{{ barangPO.dataBarang.hsCode }}</td>
@@ -176,10 +180,10 @@
               </div>
               <div style="height: 70px"></div>
               <div style="text-align: center">
-                ppppp
+                <b>{{ report.penanggungJawab }}</b>
               </div>
               <div style="text-align: center">
-                pppp
+                {{ report.jabatan }}
               </div>
             </div>
           </div>

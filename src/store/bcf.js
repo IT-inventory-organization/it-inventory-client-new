@@ -368,7 +368,7 @@ const bcf = {
         });
 
         const res = await axios.get(
-          `${baseUrl}/bcf3315/${context.state.BCFId}`,
+          `${baseUrl}/report/dokumen/get/bcf/${context.state.BCFId}`,
           {
             headers: {
               authorization:
