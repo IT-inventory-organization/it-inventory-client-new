@@ -3,6 +3,7 @@ import countriesMock from "@/_mocks_/countries";
 import currencyMock from "@/_mocks_/currency";
 import axios from "axios";
 import { AESDecrypt, AESEncrypt } from "@/helper/Encryption";
+import Swal from "sweetalert2";
 const baseUrl = process.env.VUE_APP_BASE_URL;
 
 const plb = {
@@ -672,6 +673,35 @@ const plb = {
       } finally {
         context.commit("SET_LOADING_PLB", {
           key: "loadingReport",
+          value: false,
+        });
+      }
+    },
+
+    async deletePLB(context, id) {
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingData",
+          value: true,
+        });
+        const result = await axios({
+          url: `${baseUrl}/Report/delete/${id}`,
+          method: "DELETE",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        if (result.data.success) {
+          Swal.fire("Berhasil!", "Berhasil Menghapus PLB.", "success");
+          context.dispatch("getAllPlb");
+        }
+      } catch (error) {
+        console.log(error);
+        Swal.fire("Gagal!", "Gagal Menghapus PLB.", "error");
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingData",
           value: false,
         });
       }

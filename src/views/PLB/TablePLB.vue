@@ -82,7 +82,7 @@
                   Edit
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="handleDelete(item)">
                 <v-list-item-title>
                   <Icon
                     icon="octicon:trash-24"
@@ -205,6 +205,9 @@ export default {
       this.dialogView = false;
       this.$store.commit("SET_NOTIFICATION_TYPE", "");
       this.$store.commit("SET_REPORT_ID", "");
+    },
+    handleDelete(item) {
+      this.$store.dispatch("deletePLB", item.id);
     },
   },
   created() {
