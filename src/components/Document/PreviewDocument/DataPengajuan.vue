@@ -19,22 +19,17 @@
           <tr>
             <td>Jenis Dokumen Pemasukan/Pengeluaran</td>
             <td>:</td>
-            <td>BC 1.6</td>
+            <td>{{ report.jenisDokumenBC }}</td>
           </tr>
           <tr>
             <td>Nomor Dokumen Pemasukan/Pengeluaran</td>
             <td>:</td>
-            <td>12345</td>
-          </tr>
-          <tr>
-            <td>Nomor Dokumen</td>
-            <td>:</td>
-            <td>12345</td>
+            <td>{{ dokumenPemasukan.nomorDokumenPemasukan }}</td>
           </tr>
           <tr>
             <td>Tanggal Dokumen Pemasukan/Pengeluaran</td>
             <td>:</td>
-            <td>01-01-2021</td>
+            <td>{{ dokumenPemasukan.tanggalDokumenPemasukan }}</td>
           </tr>
         </table>
       </v-col>
@@ -43,32 +38,32 @@
           <tr>
             <td>Nomor BC 1.0</td>
             <td>:</td>
-            <td>12345</td>
+            <td>{{ report.dokumenTambahan.nomorBC10 }}</td>
           </tr>
           <tr>
             <td>Tanggal BC 1.0</td>
             <td>:</td>
-            <td>01-01-2021</td>
+            <td>{{ report.dokumenTambahan.tanggalBC10 }}</td>
           </tr>
           <tr>
             <td>Nomor BC 1.1</td>
             <td>:</td>
-            <td>12345</td>
+            <td>{{ report.dokumenTambahan.nomorBC11 }}</td>
           </tr>
           <tr>
             <td>Tanggal BC 1.1</td>
             <td>:</td>
-            <td>01-01-2021</td>
+            <td>{{ report.dokumenTambahan.tanggalBC11 }}</td>
           </tr>
           <tr>
             <td>Nomor B/L</td>
             <td>:</td>
-            <td>12345</td>
+            <td>{{ report.dokumenTambahan.nomorBL }}</td>
           </tr>
           <tr>
             <td>Tanggal B/L</td>
             <td>:</td>
-            <td>01-01-2021</td>
+            <td>{{ report.dokumenTambahan.tanggalBL }}</td>
           </tr>
         </table>
       </v-col>
@@ -81,7 +76,10 @@ export default {
   name: "DataPengajuan",
   computed: {
     report() {
-      return this.$store.state.plb.report;
+      return this.$store.state.plb.previewDokumenPLB.report;
+    },
+    dokumenPemasukan() {
+      return this.$store.state.plb.previewDokumenPLB;
     },
   },
 };

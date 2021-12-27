@@ -46,6 +46,10 @@ const bcf = {
     },
     listNomorPO: [],
     listBarang: [],
+
+    // Dokumen BCF
+    dokumenBCF3315: false,
+    dokumenBCF3314: false,
   },
   mutations: {
     SET_LOADING_BCF(state, payload) {
@@ -74,6 +78,12 @@ const bcf = {
     },
     SET_BCF_ID(state, payload) {
       state.BCFId = payload;
+    },
+    SET_PRINT_BCF3315(state, payload) {
+      state.dokumenBCF3315 = payload;
+    },
+    SET_PRINT_BCF3314(state, payload) {
+      state.dokumenBCF3314 = payload;
     },
   },
   actions: {

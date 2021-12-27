@@ -199,6 +199,7 @@ export default {
       this.dialogView = true;
       this.$store.commit("SET_NOTIFICATION_TYPE", item.jenisPemberitahuan);
       this.$store.commit("SET_REPORT_ID", item.id);
+      this.$store.dispatch("previewPLB", item.id);
     },
     handleCloseView() {
       this.dialogView = false;

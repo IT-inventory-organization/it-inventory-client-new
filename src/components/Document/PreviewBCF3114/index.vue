@@ -1,5 +1,9 @@
 <template>
-  <div style="padding: 0 48px; font-size: 12px; width: 8.27in">
+  <div
+    style="padding: 0 48px; font-size: 12px; width: 8.27in"
+    ref="dokumenBCF3314"
+    id="dokumenBCF3314"
+  >
     <h4 style="text-align: right">BCF 3.3.14</h4>
     <div style="border: 1px solid black; padding: 5px 16px">
       <h4>
@@ -11,11 +15,11 @@
 
       <br />
 
-      <h2 style="text-align:center">
+      <h3 style="text-align:center">
         SURAT PERSETUJUAN PEMASUKAN ATAU PENGELUARAN BARANG KE ATAU<br />
         DARI PLB DAN/ATAU PEMUATAN BARANG KE SARANA PENGANGKUT <br />
         SEBELUM PENYAMPAIAN PEMBERITAHUAN PABEAN
-      </h2>
+      </h3>
       <p style="text-align:center">
         Nomor : {{ reportId.nomorFormBcf3315 }} Tanggal : {{ reportId.tanggal }}
       </p>
@@ -277,6 +281,17 @@ export default {
   computed: {
     reportId() {
       return this.$store.state.bcf.BCF3314Id;
+    },
+    isPrint() {
+      return this.$store.state.bcf.dokumenBCF3314;
+    },
+  },
+  watch: {
+    isPrint: function(val) {
+      if (val) {
+        this.$htmlToPaper("dokumenBCF3314");
+        this.$store.commit("bcf/SET_PRINT_BCF3314", false);
+      }
     },
   },
 };

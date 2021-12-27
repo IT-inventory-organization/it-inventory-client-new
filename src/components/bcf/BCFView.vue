@@ -5,7 +5,7 @@
     </template>
     <v-card-title>
       <div class="d-flex justify-end align-center" style="width: 100%">
-        <v-btn color="#000000" outlined class="mr-4">
+        <v-btn color="#000000" outlined class="mr-4" @click="handlePrint()">
           <Icon icon="fluent:print-48-regular" style="font-size: 24px" />
           Print
         </v-btn>
@@ -15,7 +15,7 @@
       </div>
     </v-card-title>
     <div class="px-6 py-5" style="display: flex; justify-content: center">
-      <preview-BCF-3115 />
+      <preview-BCF-3115 ref="dokumenBCF3315" />
     </div>
   </v-card>
 </template>
@@ -32,6 +32,9 @@ export default {
   methods: {
     handleViewClose() {
       this.$emit("handleViewBCF");
+    },
+    handlePrint() {
+      this.$store.commit("bcf/SET_PRINT_BCF3315", true);
     },
   },
 };

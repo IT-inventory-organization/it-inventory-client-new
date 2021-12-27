@@ -13,7 +13,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in data" :key="index">
+          <tr v-for="(item, index) in dataBarangs" :key="index">
             <td>{{ item.kodeBarang }}</td>
             <td>{{ item.namaBarang }}</td>
             <td>{{ item.uraian }}</td>
@@ -62,37 +62,12 @@ export default {
         { text: "PPNBM" },
         { text: "Cukai" },
       ],
-      data: [
-        {
-          kodeBarang: 1111,
-          namaBarang: "test",
-          uraian: "lorem ipsum",
-          nettoBruttoVolume: 1000,
-          satuanKemasan: 10,
-          stock: 10,
-          nilaiPabeanHargaPenyerahan: 10,
-          posTarif: 9,
-          bm: 2,
-          ppn: 1,
-          ppnbm: 3,
-          cukai: 8,
-        },
-        {
-          kodeBarang: 112,
-          namaBarang: "test",
-          uraian: "lorem ipsum dolor sit amet bla bla bla",
-          nettoBruttoVolume: 1000,
-          satuanKemasan: 10,
-          stock: 10,
-          nilaiPabeanHargaPenyerahan: 10,
-          posTarif: 9,
-          bm: 2,
-          ppn: 1,
-          ppnbm: 3,
-          cukai: 8,
-        },
-      ],
     };
+  },
+  computed: {
+    dataBarangs() {
+      return this.$store.state.plb.previewDokumenPLB.report.dataBarangs;
+    },
   },
 };
 </script>

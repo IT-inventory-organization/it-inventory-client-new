@@ -11,8 +11,13 @@ const plb = {
     reportId: "",
     reports: [],
     stepper: 1,
+
+    // Preview PLB
+    previewDokumenPLB: [],
+
     loading: {
       loadingReports: false,
+      loadingReport: false,
       loadingDokumen: false,
       loadingBarang: false,
       loadingData: false,
@@ -224,6 +229,12 @@ const plb = {
     },
     SET_OPTIONS_TABLE_REPORTS(state, payload) {
       state.optionsTableReports = Object.assign({}, payload);
+    },
+
+    // Preview PLB
+
+    SET_PREVIEW_PLB(state, payload) {
+      state.previewDokumenPLB = payload;
     },
 
     // Stepper
@@ -610,6 +621,7 @@ const plb = {
         });
       }
     },
+
     async getAllPlb(context) {
       try {
         context.commit("SET_LOADING_PLB", { key: "loadingData", value: true });
@@ -631,6 +643,35 @@ const plb = {
         console.log(error.response.data);
       } finally {
         context.commit("SET_LOADING_PLB", { key: "loadingData", value: false });
+      }
+    },
+
+    async previewPLB(context, id) {
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingReport",
+          value: true,
+        });
+
+        const result = await axios({
+          url: `${baseUrl}/report/ViewDokumen/get/pemasukan/${id}`,
+          method: "GET",
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        const data = AESDecrypt(result.data.data);
+        if (result.data.success) {
+          context.commit("SET_PREVIEW_PLB", data);
+        }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingReport",
+          value: false,
+        });
       }
     },
 
