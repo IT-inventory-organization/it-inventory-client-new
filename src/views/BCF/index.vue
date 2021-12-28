@@ -69,10 +69,7 @@
             </template>
 
             <v-list class="it-inventory-actions-list">
-              <v-list-item
-                @click="handleViewBCF(item.id)"
-                v-if="item.status !== 'DISETUJUI'"
-              >
+              <v-list-item @click="handleViewBCF(item.id)">
                 <v-list-item-title>
                   <Icon
                     icon="fluent:apps-list-detail-20-regular"
@@ -239,7 +236,7 @@ export default {
       this.dialogBCFView = !this.dialogBCFView;
       (async () => {
         await this.$store.commit("bcf/SET_BCF_ID", id);
-        await this.$store.dispatch("bcf/getOneBCF3315");
+        await this.$store.dispatch("bcf/getOneBCF3315", id);
       })();
     },
     handleViewBCF3314(id) {

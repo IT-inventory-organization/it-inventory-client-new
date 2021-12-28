@@ -61,6 +61,7 @@ export default {
   methods: {
     handleClose() {
       this.$emit("handleCloseView");
+      this.$store.commit("SET_PREVIEW_PLB", "");
     },
     handleOpenDialogXML() {
       this.dialogXML = true;

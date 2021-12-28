@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     dataBarangs() {
-      return this.$store.state.plb.previewDokumenPLB.report.dataBarangs;
+      return this.$store.state.plb.previewDokumenPLB.dataBarangs;
     },
   },
 };

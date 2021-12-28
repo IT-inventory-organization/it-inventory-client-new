@@ -650,6 +650,10 @@ const plb = {
     },
 
     async previewPLB(context, id) {
+      let type = "pengeluaran";
+      if (context.state.NotificationType === "Pemasukan") {
+        type = "pemasukan";
+      }
       try {
         context.commit("SET_LOADING_PLB", {
           key: "loadingReport",
@@ -657,7 +661,7 @@ const plb = {
         });
 
         const result = await axios({
-          url: `${baseUrl}/report/ViewDokumen/get/pemasukan/${id}`,
+          url: `${baseUrl}/report/ViewDokumen/get/${type}/${id}`,
           method: "GET",
           headers: {
             authorization:

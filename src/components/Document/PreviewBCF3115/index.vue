@@ -14,12 +14,12 @@
             <tr>
               <td valign="top">Nomor</td>
               <td valign="top">:</td>
-              <td valign="top"></td>
+              <td valign="top">{{ report.nomor }}</td>
             </tr>
             <tr>
               <td style="width: 100px">Lampiran</td>
               <td valign="top">:</td>
-              <td valign="top"></td>
+              <td valign="top">{{ report.lampiran }}</td>
             </tr>
             <tr>
               <td valign="top">Hal</td>
@@ -99,7 +99,7 @@
                   <td align="center">No</td>
                   <td>{{ barangPO.dataBarang.jenisBarang }}</td>
                   <td>{{ barangPO.dataBarang.hsCode }}</td>
-                  <td>Persyaratan Expor</td>
+                  <td align="center">-</td>
                   <td>
                     {{ barangPO.perkiraanJumlah }}
                     {{ barangPO.satuan }}
@@ -173,7 +173,7 @@
             </div>
             <div style="margin-right: 70px">
               <div style="width: fit-content">
-                Tanjungpinang, 01 Januari 2021
+                Tanjungpinang, {{ report.tanggal }}
               </div>
               <div style="width: fit-content">
                 Tanda tangan dan cap perusahaan
@@ -189,15 +189,29 @@
           </div>
         </div>
       </div>
-      <div class="alasan">
-        <p class="status">Perbaikan</p>
+      <div
+        class="alasan"
+        v-bind:class="[
+          report.status === 'DISETUJUI'
+            ? 'disetujui'
+            : report.status === 'MENUNGGU'
+            ? 'menunggu'
+            : 'perbaikan',
+        ]"
+      >
+        <p class="status">
+          <span>{{ report.status }}</span>
+          <Icon
+            icon="bx:bx-check-double"
+            v-if="report.status === 'DISETUJUI'"
+          />
+          <Icon icon="bx:bx-loader" v-if="report.status === 'MENUNGGU'" />
+          <Icon icon="bx:bx-minus" v-if="report.status === 'PERBAIKAN'" />
+        </p>
         <div class="card">
           <p class="title">Alasan :</p>
           <p class="desc">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam
-            veritatis blanditiis maiores quisquam esse pariatur itaque doloribus
-            fugiat sapiente cumque optio, repudiandae tempora cum quia
-            obcaecati, dolor illo et suscipit.
+            {{ report.alasan }}
           </p>
         </div>
       </div>
@@ -206,10 +220,15 @@
 </template>
 
 <script>
+import { Icon } from "@iconify/vue2";
+
 export default {
   name: "PreviewBCF3115",
   data() {
     return {};
+  },
+  components: {
+    Icon,
   },
   computed: {
     report() {
@@ -234,29 +253,59 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.status {
-  border: 1px solid #f27b61;
-  color: #f27b61;
-  display: inline-block;
-  padding: 0.3rem 0.5rem;
-  border-radius: 50px;
-  font-weight: 500;
-}
 .wrapper {
   display: flex;
 
   .alasan {
     width: 30%;
 
+    .status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 130px;
+      margin-left: auto;
+      padding: 0.3rem 0.5rem;
+      border-radius: 50px;
+      font-weight: 500;
+    }
     .card {
       font-size: 0.8rem;
-      border: 1px solid #f27b61;
       border-radius: 5px;
       padding: 0.7rem;
-      .title {
-        color: #f27b61;
-      }
     }
+  }
+}
+.disetujui {
+  .status {
+    border: 1px solid #3cb774;
+    color: #3cb774;
+  }
+  .card {
+    border: 1px solid #3cb774;
+    color: #3cb774;
+  }
+}
+
+.menunggu {
+  .status {
+    border: 1px solid #c8c8c8;
+    color: #c8c8c8;
+  }
+  .card {
+    border: 1px solid #c8c8c8;
+    color: #c8c8c8;
+  }
+}
+
+.perbaikan {
+  .status {
+    border: 1px solid #f27b61;
+    color: #f27b61;
+  }
+  .card {
+    border: 1px solid #f27b61;
+    color: #f27b61;
   }
 }
 </style>

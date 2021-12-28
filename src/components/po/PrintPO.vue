@@ -1,7 +1,7 @@
 <template>
   <div id="dokumenPO" style="padding:1rem">
     <div style="border: 1px solid black; padding: 20px 16px; font-size:14px">
-      <h3>PO-0001</h3>
+      <h3>{{ reportId.nomorPO }}</h3>
       <br />
       <h3>PURCHASE ORDER</h3>
       <table>

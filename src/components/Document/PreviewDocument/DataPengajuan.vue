@@ -24,12 +24,12 @@
           <tr>
             <td>Nomor Dokumen Pemasukan/Pengeluaran</td>
             <td>:</td>
-            <td>{{ dokumenPemasukan.nomorDokumenPemasukan }}</td>
+            <td>{{ dokumen.nomorDokumen }}</td>
           </tr>
           <tr>
             <td>Tanggal Dokumen Pemasukan/Pengeluaran</td>
             <td>:</td>
-            <td>{{ dokumenPemasukan.tanggalDokumenPemasukan }}</td>
+            <td>{{ dokumen.tanggalDokumen }}</td>
           </tr>
         </table>
       </v-col>
@@ -38,32 +38,32 @@
           <tr>
             <td>Nomor BC 1.0</td>
             <td>:</td>
-            <td>{{ report.dokumenTambahan.nomorBC10 }}</td>
+            <td>{{ dokumenTambahan.nomorBC10 }}</td>
           </tr>
           <tr>
             <td>Tanggal BC 1.0</td>
             <td>:</td>
-            <td>{{ report.dokumenTambahan.tanggalBC10 }}</td>
+            <td>{{ dokumenTambahan.tanggalBC10 }}</td>
           </tr>
           <tr>
             <td>Nomor BC 1.1</td>
             <td>:</td>
-            <td>{{ report.dokumenTambahan.nomorBC11 }}</td>
+            <td>{{ dokumenTambahan.nomorBC11 }}</td>
           </tr>
           <tr>
             <td>Tanggal BC 1.1</td>
             <td>:</td>
-            <td>{{ report.dokumenTambahan.tanggalBC11 }}</td>
+            <td>{{ dokumenTambahan.tanggalBC11 }}</td>
           </tr>
           <tr>
             <td>Nomor B/L</td>
             <td>:</td>
-            <td>{{ report.dokumenTambahan.nomorBL }}</td>
+            <td>{{ dokumenTambahan.nomorBL }}</td>
           </tr>
           <tr>
             <td>Tanggal B/L</td>
             <td>:</td>
-            <td>{{ report.dokumenTambahan.tanggalBL }}</td>
+            <td>{{ dokumenTambahan.tanggalBL }}</td>
           </tr>
         </table>
       </v-col>
@@ -74,12 +74,24 @@
 <script>
 export default {
   name: "DataPengajuan",
+  data() {
+    return {};
+  },
   computed: {
     report() {
-      return this.$store.state.plb.previewDokumenPLB.report;
-    },
-    dokumenPemasukan() {
       return this.$store.state.plb.previewDokumenPLB;
+    },
+    jenisPemberitahuan() {
+      return this.$store.state.plb.previewDokumenPLB.jenisPemberitahuan;
+    },
+    dokumen() {
+      let stat = this.jenisPemberitahuan === "Pemasukan";
+      return stat
+        ? this.$store.state.plb.previewDokumenPLB.dokumenPemasukan
+        : this.$store.state.plb.previewDokumenPLB.dokumenPengeluaran;
+    },
+    dokumenTambahan() {
+      return this.$store.state.plb.previewDokumenPLB.dokumenTambahan;
     },
   },
 };

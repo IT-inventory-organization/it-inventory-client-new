@@ -326,7 +326,9 @@
           <tr>
             <td>Tempat Penimbunan</td>
             <td>:</td>
-            <td>{{ tempatPenimbunan.tempatPenimbunan }}</td>
+            <td v-if="tempatPenimbunan !== null">
+              {{ tempatPenimbunan.tempatPenimbunan }}
+            </td>
           </tr>
         </table>
       </v-col>
@@ -335,7 +337,9 @@
           <tr>
             <td>Perkiraan Tanggal Pengeluaran</td>
             <td>:</td>
-            <td>{{ tempatPenimbunan.perkiraanTanggalPengeluaran }}</td>
+            <td v-if="tempatPenimbunan !== null">
+              {{ tempatPenimbunan.perkiraanTanggalPengeluaran }}
+            </td>
           </tr>
         </table>
       </v-col>
@@ -348,40 +352,46 @@ export default {
   name: "DataPemberitahuan",
   computed: {
     dataPelabuhan() {
-      return this.$store.state.plb.previewDokumenPLB.report.dataPelabuhan;
+      return this.$store.state.plb.previewDokumenPLB.dataPelabuhan;
     },
     dataKapal() {
-      return this.$store.state.plb.previewDokumenPLB.report.dataKapal;
+      return this.$store.state.plb.previewDokumenPLB.dataKapal;
     },
     identitasBarang() {
-      return this.$store.state.plb.previewDokumenPLB.report.identitasBarang;
+      return this.$store.state.plb.previewDokumenPLB.identitasBarang;
     },
     penjualBarang() {
-      return this.$store.state.plb.previewDokumenPLB.report.penjualBarang;
+      return this.$store.state.plb.previewDokumenPLB.penjualBarang;
     },
     pengirimBarang() {
-      return this.$store.state.plb.previewDokumenPLB.report.pengirimBarang;
+      return this.$store.state.plb.previewDokumenPLB.pengirimBarang;
     },
     pengusahaPLB() {
-      return this.$store.state.plb.previewDokumenPLB.report.pengusahaPLB;
+      return this.$store.state.plb.previewDokumenPLB.pengusahaPLB;
     },
     pembeliBarang() {
-      return this.$store.state.plb.previewDokumenPLB.report.pembeliBarang;
+      return this.$store.state.plb.previewDokumenPLB.pembeliBarang;
     },
     ppjk() {
-      return this.$store.state.plb.previewDokumenPLB.report.ppjk;
+      return this.$store.state.plb.previewDokumenPLB.ppjk;
     },
     mataUang() {
-      return this.$store.state.plb.previewDokumenPLB.report.mataUang;
+      return this.$store.state.plb.previewDokumenPLB.mataUang;
     },
     dataPengangkutan() {
-      return this.$store.state.plb.previewDokumenPLB.report.dataPengangkutan;
+      return this.$store.state.plb.previewDokumenPLB.dataPengangkutan;
     },
     beratDanVolume() {
-      return this.$store.state.plb.previewDokumenPLB.report.beratDanVolume;
+      return this.$store.state.plb.previewDokumenPLB.beratDanVolume;
+    },
+    jenisPemberitahuan() {
+      return this.$store.state.plb.previewDokumenPLB.jenisPemberitahuan;
     },
     tempatPenimbunan() {
-      return this.$store.state.plb.previewDokumenPLB.report.tempatPenimbunan;
+      let stat = this.jenisPemberitahuan == "Pemasukan";
+      return stat
+        ? this.$store.state.plb.previewDokumenPLB.tempatPenimbunan
+        : null;
     },
   },
 };
