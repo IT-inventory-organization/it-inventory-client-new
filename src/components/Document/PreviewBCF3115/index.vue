@@ -201,14 +201,16 @@
       >
         <p class="status">
           <span>{{ report.status }}</span>
-          <Icon
-            icon="bx:bx-check-double"
-            v-if="report.status === 'DISETUJUI'"
-          />
-          <Icon icon="bx:bx-loader" v-if="report.status === 'MENUNGGU'" />
-          <Icon icon="bx:bx-minus" v-if="report.status === 'PERBAIKAN'" />
+          <span class="icon">
+            <Icon
+              icon="bx:bx-check-double"
+              v-if="report.status === 'DISETUJUI'"
+            />
+            <Icon icon="bx:bx-loader" v-if="report.status === 'MENUNGGU'" />
+            <Icon icon="bx:bx-minus" v-if="report.status === 'PERBAIKAN'" />
+          </span>
         </p>
-        <div class="card">
+        <div class="card" v-if="report.status === 'PERBAIKAN'">
           <p class="title">Alasan :</p>
           <p class="desc">
             {{ report.alasan }}
@@ -263,11 +265,21 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 130px;
+      width: 135px;
       margin-left: auto;
       padding: 0.3rem 0.5rem;
       border-radius: 50px;
       font-weight: 500;
+
+      .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+      }
     }
     .card {
       font-size: 0.8rem;
@@ -280,6 +292,10 @@ export default {
   .status {
     border: 1px solid #3cb774;
     color: #3cb774;
+
+    .icon {
+      background: #3cb774;
+    }
   }
   .card {
     border: 1px solid #3cb774;
@@ -291,6 +307,10 @@ export default {
   .status {
     border: 1px solid #c8c8c8;
     color: #c8c8c8;
+
+    .icon {
+      background: #c8c8c8;
+    }
   }
   .card {
     border: 1px solid #c8c8c8;
@@ -302,6 +322,10 @@ export default {
   .status {
     border: 1px solid #f27b61;
     color: #f27b61;
+
+    .icon {
+      background: #f27b61;
+    }
   }
   .card {
     border: 1px solid #f27b61;

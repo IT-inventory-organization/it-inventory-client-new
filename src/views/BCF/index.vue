@@ -113,15 +113,6 @@
                   </v-list-item-title>
                 </v-list-item>
               </div>
-              <v-list-item>
-                <v-list-item-title>
-                  <Icon
-                    icon="fluent:print-24-regular"
-                    class="v-icon--left it-inventory-action-list__icon"
-                  />
-                  Print
-                </v-list-item-title>
-              </v-list-item>
             </v-list>
           </v-menu>
         </template>
