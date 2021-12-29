@@ -18,8 +18,8 @@ export default {
     },
   },
   created() {
-    console.log(this.reportId);
-    this.$store.dispatch("previewPLB", this.reportId);
+    let id = this.reportId;
+    this.$store.dispatch("previewPLB", id);
   },
 };
 </script>

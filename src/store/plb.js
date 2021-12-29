@@ -12,6 +12,7 @@ const plb = {
     reportId: "",
     reports: [],
     stepper: 1,
+    isEdit: false,
 
     // Preview PLB
     previewDokumenPLB: [],

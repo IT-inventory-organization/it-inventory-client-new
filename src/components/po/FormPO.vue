@@ -40,6 +40,7 @@
                     dense
                     v-model="kapalPenjual"
                     :items="kapalPenjual"
+                    ref="kapalPenjual"
                     item-text="namaKapal"
                     v-on:change="
                       getBarangAfterChoosingKapalPenjual(...kapalPenjual)
@@ -153,11 +154,6 @@
                   v-model="input.itemDeskripsi"
                   readonly
                   placeholder="Tulis Deskripsi"
-                  :rules="[
-                    (value) => {
-                      return genericRequiredRule(value, 'Item Deskripsi');
-                    },
-                  ]"
                 ></v-text-field>
               </v-col>
               <v-col cols="1" style="padding: 0 1em;">
@@ -167,11 +163,6 @@
                   v-model="input.satuanKemasan"
                   readonly
                   placeholder="Barel"
-                  :rules="[
-                    (value) => {
-                      return genericRequiredRule(value, 'Satuan Kemasan');
-                    },
-                  ]"
                 ></v-text-field>
               </v-col>
               <v-col cols="1" style="padding: 0 1em;">
@@ -382,6 +373,7 @@ export default {
       this.resetData();
     },
     resetData() {
+      this.$refs.kapalPenjual.reset();
       this.$store.commit("RESET_PURCHASE_ORDER", {
         reportId: "",
         kapalPenjual: "",
