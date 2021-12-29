@@ -151,6 +151,7 @@
                   outlined
                   dense
                   v-model="input.itemDeskripsi"
+                  readonly
                   placeholder="Tulis Deskripsi"
                   :rules="[
                     (value) => {
@@ -164,6 +165,7 @@
                   outlined
                   dense
                   v-model="input.satuanKemasan"
+                  readonly
                   placeholder="Barel"
                   :rules="[
                     (value) => {
@@ -373,21 +375,32 @@ export default {
     },
   },
   methods: {
-    add() {
-      this.ListPurchaseOrderItem.push({
-        kodeBarang: "",
-        itemDeskripsi: "",
-        satuanKemasan: "",
-        quantity: "",
-        hargaSatuan: "",
-        jumlah: "",
-      });
-    },
-    remove(index) {
-      this.ListPurchaseOrderItem.splice(index, 1);
-    },
+    // Handle Close Dialog and Submit
+
     handleCloseDialog() {
       this.$emit("handleBuatBaru");
+      this.resetData();
+    },
+    resetData() {
+      this.$store.commit("RESET_PURCHASE_ORDER", {
+        reportId: "",
+        kapalPenjual: "",
+        nomorPO: "",
+        tanggalPurchaseOrder: "",
+        remarks: "",
+        jumlahTotal: 0,
+      });
+      let value = this.$store.state.po.ListPurchaseOrderItem;
+      for (let i = 0; i < value.length; i++) {
+        this.ListPurchaseOrderItem[i].idBarang = "";
+        this.ListPurchaseOrderItem[i].kodeBarang = "";
+        this.ListPurchaseOrderItem[i].itemDeskripsi = "";
+        this.ListPurchaseOrderItem[i].satuanKemasan = "";
+        this.ListPurchaseOrderItem[i].quantity = "";
+        this.ListPurchaseOrderItem[i].hargaSatuan = "";
+        this.ListPurchaseOrderItem[i].jumlah = "";
+      }
+      this.ListPurchaseOrderItem.splice(1);
     },
     handleSubmit() {
       const getRef = this.$refs.initialReport.validate();
@@ -401,6 +414,9 @@ export default {
         return false;
       }
     },
+
+    // Data Barang
+
     getBarangAfterChoosingKapalPenjual(kapalPenjual) {
       this.reportId = kapalPenjual.id;
       this.$store.dispatch(
@@ -408,6 +424,14 @@ export default {
         kapalPenjual.idKapal
       );
       console.log(kapalPenjual.idKapal);
+    },
+    idDataBarang(dataBarang) {
+      let value = this.$store.state.po.ListPurchaseOrderItem;
+      for (let i = 0; i < value.length; i++) {
+        this.ListPurchaseOrderItem[i].idBarang = dataBarang.id;
+        this.ListPurchaseOrderItem[i].itemDeskripsi = dataBarang.uraian;
+        this.ListPurchaseOrderItem[i].satuanKemasan = dataBarang.satuanKemasan;
+      }
     },
     hitungJumlah() {
       let value = this.$store.state.po.ListPurchaseOrderItem;
@@ -422,6 +446,25 @@ export default {
 
       this.hitungJumlahTotal();
     },
+
+    // Increment Data Barang
+
+    add() {
+      this.ListPurchaseOrderItem.push({
+        kodeBarang: "",
+        itemDeskripsi: "",
+        satuanKemasan: "",
+        quantity: "",
+        hargaSatuan: "",
+        jumlah: "",
+      });
+    },
+    remove(index) {
+      this.ListPurchaseOrderItem.splice(index, 1);
+    },
+
+    // Jumlah Total
+
     hitungJumlahTotal() {
       let value = this.$store.state.po.ListPurchaseOrderItem;
       let result = 0;
@@ -432,12 +475,6 @@ export default {
         result = 0;
       }
       this.jumlahTotal = result;
-    },
-    idDataBarang(dataBarang) {
-      let value = this.$store.state.po.ListPurchaseOrderItem;
-      for (let i = 0; i < value.length; i++) {
-        this.ListPurchaseOrderItem[i].idBarang = dataBarang.id;
-      }
     },
   },
   created() {

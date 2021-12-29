@@ -12,6 +12,15 @@ export default {
       import("@/components/Document/PreviewDocument/index"),
   },
   methods: {},
+  computed: {
+    reportId() {
+      return this.$store.state.plb.reportId;
+    },
+  },
+  created() {
+    console.log(this.reportId);
+    this.$store.dispatch("previewPLB", this.reportId);
+  },
 };
 </script>
 

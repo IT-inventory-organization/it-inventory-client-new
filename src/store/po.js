@@ -63,12 +63,22 @@ const po = {
     SET_DATA_BARANG(state, payload) {
       state.dataBarang = payload;
     },
+
+    // Input PO
+
     SET_PURCHASE_ORDER(state, payload) {
       state.PurchaseOrder[payload.key] = payload.value;
     },
+    RESET_PURCHASE_ORDER(state, payload) {
+      state.PurchaseOrder = payload;
+    },
+
     SET_PURCHASE_ORDER_ITEM(state, payload) {
       state.PurchaseOrder[payload.key] = payload.value;
     },
+
+    // Print PO
+
     SET_PRINT_PO(state, payload) {
       state.isPrint = payload;
     },

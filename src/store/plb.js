@@ -85,6 +85,7 @@ const plb = {
 
     itemDokumenBCF: [],
     selectedDokumenBCF: [],
+    BCF3314Id: [],
 
     // payload save
 
@@ -259,6 +260,9 @@ const plb = {
       if (index != -1) {
         state.selectedDokumenBCF.splice(index, 1);
       }
+    },
+    SET_SELECTED_BCF3314_ID(state, payload) {
+      state.BCF3314Id[payload.key] = payload.value;
     },
 
     //
@@ -732,6 +736,30 @@ const plb = {
         if (result.data.success) {
           context.commit("SET_DOKUMEN_BCF", data);
         }
+      } catch (error) {
+        console.log(error.response.data);
+      } finally {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: false,
+        });
+      }
+    },
+    async getOneBCF3314(context, id) {
+      try {
+        context.commit("SET_LOADING_PLB", {
+          key: "loadingDokumen",
+          value: true,
+        });
+
+        const res = await axios.get(`${baseUrl}/report/dokumen/get/bcf/${id}`, {
+          headers: {
+            authorization:
+              "Bearer " + localStorage.getItem("token_it_inventory"),
+          },
+        });
+        const dataDecrypted = AESDecrypt(res.data.data);
+        context.commit("SET_BCF3314_ID", dataDecrypted);
       } catch (error) {
         console.log(error.response.data);
       } finally {

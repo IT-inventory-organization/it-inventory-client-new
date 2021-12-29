@@ -24,6 +24,7 @@
           hide-details
           class="it-inventory-select-po"
           v-model="selectedDokumenBCF"
+          @change="selectedIdBCF(...itemDokumenBCF)"
           append-icon="mdi-chevron-down"
         >
         </v-select>
@@ -46,7 +47,7 @@
         >
         </v-text-field>
         <div class="it-inven-dokumen-po__items-action">
-          <div @click.prevent="handleView">
+          <div @click.prevent="handleView(item)">
             <Icon
               class="mx-2 it-inven-dokumen-po__items-action__item"
               icon="fluent:apps-list-detail-20-regular"
@@ -77,6 +78,15 @@ import { FieldRequired } from "@/mixins/ValidationRules";
 export default {
   name: "DokumenPO",
   mixins: [FieldRequired],
+  data() {
+    return {
+      itemSelectedIdBCF: [
+        {
+          id: "",
+        },
+      ],
+    };
+  },
   components: {
     Icon,
   },
@@ -96,13 +106,24 @@ export default {
   methods: {
     handleDelete(value) {
       this.$store.commit("DELETE_SELECTED_DOKUMEN_BCF", value);
+      const index = this.itemSelectedIdBCF.indexOf(value);
+      if (index != -1) {
+        this.itemSelectedIdBCF.splice(index, 1);
+      }
     },
-    handleView() {
-      alert("View");
+    handleView(item) {
+      alert(item);
     },
     handleSubmit() {
       this.$store.commit("SET_STEPPER", 2);
       return true;
+    },
+    selectedIdBCF(item) {
+      let lang = this.selectedDokumenBCF.length;
+      for (let i = 0; i < lang; i++) {
+        this.itemSelectedIdBCF[i].id = item.id;
+      }
+      console.log(this.itemSelectedIdBCF);
     },
   },
   created() {

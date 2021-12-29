@@ -20,7 +20,7 @@
           ></v-text-field>
         </div>
         <div>
-          <label class="caption font-weight-medium">Jenis Barang</label>
+          <label class="caption font-weight-medium"> Jenis Barang</label>
           <v-text-field
             outlined
             dense
@@ -131,17 +131,6 @@
             placeholder="Jumlah Kemasan"
           ></v-text-field>
         </div>
-
-        <div>
-          <label class="caption font-weight-medium">Nomor PO</label>
-          <v-select
-            outlined
-            dense
-            v-model="nomorPO"
-            placeholder="Pilih Nomor PO"
-            append-icon="mdi-chevron-down"
-          ></v-select>
-        </div>
       </v-col>
     </v-row>
   </div>
@@ -216,7 +205,7 @@ export default {
         return this.$store.state.plb.identitasBarang.jumlahBarang;
       },
       set(value) {
-        value = parseInt(value)
+        value = parseInt(value);
         this.$store.commit("SET_IDENTITAS_BARANG", {
           key: "jumlahBarang",
           value,
@@ -228,7 +217,7 @@ export default {
         return this.$store.state.plb.identitasBarang.jumlahKemasan;
       },
       set(value) {
-        value = parseInt(value)
+        value = parseInt(value);
 
         this.$store.commit("SET_IDENTITAS_BARANG", {
           key: "jumlahKemasan",

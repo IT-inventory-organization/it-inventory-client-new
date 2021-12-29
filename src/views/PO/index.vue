@@ -38,7 +38,7 @@
         :headers="headers"
         :items="reports.rows"
         :options.sync="reports.optionsTableReports"
-        :server-items-length="reports.count"
+        :server-items-length="reports.length"
         no-data-text="Data not available"
         no-results-text="Data not available"
         class="it-inventory-simple-table"
